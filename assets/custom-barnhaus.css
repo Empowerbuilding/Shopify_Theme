@@ -840,6 +840,81 @@ img {
   line-height: 1.7;
 }
 
+/* Product Description Content Formatting */
+.product-description-content {
+  color: #D1D5DB;
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.product-description-content p {
+  margin-bottom: 1rem;
+  white-space: pre-line;
+}
+
+.product-description-content p:last-child {
+  margin-bottom: 0;
+}
+
+.product-description-content ul,
+.product-description-content ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.product-description-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.product-description-content strong,
+.product-description-content b {
+  color: #B8860B;
+  font-weight: 700;
+}
+
+.product-description-content h1,
+.product-description-content h2,
+.product-description-content h3,
+.product-description-content h4 {
+  color: #FFFFFF;
+  font-weight: 700;
+  margin: 1.5rem 0 1rem 0;
+  line-height: 1.3;
+}
+
+.product-description-content h1 {
+  font-size: 1.5rem;
+}
+
+.product-description-content h2 {
+  font-size: 1.35rem;
+}
+
+.product-description-content h3 {
+  font-size: 1.2rem;
+}
+
+.product-description-content h4 {
+  font-size: 1.1rem;
+}
+
+.product-description-content a {
+  color: #B8860B;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.product-description-content a:hover {
+  color: #FFD700;
+}
+
+.product-description-content br {
+  content: "";
+  display: block;
+  margin: 0.5rem 0;
+}
+
 .product-form {
   display: flex;
   flex-direction: column;
@@ -1330,6 +1405,37 @@ img {
     line-height: 1.6;
     word-wrap: break-word;
     margin-bottom: 1.5rem;
+  }
+  
+  /* Mobile product description content */
+  .product-description-content {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  .product-description-content p {
+    margin-bottom: 0.875rem;
+  }
+  
+  .product-description-content h1 {
+    font-size: 1.35rem;
+  }
+  
+  .product-description-content h2 {
+    font-size: 1.2rem;
+  }
+  
+  .product-description-content h3 {
+    font-size: 1.1rem;
+  }
+  
+  .product-description-content h4 {
+    font-size: 1rem;
+  }
+  
+  .product-description-content ul,
+  .product-description-content ol {
+    padding-left: 1.25rem;
   }
   
   /* Form elements */
