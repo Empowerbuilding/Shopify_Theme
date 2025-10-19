@@ -132,8 +132,8 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-top: -80px; /* Negative margin to pull video under header */
-  padding-top: 80px; /* Padding to keep content below header */
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .hero-image-wrapper {
@@ -317,8 +317,8 @@
   .hero-section {
     height: 50vh;
     min-height: 400px;
-    margin-top: -70px;
-    padding-top: 70px;
+    margin-top: 0;
+    padding-top: 0;
   }
   
   .hero-content {
@@ -327,6 +327,15 @@
   
   .hero-tagline {
     font-size: 2rem;
+  }
+  
+  /* Ensure video starts at very top */
+  .hero-image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
   
   .features-section {
