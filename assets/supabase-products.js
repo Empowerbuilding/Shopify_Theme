@@ -79,6 +79,16 @@ function createProductCard(plan) {
   // Create card container
   const card = document.createElement('div');
   card.className = 'supabase-product-card fade-in';
+  card.style.cursor = 'pointer';
+  
+  // Make entire card clickable to go to detail page
+  card.addEventListener('click', function(e) {
+    // Don't navigate if clicking on buttons
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') {
+      return;
+    }
+    window.location.href = '/pages/plan-' + plan.id;
+  });
   
   // Create image
   const image = document.createElement('img');
@@ -128,58 +138,32 @@ function createProductCard(plan) {
   if (plan.description) {
     description = document.createElement('p');
     description.className = 'supabase-product-description';
-    description.textContent = plan.description.length > 150 
-      ? plan.description.substring(0, 150) + '...' 
+    description.textContent = plan.description.length > 100 
+      ? plan.description.substring(0, 100) + '...' 
       : plan.description;
   }
   
-  // Create features list
+  // Create features list (show only 3 features on card)
   let featuresList = null;
   if (plan.features && Array.isArray(plan.features) && plan.features.length > 0) {
     featuresList = document.createElement('ul');
     featuresList.className = 'supabase-product-features';
     
-    // Show first 4 features
-    plan.features.slice(0, 4).forEach(feature => {
+    // Show first 3 features
+    plan.features.slice(0, 3).forEach(feature => {
       const li = document.createElement('li');
       li.textContent = feature;
       featuresList.appendChild(li);
     });
   }
   
-  // Create price
-  const price = document.createElement('p');
-  price.className = 'supabase-product-price';
-  price.textContent = 'Starting at $2,999';
-  
-  // Create buttons container
-  const buttonsContainer = document.createElement('div');
-  buttonsContainer.className = 'supabase-product-buttons';
-  
-  // Request Quote button
-  const quoteButton = document.createElement('button');
-  quoteButton.className = 'btn btn-small';
-  quoteButton.textContent = 'Request Quote';
-  quoteButton.onclick = function() {
-    // Open search modal or redirect to contact
-    if (typeof openSearchModal === 'function') {
-      // You could create a custom modal for quotes
-      window.location.href = '/pages/contact?plan=' + encodeURIComponent(plan.title);
-    } else {
-      window.location.href = '/pages/contact?plan=' + encodeURIComponent(plan.title);
-    }
-  };
-  
-  // Learn More button
-  const learnMoreButton = document.createElement('a');
-  learnMoreButton.className = 'btn btn-secondary btn-small';
-  learnMoreButton.textContent = 'Learn More';
-  learnMoreButton.href = '/pages/contact?plan=' + encodeURIComponent(plan.title);
-  learnMoreButton.style.background = '#3A3A3A';
-  
-  // Assemble buttons
-  buttonsContainer.appendChild(quoteButton);
-  buttonsContainer.appendChild(learnMoreButton);
+  // Create "View Details" link instead of price
+  const viewDetails = document.createElement('p');
+  viewDetails.className = 'supabase-product-price';
+  viewDetails.style.display = 'flex';
+  viewDetails.style.alignItems = 'center';
+  viewDetails.style.gap = '0.5rem';
+  viewDetails.innerHTML = 'View Details <span style="font-size: 1rem;">→</span>';
   
   // Assemble content
   content.appendChild(title);
@@ -190,8 +174,7 @@ function createProductCard(plan) {
   if (featuresList) {
     content.appendChild(featuresList);
   }
-  content.appendChild(price);
-  content.appendChild(buttonsContainer);
+  content.appendChild(viewDetails);
   
   // Assemble card
   card.appendChild(image);
