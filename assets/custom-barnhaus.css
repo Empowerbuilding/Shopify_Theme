@@ -663,7 +663,8 @@ img {
 
 .product-image-main {
   width: 100%;
-  aspect-ratio: 1;
+  max-height: 500px;
+  aspect-ratio: 16/10;
   background: #1C1C1C;
   border-radius: 8px;
   overflow: hidden;
