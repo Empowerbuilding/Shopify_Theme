@@ -34,6 +34,36 @@
     </div>
   </div>
 
+  <!-- Horizontal Product Carousel -->
+  <div class="product-carousel-section">
+    <div class="page-width">
+      <div class="carousel-header">
+        <h2 class="carousel-title">Featured Floor Plans</h2>
+        <a href="/pages/plans" class="view-all-link">
+          View All Plans
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+    
+    <div class="carousel-container">
+      <div class="carousel-track" id="carousel-track">
+        <!-- Products will be loaded here dynamically -->
+        <div class="carousel-loading">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#3A3A3A" stroke-width="4"/>
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#B8860B" stroke-width="4" stroke-dasharray="90, 150" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Features Section -->
   <div class="features-section">
     <div class="page-width">
@@ -400,7 +430,257 @@
     width: 100%;
   }
 }
+
+/* Horizontal Product Carousel */
+.product-carousel-section {
+  padding: 4rem 0;
+  background: #1C1C1C;
+  overflow: hidden;
+}
+
+.carousel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 1.5rem;
+}
+
+.carousel-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.view-all-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #B8860B;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.view-all-link:hover {
+  color: #FFD700;
+  gap: 0.75rem;
+}
+
+.view-all-link svg {
+  transition: transform 0.3s ease;
+}
+
+.view-all-link:hover svg {
+  transform: translateX(4px);
+}
+
+.carousel-container {
+  position: relative;
+  padding: 0 1.5rem;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #B8860B #2A2A2A;
+  padding-bottom: 1rem;
+}
+
+.carousel-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carousel-track::-webkit-scrollbar-track {
+  background: #2A2A2A;
+  border-radius: 4px;
+}
+
+.carousel-track::-webkit-scrollbar-thumb {
+  background: #B8860B;
+  border-radius: 4px;
+}
+
+.carousel-track::-webkit-scrollbar-thumb:hover {
+  background: #FFD700;
+}
+
+.carousel-card {
+  flex: 0 0 350px;
+  background: #2A2A2A;
+  border: 1px solid #3A3A3A;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-card:hover {
+  border-color: #B8860B;
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
+  transform: translateY(-5px);
+}
+
+.carousel-card-image {
+  width: 100%;
+  height: 240px;
+  object-fit: contain;
+  background: #1C1C1C;
+}
+
+.carousel-card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.carousel-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+}
+
+.carousel-card-specs {
+  display: flex;
+  gap: 1rem;
+  color: #D1D5DB;
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.carousel-card-price {
+  color: #B8860B;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.carousel-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+/* Carousel Mobile Responsive */
+@media (max-width: 768px) {
+  .product-carousel-section {
+    padding: 3rem 0;
+  }
+  
+  .carousel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+  
+  .carousel-title {
+    font-size: 1.75rem;
+  }
+  
+  .carousel-container {
+    padding: 0 1rem;
+  }
+  
+  .carousel-card {
+    flex: 0 0 280px;
+  }
+  
+  .carousel-card-image {
+    height: 200px;
+  }
+}
 </style>
+
+<script>
+// Load products into carousel
+document.addEventListener('DOMContentLoaded', function() {
+  const carouselTrack = document.getElementById('carousel-track');
+  
+  // Fetch products from Shopify
+  fetch('/collections/all/products.json?limit=8')
+    .then(response => response.json())
+    .then(data => {
+      if (data.products && data.products.length > 0) {
+        carouselTrack.innerHTML = '';
+        
+        data.products.forEach(product => {
+          const card = document.createElement('a');
+          card.href = `/products/${product.handle}`;
+          card.className = 'carousel-card';
+          
+          // Get product specs from title or tags
+          const specs = extractSpecs(product);
+          
+          card.innerHTML = `
+            <img src="${product.images[0]?.src || ''}" 
+                 alt="${product.title}" 
+                 class="carousel-card-image">
+            <div class="carousel-card-content">
+              <h3 class="carousel-card-title">${product.title}</h3>
+              ${specs ? `<div class="carousel-card-specs">${specs}</div>` : ''}
+              <div class="carousel-card-price">${formatMoney(product.variants[0].price)}</div>
+            </div>
+          `;
+          
+          carouselTrack.appendChild(card);
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error loading products:', error);
+      carouselTrack.innerHTML = '<p style="color: #D1D5DB; text-align: center; width: 100%;">Unable to load products</p>';
+    });
+});
+
+// Extract specs from product title or tags
+function extractSpecs(product) {
+  const specs = [];
+  const title = product.title.toLowerCase();
+  
+  // Try to extract dimensions from title
+  const sizeMatch = title.match(/(\d+)\s*x\s*(\d+)/);
+  if (sizeMatch) {
+    specs.push(`<span>📐 ${sizeMatch[1]}' x ${sizeMatch[2]}'</span>`);
+  }
+  
+  // Try to extract bedrooms
+  const bedMatch = title.match(/(\d+)\s*bed/i);
+  if (bedMatch) {
+    specs.push(`<span>🛏️ ${bedMatch[1]} Bed</span>`);
+  }
+  
+  // Try to extract bathrooms
+  const bathMatch = title.match(/(\d+(?:\.\d+)?)\s*bath/i);
+  if (bathMatch) {
+    specs.push(`<span>🚿 ${bathMatch[1]} Bath</span>`);
+  }
+  
+  return specs.join('');
+}
+
+// Format money
+function formatMoney(cents) {
+  return '$' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+</script>
 
 {% schema %}
 {
