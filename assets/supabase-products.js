@@ -293,15 +293,7 @@ function openPlanDetailModal(plan) {
   
   document.body.appendChild(modal);
   document.body.style.overflow = 'hidden';
-  
-  // IMPORTANT: Scroll modal content to top on open and activate animation
-  setTimeout(() => {
-    modal.classList.add('active');
-    const modalContent = modal.querySelector('.plan-modal-content');
-    if (modalContent) {
-      modalContent.scrollTop = 0; // Reset scroll position to top
-    }
-  }, 10);
+  setTimeout(() => modal.classList.add('active'), 10);
 }
 
 /**

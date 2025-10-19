@@ -258,15 +258,6 @@
     }
   }
   
-  @keyframes slideInFromBottom {
-    from {
-      transform: translateY(100%);
-    }
-    to {
-      transform: translateY(0);
-    }
-  }
-  
   .plan-modal-close {
     position: absolute;
     top: 1rem;
@@ -602,38 +593,22 @@
   }
   
   @media (max-width: 768px) {
-    /* Ensure modal starts at viewport top on mobile */
-    .plan-detail-modal {
-      align-items: flex-start;
-    }
-    
-    /* Make modal full screen on mobile */
     .plan-modal-content {
-      width: 100%;
-      max-width: 100%;
-      max-height: 100vh;
-      margin: 0;
-      border-radius: 0;
-      animation: slideInFromBottom 0.3s ease;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      width: 95%;
+      margin: 2vh auto;
+      max-height: 96vh;
     }
     
     .plan-modal-grid {
-      padding: 1.5rem 1rem;
-      padding-top: 4rem;
+      padding: 1.5rem;
       gap: 1.25rem;
     }
     
-    /* Make close button fixed on mobile for easy access */
     .plan-modal-close {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
+      top: 0.5rem;
+      right: 0.5rem;
       width: 40px;
       height: 40px;
-      z-index: 10001;
-      background: rgba(0, 0, 0, 0.8);
     }
     
     .plan-modal-title {
@@ -650,12 +625,6 @@
     
     .plan-modal-actions .btn {
       width: 100%;
-    }
-    
-    /* Adjust image for mobile viewing */
-    .plan-modal-image-wrapper {
-      aspect-ratio: 16/9;
-      margin-bottom: 1rem;
     }
     
     .zoom-modal-content {
