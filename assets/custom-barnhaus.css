@@ -1005,6 +1005,55 @@ img {
     gap: 1rem;
   }
   
+  /* Product Page Mobile Optimization */
+  .product-page {
+    padding: 2rem 0;
+  }
+  
+  .product-title {
+    font-size: 1.5rem !important;
+  }
+  
+  .product-price {
+    font-size: 1.5rem !important;
+  }
+  
+  .product-image-main {
+    max-height: 350px;
+  }
+  
+  .product-thumbnails {
+    gap: 0.5rem;
+  }
+  
+  .product-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .product-form {
+    gap: 1rem;
+  }
+  
+  .btn {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .quantity-selector {
+    justify-content: center;
+  }
+  
+  .product-description {
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .product-info {
+    padding: 0 0.5rem;
+  }
+  
   /* Cart Items */
   .cart-item {
     grid-template-columns: 80px 1fr;
