@@ -1106,7 +1106,7 @@ img {
   
   /* Constrain all product page elements */
   .product-page {
-    padding: 1.5rem 0;
+    padding: 100px 0 1.5rem 0;
     width: 100%;
     overflow-x: hidden;
   }
@@ -1195,6 +1195,7 @@ img {
   
   .product-info {
     padding: 0 0.5rem;
+    padding-top: env(safe-area-inset-top, 0);
   }
   
   /* Cart Items */
@@ -1239,11 +1240,12 @@ img {
   
   /* Product Page Extra Small Mobile */
   .product-page {
-    padding: 1rem 0;
+    padding: 90px 0 1rem 0;
   }
   
   .product-title {
     font-size: 1.25rem !important;
+    margin-top: 0;
   }
   
   .product-image-main {
