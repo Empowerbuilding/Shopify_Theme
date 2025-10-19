@@ -4,17 +4,54 @@
 {% endcomment %}
 
 <section class="product-page">
+  <!-- Mobile Back Button -->
+  <button class="mobile-back-button" onclick="window.history.back()" aria-label="Go back">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+  </button>
+
   <div class="container">
     <div class="product-main">
       <!-- Product Gallery -->
       <div class="product-gallery">
         <div class="product-image-main" id="product-image-main">
-          {% if product.featured_image %}
-            <img src="{{ product.featured_image | img_url: '800x800' }}" 
-                 alt="{{ product.featured_image.alt | escape }}"
-                 id="main-product-image">
-          {% else %}
-            <img src="{{ 'product-placeholder.png' | asset_url }}" alt="Product placeholder">
+          <div class="image-carousel" id="image-carousel">
+            {% if product.images.size > 0 %}
+              {% for image in product.images %}
+                <div class="carousel-image {% if forloop.first %}active{% endif %}">
+                  <img src="{{ image | img_url: '800x800' }}" 
+                       alt="{{ image.alt | escape }}"
+                       loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="carousel-image active">
+                <img src="{{ 'product-placeholder.png' | asset_url }}" alt="Product placeholder">
+              </div>
+            {% endif %}
+          </div>
+          
+          {% if product.images.size > 1 %}
+            <!-- Image Navigation Arrows -->
+            <button class="image-nav-btn prev" onclick="previousImage()" aria-label="Previous image">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button class="image-nav-btn next" onclick="nextImage()" aria-label="Next image">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+            
+            <!-- Image Indicators (Dots) -->
+            <div class="image-indicators" id="image-indicators">
+              {% for image in product.images %}
+                <span class="indicator {% if forloop.first %}active{% endif %}" onclick="goToImage({{ forloop.index0 }})"></span>
+              {% endfor %}
+            </div>
           {% endif %}
         </div>
         
@@ -22,8 +59,8 @@
           <div class="product-thumbnails">
             {% for image in product.images %}
               <div class="product-thumbnail {% if forloop.first %}active{% endif %}" 
-                   data-image-url="{{ image | img_url: '800x800' }}"
-                   onclick="changeProductImage(this)">
+                   data-image-index="{{ forloop.index0 }}"
+                   onclick="goToImage({{ forloop.index0 }})">
                 <img src="{{ image | img_url: '100x100' }}" alt="{{ image.alt | escape }}">
               </div>
             {% endfor %}
@@ -133,20 +170,87 @@
   const productVariants = {{ product.variants | json }};
   const productOptions = {{ product.options_with_values | json }};
   
-  // Change product image
-  function changeProductImage(thumbnail) {
-    const imageUrl = thumbnail.getAttribute('data-image-url');
-    const mainImage = document.getElementById('main-product-image');
-    if (mainImage) {
-      mainImage.src = imageUrl;
+  // Image carousel management
+  let currentImageIndex = 0;
+  const carouselImages = document.querySelectorAll('.carousel-image');
+  const indicators = document.querySelectorAll('.indicator');
+  const thumbnails = document.querySelectorAll('.product-thumbnail');
+  
+  // Go to specific image
+  function goToImage(index) {
+    if (index < 0 || index >= carouselImages.length) return;
+    
+    // Hide current image
+    carouselImages[currentImageIndex].classList.remove('active');
+    if (indicators[currentImageIndex]) {
+      indicators[currentImageIndex].classList.remove('active');
+    }
+    if (thumbnails[currentImageIndex]) {
+      thumbnails[currentImageIndex].classList.remove('active');
     }
     
-    // Update active thumbnail
-    document.querySelectorAll('.product-thumbnail').forEach(function(thumb) {
-      thumb.classList.remove('active');
-    });
-    thumbnail.classList.add('active');
+    // Show new image
+    currentImageIndex = index;
+    carouselImages[currentImageIndex].classList.add('active');
+    if (indicators[currentImageIndex]) {
+      indicators[currentImageIndex].classList.add('active');
+    }
+    if (thumbnails[currentImageIndex]) {
+      thumbnails[currentImageIndex].classList.add('active');
+    }
   }
+  
+  // Next image
+  function nextImage() {
+    const nextIndex = (currentImageIndex + 1) % carouselImages.length;
+    goToImage(nextIndex);
+  }
+  
+  // Previous image
+  function previousImage() {
+    const prevIndex = (currentImageIndex - 1 + carouselImages.length) % carouselImages.length;
+    goToImage(prevIndex);
+  }
+  
+  // Touch swipe functionality
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const carousel = document.getElementById('image-carousel');
+  
+  if (carousel) {
+    carousel.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    carousel.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+  }
+  
+  function handleSwipe() {
+    const swipeThreshold = 50; // Minimum swipe distance
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swiped left - next image
+        nextImage();
+      } else {
+        // Swiped right - previous image
+        previousImage();
+      }
+    }
+  }
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+      previousImage();
+    } else if (e.key === 'ArrowRight') {
+      nextImage();
+    }
+  });
   
   // Update variant based on selected options
   function updateVariant() {
