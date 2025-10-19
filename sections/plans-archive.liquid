@@ -1,6 +1,7 @@
 {% comment %}
   Plans Archive Section - Unified Card Styling
   Matches the featured-collection card design exactly
+  Fetches products from Shopify collections
 {% endcomment %}
 
 <style>
@@ -313,42 +314,76 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const API_BASE = '{{ section.settings.api_base_url }}';
   const grid = document.getElementById('plans-grid');
+  const collectionHandle = '{{ section.settings.collection_handle }}' || 'floor-plans';
 
   async function loadPlans() {
     try {
-      const response = await fetch(`${API_BASE}/api/plans`);
-      if (!response.ok) throw new Error('Failed to fetch plans');
+      // Fetch products from Shopify collection
+      const response = await fetch(`/collections/${collectionHandle}/products.json`);
       
-      const plans = await response.json();
+      if (!response.ok) throw new Error('Failed to fetch products');
+      
+      const data = await response.json();
+      const products = data.products;
+      
+      if (!products || products.length === 0) {
+        grid.innerHTML = '<div class="loading-message">No products available in this collection.</div>';
+        return;
+      }
       
       grid.innerHTML = '';
       
-      plans.forEach((plan, index) => {
+      products.forEach((product, index) => {
         const card = document.createElement('div');
         card.className = 'product-card fade-in';
         card.style.animationDelay = `${index * 0.05}s`;
+        card.style.cursor = 'pointer';
         
-        const imageUrl = plan.image_url || 'https://via.placeholder.com/400x280?text=No+Image';
-        const title = plan.title || 'Untitled Plan';
-        const description = plan.description || 'No description available';
-        const width = plan.width || 'N/A';
-        const length = plan.length || 'N/A';
-        const price = plan.price || 0;
-        const planId = plan.id;
+        // Click handler for entire card
+        card.addEventListener('click', function(e) {
+          if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+            window.location.href = `/products/${product.handle}`;
+          }
+        });
+        
+        // Get product details
+        const imageUrl = product.images && product.images.length > 0 
+          ? product.images[0].src 
+          : 'https://via.placeholder.com/400x280?text=No+Image';
+        
+        const title = product.title || 'Untitled Product';
+        
+        // Extract description from HTML
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = product.body_html || '';
+        const plainText = tempDiv.textContent || tempDiv.innerText || '';
+        const description = plainText.length > 150 
+          ? plainText.substring(0, 150) + '...' 
+          : plainText || 'No description available';
+        
+        // Extract dimensions from title or tags
+        let specs = '';
+        const sizeMatch = product.title.match(/(\d+)\s*[xX×]\s*(\d+)/);
+        if (sizeMatch) {
+          specs = `<span>📐 ${sizeMatch[1]}' × ${sizeMatch[2]}'</span>`;
+        }
+        
+        // Get price from first variant
+        const variant = product.variants[0];
+        const price = variant && variant.price 
+          ? parseFloat(variant.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          : '0.00';
         
         card.innerHTML = `
           <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy">
           <div class="product-content">
             <h3 class="product-title">${title}</h3>
-            <div class="product-specs">
-              <span>📐 ${width}' × ${length}'</span>
-            </div>
+            ${specs ? `<div class="product-specs">${specs}</div>` : ''}
             <p class="product-description">${description}</p>
-            <div class="product-price">$${parseFloat(price).toLocaleString()}</div>
+            <div class="product-price">$${price}</div>
             <div class="product-buttons">
-              <a href="/products/${planId}" class="btn">View Details</a>
+              <button class="btn" onclick="window.location.href='/products/${product.handle}'">View Details</button>
             </div>
           </div>
         `;
@@ -356,8 +391,8 @@ document.addEventListener('DOMContentLoaded', function() {
         grid.appendChild(card);
       });
     } catch (error) {
-      console.error('Error loading plans:', error);
-      grid.innerHTML = '<div class="loading-message">Unable to load floor plans. Please try again later.</div>';
+      console.error('Error loading products:', error);
+      grid.innerHTML = '<div class="loading-message" style="color: #DC2626;">Unable to load floor plans. Please try again later.</div>';
     }
   }
 
@@ -383,9 +418,10 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     {
       "type": "text",
-      "id": "api_base_url",
-      "label": "API Base URL",
-      "default": "https://your-api-url.com"
+      "id": "collection_handle",
+      "label": "Collection Handle",
+      "default": "floor-plans",
+      "info": "Enter the handle of the Shopify collection to display (e.g., 'floor-plans', 'all')"
     }
   ],
   "presets": [
