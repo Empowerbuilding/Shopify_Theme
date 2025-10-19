@@ -1,43 +1,13 @@
 {% comment %}
-  Plans Archive Section
-  Displays all floor plans from Shopify
+  Plans Archive Section - Unified Card Styling
+  Matches the featured-collection card design exactly
 {% endcomment %}
 
-{% render 'plan-modal-styles' %}
-
-<section class="plans-archive-section">
-  <div class="container">
-    <div class="plans-archive-header">
-      <h1 class="plans-archive-title">Pre-Made Floor Plans</h1>
-      <p class="plans-archive-subtitle">
-        Browse our collection of ready-to-build steel building plans. Download instantly and start your project today.
-      </p>
-    </div>
-    
-    <!-- Products Grid -->
-    <div id="products-grid" class="product-grid">
-      <div class="loading-message">
-        <svg width="40" height="40" viewBox="0 0 40 40" style="margin: 0 auto 1rem; display: block;">
-          <circle cx="20" cy="20" r="18" fill="none" stroke="#3A3A3A" stroke-width="4"/>
-          <circle cx="20" cy="20" r="18" fill="none" stroke="#B8860B" stroke-width="4" stroke-dasharray="90, 150" stroke-linecap="round">
-            <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
-          </circle>
-        </svg>
-        Loading floor plans...
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Load Shopify Products Script -->
-<script src="{{ 'shopify-products.js' | asset_url }}" defer></script>
-
 <style>
-/* Plans Archive Section Styles */
+/* Clean Product Grid Styles - Matches Home Page */
 
 .plans-archive-section {
   padding: 4rem 0;
-  min-height: 60vh;
   background: #1C1C1C;
 }
 
@@ -47,7 +17,7 @@
 }
 
 .plans-archive-title {
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
   -webkit-background-clip: text;
@@ -58,10 +28,9 @@
 
 .plans-archive-subtitle {
   color: #D1D5DB;
-  font-size: 1.25rem;
-  max-width: 700px;
+  font-size: 1.125rem;
+  max-width: 600px;
   margin: 0 auto;
-  line-height: 1.6;
 }
 
 /* IMPROVED PRODUCT GRID */
@@ -229,7 +198,7 @@
   }
 }
 
-/* MOBILE OPTIMIZED LAYOUT */
+/* MOBILE OPTIMIZED LAYOUT - MATCHES HOME PAGE */
 @media (max-width: 768px) {
   .plans-archive-section {
     padding: 1.5rem 0;
@@ -280,117 +249,150 @@
   
   /* CONTENT AREA - GENEROUS PADDING */
   .product-content {
-    padding: 1.5rem 1.25rem;
-    gap: 0.875rem;
+    padding: 1.5rem;
   }
   
-  /* FULL TITLE - NO TRUNCATION */
+  /* MOBILE TITLE */
   .product-title {
     font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.3;
     min-height: auto;
-    max-height: none;
-    display: block;
-    overflow: visible;
-    -webkit-line-clamp: unset;
-    -webkit-box-orient: unset;
-    word-wrap: break-word;
-    margin-bottom: 0.75rem;
+    -webkit-line-clamp: 2;
   }
   
-  /* COMPACT SPECS */
+  /* MOBILE SPECS */
   .product-specs {
     font-size: 0.875rem;
     gap: 0.75rem;
-    min-height: auto;
-    margin-bottom: 0.5rem;
   }
   
-  .product-specs span {
-    gap: 0.375rem;
-  }
-  
-  /* DESCRIPTION - MORE LINES */
+  /* MOBILE DESCRIPTION */
   .product-description {
-    font-size: 0.9rem;
-    line-height: 1.5;
-    -webkit-line-clamp: 3;
+    font-size: 0.875rem;
+    -webkit-line-clamp: 2;
     min-height: auto;
-    margin-bottom: 0.75rem;
   }
   
-  /* PROMINENT PRICE */
+  /* MOBILE PRICE */
   .product-price {
-    font-size: 2rem;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.375rem;
   }
   
-  /* FULL WIDTH BUTTON */
-  .product-buttons {
-    margin-top: 0.75rem;
-  }
-  
+  /* MOBILE BUTTON */
   .product-buttons .btn {
-    padding: 1.125rem 1.5rem;
-    font-size: 1.0625rem;
-    width: 100%;
-    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
   }
 }
 
 /* EXTRA SMALL MOBILE */
 @media (max-width: 480px) {
-  .plans-archive-section {
-    padding: 1rem 0;
-  }
-  
-  .product-grid {
-    gap: 0.75rem;
-  }
-  
   .product-image {
-    height: 350px;
-  }
-  
-  .product-content {
-    padding: 1.25rem 1rem;
+    height: 300px;
   }
   
   .product-title {
-    font-size: 1.15rem;
-  }
-  
-  .product-price {
-    font-size: 1.75rem;
-  }
-  
-  .product-specs {
-    font-size: 0.8125rem;
-  }
-  
-  .product-description {
-    font-size: 0.875rem;
-  }
-}
-
-/* VERY LARGE MOBILE (like iPhone Pro Max) */
-@media (min-width: 481px) and (max-width: 768px) {
-  .product-image {
-    height: 450px;
-  }
-  
-  .product-title {
-    font-size: 1.375rem;
+    font-size: 1.125rem;
   }
 }
 </style>
 
+<section class="plans-archive-section">
+  <div class="container">
+    <div class="plans-archive-header">
+      <h1 class="plans-archive-title">{{ section.settings.title }}</h1>
+      {% if section.settings.subtitle %}
+        <p class="plans-archive-subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="product-grid" id="plans-grid">
+      <div class="loading-message">Loading floor plans...</div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const API_BASE = '{{ section.settings.api_base_url }}';
+  const grid = document.getElementById('plans-grid');
+
+  async function loadPlans() {
+    try {
+      const response = await fetch(`${API_BASE}/api/plans`);
+      if (!response.ok) throw new Error('Failed to fetch plans');
+      
+      const plans = await response.json();
+      
+      grid.innerHTML = '';
+      
+      plans.forEach((plan, index) => {
+        const card = document.createElement('div');
+        card.className = 'product-card fade-in';
+        card.style.animationDelay = `${index * 0.05}s`;
+        
+        const imageUrl = plan.image_url || 'https://via.placeholder.com/400x280?text=No+Image';
+        const title = plan.title || 'Untitled Plan';
+        const description = plan.description || 'No description available';
+        const width = plan.width || 'N/A';
+        const length = plan.length || 'N/A';
+        const price = plan.price || 0;
+        const planId = plan.id;
+        
+        card.innerHTML = `
+          <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy">
+          <div class="product-content">
+            <h3 class="product-title">${title}</h3>
+            <div class="product-specs">
+              <span>📐 ${width}' × ${length}'</span>
+            </div>
+            <p class="product-description">${description}</p>
+            <div class="product-price">$${parseFloat(price).toLocaleString()}</div>
+            <div class="product-buttons">
+              <a href="/products/${planId}" class="btn">View Details</a>
+            </div>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error loading plans:', error);
+      grid.innerHTML = '<div class="loading-message">Unable to load floor plans. Please try again later.</div>';
+    }
+  }
+
+  loadPlans();
+});
+</script>
+
 {% schema %}
 {
   "name": "Plans Archive",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Browse Our Floor Plans"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "Explore our complete collection of customizable steel building floor plans"
+    },
+    {
+      "type": "text",
+      "id": "api_base_url",
+      "label": "API Base URL",
+      "default": "https://your-api-url.com"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Plans Archive",
+      "category": "Custom"
+    }
+  ]
 }
 {% endschema %}
-
