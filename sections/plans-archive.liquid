@@ -202,12 +202,14 @@
 /* MOBILE OPTIMIZED LAYOUT - MATCHES HOME PAGE */
 @media (max-width: 768px) {
   .plans-archive-section {
-    padding: 1.5rem 0;
+    padding: 100px 0 1.5rem 0;
+    margin-top: 0;
   }
   
   .plans-archive-header {
     padding: 0 1rem;
     margin-bottom: 1.5rem;
+    padding-top: env(safe-area-inset-top, 0);
   }
   
   .plans-archive-title {
@@ -287,6 +289,10 @@
 
 /* EXTRA SMALL MOBILE */
 @media (max-width: 480px) {
+  .plans-archive-section {
+    padding-top: 90px;
+  }
+  
   .product-image {
     height: 300px;
   }
