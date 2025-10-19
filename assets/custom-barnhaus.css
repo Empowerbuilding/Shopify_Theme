@@ -613,31 +613,32 @@ img {
   position: relative;
 }
 
-/* Mobile Back Button */
+/* Back Button (Desktop & Mobile) */
 .mobile-back-button {
-  display: none; /* Hidden on desktop */
+  display: flex;
   position: fixed;
   top: 90px;
-  left: 1rem;
+  left: 1.5rem;
   z-index: 999;
   background: rgba(42, 42, 42, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid var(--color-border);
   border-radius: 50%;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   align-items: center;
   justify-content: center;
   color: var(--color-white);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .mobile-back-button:hover {
   background: var(--color-primary-gold);
   border-color: var(--color-primary-gold);
   transform: translateX(-3px);
+  box-shadow: 0 6px 16px rgba(184, 134, 11, 0.4);
 }
 
 .mobile-back-button svg {
@@ -647,9 +648,11 @@ img {
 
 .product-main {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 3rem;
   margin-bottom: 3rem;
+  max-width: 900px;
+  margin: 0 auto 3rem auto;
 }
 
 .product-gallery {
@@ -1324,11 +1327,6 @@ img {
     padding: 100px 0 1.5rem 0;
     width: 100%;
     overflow-x: hidden;
-  }
-  
-  /* Show mobile back button */
-  .mobile-back-button {
-    display: flex;
   }
   
   /* Always show navigation arrows on mobile */
