@@ -3,7 +3,8 @@
     "main": {
       "type": "featured-collection",
       "settings": {
-        "title": "Featured Steel Building Plans"
+        "title": "Steel Building Floor Plans",
+        "description": "Browse our collection of customizable steel building plans, perfect for barndominiums, garages, and more."
       }
     }
   },
