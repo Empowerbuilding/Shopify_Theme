@@ -1,0 +1,431 @@
+{% comment %}
+  Store Homepage Section
+  Features hero section with CTAs and features grid
+{% endcomment %}
+
+<div class="store-homepage">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-image-wrapper">
+      <img 
+        src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/hero-min.jpg" 
+        alt="Steel Building" 
+        class="hero-image"
+        loading="eager"
+      >
+      <div class="hero-overlay"></div>
+    </div>
+    
+    <div class="hero-content">
+      <h1 class="hero-title">{{ section.settings.title | default: "Premium Steel Building Plans" }}</h1>
+      <p class="hero-subtitle">Ready-to-build plans or custom designs tailored to your vision</p>
+      
+      <div class="hero-ctas">
+        <a href="/collections/all" class="hero-btn hero-btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Browse Pre-Made Plans
+        </a>
+        
+        <a href="https://barnhaussteelbuilders.com/cost-calculator" class="hero-btn hero-btn-secondary" target="_blank">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          Custom Concept Studio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section">
+    <div class="page-width">
+      <h2 class="features-title">Why Choose Barnhaus Steel?</h2>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <h3>Pre-Made Plans</h3>
+          <p>Download complete, builder-ready steel building plans instantly. Perfect for common sizes and layouts.</p>
+          <a href="/collections/all" class="feature-link">Browse Plans →</a>
+        </div>
+        
+        <div class="feature-card feature-card-highlight">
+          <div class="feature-badge">Most Popular</div>
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+          </div>
+          <h3>Custom Design Studio</h3>
+          <p>Use our interactive cost calculator to design your dream building. Get instant pricing and 3D visualization.</p>
+          <a href="https://barnhaussteelbuilders.com/cost-calculator" class="feature-link" target="_blank">Start Designing →</a>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3>Instant Download</h3>
+          <p>Get your plans immediately after purchase. Includes structural drawings, material lists, and specifications.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="cta-section">
+    <div class="page-width">
+      <div class="cta-content">
+        <h2>Ready to Build Your Dream?</h2>
+        <p>Whether you choose a pre-made plan or custom design, we're here to help bring your vision to life.</p>
+        <div class="cta-buttons">
+          <a href="/collections/all" class="btn btn-large">Shop Plans</a>
+          <a href="https://barnhaussteelbuilders.com/contact" class="btn btn-secondary btn-large" target="_blank">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Store Homepage Styles */
+.store-homepage {
+  background: #1C1C1C;
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  height: 80vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-image-wrapper {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(28, 28, 28, 0.7), rgba(28, 28, 28, 0.9));
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem;
+  max-width: 900px;
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #D1D5DB;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 3rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  min-width: 280px;
+  justify-content: center;
+}
+
+.hero-btn-primary {
+  background: linear-gradient(135deg, #B8860B 0%, #966F09 100%);
+  color: white;
+  box-shadow: 0 4px 20px rgba(184, 134, 11, 0.4);
+}
+
+.hero-btn-primary:hover {
+  background: linear-gradient(135deg, #966F09 0%, #B8860B 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(184, 134, 11, 0.6);
+}
+
+.hero-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 2px solid #B8860B;
+  backdrop-filter: blur(10px);
+}
+
+.hero-btn-secondary:hover {
+  background: rgba(184, 134, 11, 0.2);
+  transform: translateY(-3px);
+}
+
+/* Features Section */
+.features-section {
+  padding: 5rem 0;
+  background: #1C1C1C;
+}
+
+.features-title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: #2A2A2A;
+  border: 2px solid #3A3A3A;
+  border-radius: 12px;
+  padding: 2.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.feature-card:hover {
+  border-color: #B8860B;
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(184, 134, 11, 0.3);
+}
+
+.feature-card-highlight {
+  border-color: #B8860B;
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.1), rgba(150, 111, 9, 0.05));
+}
+
+.feature-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #B8860B 0%, #966F09 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.feature-icon {
+  margin-bottom: 1.5rem;
+  color: #B8860B;
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feature-card p {
+  color: #D1D5DB;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.feature-link {
+  color: #B8860B;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: gap 0.3s ease;
+  text-decoration: none;
+}
+
+.feature-link:hover {
+  gap: 1rem;
+}
+
+/* CTA Section */
+.cta-section {
+  background: linear-gradient(135deg, #2A2A2A 0%, #1C1C1C 100%);
+  padding: 5rem 0;
+  border-top: 2px solid #3A3A3A;
+}
+
+.cta-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-content h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-content p {
+  font-size: 1.25rem;
+  color: #D1D5DB;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-large {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.1rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hero-section {
+    height: 70vh;
+    min-height: 500px;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-ctas {
+    flex-direction: column;
+  }
+  
+  .hero-btn {
+    min-width: 100%;
+    font-size: 1.1rem;
+    padding: 1.25rem 2rem;
+  }
+  
+  .features-section {
+    padding: 3rem 0;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .features-title {
+    font-size: 2rem;
+  }
+  
+  .feature-card {
+    padding: 2rem;
+  }
+  
+  .cta-section {
+    padding: 3rem 0;
+  }
+  
+  .cta-content h2 {
+    font-size: 2rem;
+  }
+  
+  .cta-content p {
+    font-size: 1.1rem;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-large {
+    width: 100%;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Store Homepage",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Hero Title",
+      "default": "Premium Steel Building Plans"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store Homepage"
+    }
+  ]
+}
+{% endschema %}
+
