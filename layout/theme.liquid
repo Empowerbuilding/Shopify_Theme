@@ -75,11 +75,12 @@
       <!-- Header Icons -->
       <div class="header-icons">
         <!-- Search Icon -->
-        <a href="/search" class="header-icon" aria-label="Search">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <button class="header-icon" onclick="openSearchModal()" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
           </svg>
-        </a>
+        </button>
         
         <!-- Cart Icon -->
         <a href="/cart" class="header-icon cart-icon" aria-label="Cart">
@@ -106,7 +107,7 @@
         <li class="mobile-nav-item"><a href="/" class="mobile-nav-link">Home</a></li>
         <li class="mobile-nav-item"><a href="/collections/all" class="mobile-nav-link">Catalog</a></li>
         <li class="mobile-nav-item"><a href="/pages/contact" class="mobile-nav-link">Contact</a></li>
-        <li class="mobile-nav-item"><a href="/search" class="mobile-nav-link">Search</a></li>
+        <li class="mobile-nav-item"><button class="mobile-nav-link" onclick="openSearchModal()" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer;">Search</button></li>
       </ul>
     </nav>
   </header>
@@ -169,6 +170,9 @@
       </div>
     </div>
   </footer>
+  
+  <!-- Search Modal -->
+  {% render 'search-modal' %}
   
   <!-- Scripts -->
   <script>

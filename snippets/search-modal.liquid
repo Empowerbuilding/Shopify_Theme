@@ -1,0 +1,363 @@
+{% comment %}
+  Search Modal
+  Modern full-screen search overlay with Barnhaus branding
+{% endcomment %}
+
+<style>
+  /* Search Modal Overlay */
+  .search-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    padding: 1rem;
+    overflow-y: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .search-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+  
+  /* Search Modal Container */
+  .search-modal {
+    background: #2A2A2A;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 700px;
+    width: 100%;
+    margin: 10vh auto 2rem;
+    padding: 2rem;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+  }
+  
+  .search-modal-overlay.active .search-modal {
+    transform: translateY(0);
+  }
+  
+  /* Close Button */
+  .search-modal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-gray);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+    z-index: 10;
+  }
+  
+  .search-modal-close:hover {
+    color: var(--color-gold);
+  }
+  
+  .search-modal-close svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Search Modal Header */
+  .search-modal-header {
+    margin-bottom: 2rem;
+  }
+  
+  .search-modal-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+  
+  .search-modal-subtitle {
+    color: var(--color-text-gray);
+    font-size: 0.95rem;
+  }
+  
+  /* Search Input Container */
+  .search-input-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .search-input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-gray);
+    pointer-events: none;
+  }
+  
+  .search-input-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Search Input */
+  .search-modal-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    background: #1C1C1C;
+    border: 2px solid #3A3A3A;
+    border-radius: 8px;
+    color: white;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+  
+  .search-modal-input:focus {
+    border-color: #B8860B;
+    box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.1);
+  }
+  
+  .search-modal-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  
+  /* Popular Searches */
+  .search-popular {
+    margin-top: 1.5rem;
+  }
+  
+  .search-popular-label {
+    color: var(--color-text-gray);
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  
+  .search-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .search-tag {
+    background: #1C1C1C;
+    border: 1px solid #3A3A3A;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    color: white;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-block;
+  }
+  
+  .search-tag:hover {
+    background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+  }
+  
+  /* Search Tips */
+  .search-tips {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #3A3A3A;
+  }
+  
+  .search-tip {
+    display: flex;
+    align-items: start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-gray);
+    font-size: 0.875rem;
+  }
+  
+  .search-tip:last-child {
+    margin-bottom: 0;
+  }
+  
+  .search-tip-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+  }
+  
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .search-modal {
+      margin: 5vh auto 2rem;
+      padding: 1.5rem;
+    }
+    
+    .search-modal-title {
+      font-size: 1.5rem;
+    }
+    
+    .search-modal-input {
+      font-size: 1rem;
+      padding: 0.875rem 0.875rem 0.875rem 2.75rem;
+    }
+    
+    .search-input-icon {
+      left: 0.875rem;
+    }
+    
+    .search-input-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .search-modal-close {
+      top: 1rem;
+      right: 1rem;
+    }
+  }
+  
+  /* Prevent body scroll when modal is open */
+  body.search-modal-open {
+    overflow: hidden;
+  }
+</style>
+
+<!-- Search Modal HTML -->
+<div class="search-modal-overlay" id="search-modal-overlay" onclick="closeSearchModalOnOverlay(event)">
+  <div class="search-modal" onclick="event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="search-modal-close" onclick="closeSearchModal()" aria-label="Close search">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <!-- Modal Header -->
+    <div class="search-modal-header">
+      <h2 class="search-modal-title">Search Products</h2>
+      <p class="search-modal-subtitle">Find your perfect steel building plan</p>
+    </div>
+    
+    <!-- Search Form -->
+    <form action="/search" method="get" class="search-form">
+      <div class="search-input-container">
+        <div class="search-input-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </div>
+        <input 
+          type="search" 
+          name="q" 
+          class="search-modal-input" 
+          placeholder="Search for building plans, sizes, or styles..."
+          autocomplete="off"
+          id="search-modal-input"
+          autofocus>
+      </div>
+    </form>
+    
+    <!-- Popular Searches -->
+    <div class="search-popular">
+      <span class="search-popular-label">Popular Searches:</span>
+      <div class="search-tags">
+        <a href="/search?q=barndominium" class="search-tag">Barndominium</a>
+        <a href="/search?q=30x40" class="search-tag">30x40</a>
+        <a href="/search?q=40x60" class="search-tag">40x60</a>
+        <a href="/search?q=2+bedroom" class="search-tag">2 Bedroom</a>
+        <a href="/search?q=3+bedroom" class="search-tag">3 Bedroom</a>
+        <a href="/search?q=garage" class="search-tag">Garage</a>
+      </div>
+    </div>
+    
+    <!-- Search Tips -->
+    <div class="search-tips">
+      <div class="search-tip">
+        <span class="search-tip-icon">💡</span>
+        <span>Try searching by size (e.g., "30x40"), style, or number of bedrooms</span>
+      </div>
+      <div class="search-tip">
+        <span class="search-tip-icon">⌨️</span>
+        <span>Press <strong>Esc</strong> to close this search modal</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Open search modal
+  function openSearchModal() {
+    const overlay = document.getElementById('search-modal-overlay');
+    const input = document.getElementById('search-modal-input');
+    
+    if (overlay) {
+      overlay.classList.add('active');
+      document.body.classList.add('search-modal-open');
+      
+      // Focus input after animation
+      setTimeout(function() {
+        if (input) {
+          input.focus();
+        }
+      }, 100);
+    }
+  }
+  
+  // Close search modal
+  function closeSearchModal() {
+    const overlay = document.getElementById('search-modal-overlay');
+    
+    if (overlay) {
+      overlay.classList.remove('active');
+      document.body.classList.remove('search-modal-open');
+    }
+  }
+  
+  // Close when clicking outside modal
+  function closeSearchModalOnOverlay(event) {
+    if (event.target.id === 'search-modal-overlay') {
+      closeSearchModal();
+    }
+  }
+  
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(event) {
+    // Close on Escape key
+    if (event.key === 'Escape' || event.keyCode === 27) {
+      closeSearchModal();
+    }
+    
+    // Open on Ctrl/Cmd + K
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      event.preventDefault();
+      openSearchModal();
+    }
+  });
+  
+  // Prevent form submission if search is empty
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchForm = document.querySelector('.search-form');
+    if (searchForm) {
+      searchForm.addEventListener('submit', function(e) {
+        const input = document.getElementById('search-modal-input');
+        if (input && input.value.trim() === '') {
+          e.preventDefault();
+          input.focus();
+        }
+      });
+    }
+  });
+</script>
+
