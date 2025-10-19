@@ -1,0 +1,151 @@
+{% comment %}
+  Featured Collection Section
+  Displays a featured collection on the homepage
+{% endcomment %}
+
+{% assign collection = collections[section.settings.collection] %}
+
+<section class="featured-collection section">
+  <div class="container">
+    <div class="section-header">
+      {% if section.settings.title != blank %}
+        <h2 class="section-title">{{ section.settings.title }}</h2>
+      {% else %}
+        <h2 class="section-title">{{ collection.title }}</h2>
+      {% endif %}
+      
+      {% if section.settings.description != blank %}
+        <p class="section-description">{{ section.settings.description }}</p>
+      {% elsif collection.description != blank %}
+        <p class="section-description">{{ collection.description | strip_html | truncate: 200 }}</p>
+      {% endif %}
+    </div>
+    
+    {% if collection.products.size > 0 %}
+      <div class="product-grid">
+        {% assign products_to_show = section.settings.products_to_show | default: 8 %}
+        {% for product in collection.products limit: products_to_show %}
+          <div class="product-card fade-in" style="animation-delay: {{ forloop.index | times: 0.1 }}s;">
+            <a href="{{ product.url }}" class="product-card-link">
+              <div class="product-card-image-wrapper">
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: '400x400' }}" 
+                       alt="{{ product.featured_image.alt | escape }}"
+                       class="product-card-image"
+                       loading="lazy">
+                {% else %}
+                  <img src="{{ 'product-placeholder.png' | asset_url }}" 
+                       alt="Product placeholder"
+                       class="product-card-image"
+                       loading="lazy">
+                {% endif %}
+                
+                {% unless product.available %}
+                  <div style="position: absolute; top: 1rem; right: 1rem; background: #DC2626; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                    SOLD OUT
+                  </div>
+                {% endunless %}
+                
+                {% if product.compare_at_price > product.price %}
+                  <div style="position: absolute; top: 1rem; left: 1rem; background: var(--gradient-gold); color: white; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                    SALE
+                  </div>
+                {% endif %}
+              </div>
+              
+              <div class="product-card-content">
+                <h3 class="product-card-title">{{ product.title }}</h3>
+                
+                <div class="product-card-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span style="text-decoration: line-through; opacity: 0.6; font-size: 1rem; margin-right: 0.5rem;">
+                      {{ product.compare_at_price | money }}
+                    </span>
+                  {% endif %}
+                  {{ product.price | money }}
+                </div>
+                
+                {% if product.description != blank %}
+                  <div class="product-card-description">
+                    {{ product.description | strip_html | truncate: 100 }}
+                  </div>
+                {% endif %}
+                
+                <div class="product-card-button">
+                  <button class="btn btn-small btn-full-width">
+                    {% if product.available %}
+                      View Product
+                    {% else %}
+                      View Details
+                    {% endif %}
+                  </button>
+                </div>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+      
+      {% if section.settings.show_view_all %}
+        <div class="text-center" style="margin-top: 3rem;">
+          <a href="{{ collection.url }}" class="btn btn-large">
+            View All {{ collection.title }}
+          </a>
+        </div>
+      {% endif %}
+      
+    {% else %}
+      <div class="text-center" style="padding: 3rem 0;">
+        <p style="color: var(--color-text-gray); font-size: 1.125rem;">
+          No products in this collection yet.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 2,
+      "label": "Products to show",
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}
+

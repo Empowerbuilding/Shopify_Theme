@@ -1,0 +1,37 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "title": "Premium Steel Building Solutions",
+        "subtitle": "Crafted with Precision and Excellence",
+        "button_text": "Shop Now",
+        "button_link": "/collections/all"
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Featured Products",
+        "collection": "frontpage",
+        "products_to_show": 8,
+        "show_view_all": true
+      }
+    },
+    "text_with_image": {
+      "type": "text-with-image",
+      "settings": {
+        "title": "Built to Last",
+        "text": "At Barnhaus Steel Builders, we specialize in creating durable, high-quality steel structures that stand the test of time. Our commitment to excellence and attention to detail ensures that every project exceeds expectations.",
+        "button_text": "Learn More",
+        "button_link": "/pages/about"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_collection",
+    "text_with_image"
+  ]
+}
+
