@@ -22,20 +22,7 @@
     </div>
     
     <div class="hero-content">
-      <h1 class="hero-title">{{ section.settings.title | default: "Premium Steel Building Plans" }}</h1>
-      <p class="hero-subtitle">Ready-to-build plans or custom designs tailored to your vision</p>
-      
-      <div class="hero-ctas">
-        <a href="/pages/plans" class="hero-btn hero-btn-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
-          </svg>
-          Browse Pre-Made Plans
-        </a>
-      </div>
+      <p class="hero-tagline">Be Different</p>
     </div>
   </div>
 
@@ -170,72 +157,22 @@
 .hero-content {
   position: relative;
   z-index: 1;
-  text-align: center;
-  padding: 2rem;
-  max-width: 900px;
-}
-
-.hero-title {
-  font-size: 4rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1.2;
-}
-
-.hero-subtitle {
-  font-size: 1.5rem;
-  color: #D1D5DB;
-  margin-bottom: 3rem;
-  line-height: 1.6;
-}
-
-.hero-ctas {
+  width: 100%;
+  height: 100%;
   display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 2rem;
 }
 
-.hero-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.5rem 3rem;
-  font-size: 1.25rem;
-  font-weight: 600;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  min-width: 280px;
-  justify-content: center;
-}
-
-.hero-btn-primary {
-  background: linear-gradient(135deg, #B8860B 0%, #966F09 100%);
+.hero-tagline {
+  font-size: 3rem;
+  font-weight: 700;
   color: white;
-  box-shadow: 0 4px 20px rgba(184, 134, 11, 0.4);
-}
-
-.hero-btn-primary:hover {
-  background: linear-gradient(135deg, #966F09 0%, #B8860B 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 25px rgba(184, 134, 11, 0.6);
-}
-
-.hero-btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 2px solid #B8860B;
-  backdrop-filter: blur(10px);
-}
-
-.hero-btn-secondary:hover {
-  background: rgba(184, 134, 11, 0.2);
-  transform: translateY(-3px);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* Features Section */
@@ -379,26 +316,17 @@
 @media (max-width: 768px) {
   .hero-section {
     height: 50vh;
-    min-height: 500px;
+    min-height: 400px;
+    margin-top: -70px;
+    padding-top: 70px;
   }
   
-  .hero-title {
-    font-size: 2.5rem;
+  .hero-content {
+    padding: 1.5rem;
   }
   
-  .hero-subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .hero-ctas {
-    flex-direction: column;
-  }
-  
-  .hero-btn {
-    min-width: 100%;
-    font-size: 1.1rem;
-    padding: 1.25rem 2rem;
+  .hero-tagline {
+    font-size: 2rem;
   }
   
   .features-section {

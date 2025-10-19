@@ -43,7 +43,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-top: 0;
+  margin: 0;
+  padding: 0;
 }
 
 /* Add padding for pages that don't have hero */
@@ -52,6 +53,10 @@ body {
 }
 
 /* Remove padding on homepage with hero */
+.template-index {
+  padding-top: 0;
+}
+
 .template-index .main-content {
   padding-top: 0;
 }
@@ -128,7 +133,7 @@ img {
   z-index: 1000;
   background: rgba(28, 28, 28, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(58, 58, 58, 0.5);
+  border-bottom: none;
   transition: all 0.3s ease;
   width: 100%;
 }
