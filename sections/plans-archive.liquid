@@ -1,0 +1,84 @@
+{% comment %}
+  Plans Archive Section
+  Displays all floor plans from Supabase
+{% endcomment %}
+
+<section class="plans-archive-section">
+  <div class="container">
+    <div class="plans-archive-header">
+      <h1 class="plans-archive-title">Pre-Made Floor Plans</h1>
+      <p class="plans-archive-subtitle">
+        Browse our collection of ready-to-build steel building plans. Download instantly and start your project today.
+      </p>
+    </div>
+    
+    <!-- Supabase Products Grid -->
+    <div id="supabase-products-grid" class="product-grid">
+      <div class="loading-message">
+        <svg width="40" height="40" viewBox="0 0 40 40" style="margin: 0 auto 1rem; display: block;">
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#3A3A3A" stroke-width="4"/>
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#B8860B" stroke-width="4" stroke-dasharray="90, 150" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+        Loading floor plans...
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Load Supabase Products Script -->
+<script src="{{ 'supabase-products.js' | asset_url }}" defer></script>
+
+<style>
+.plans-archive-section {
+  padding: 4rem 0;
+  min-height: 60vh;
+  background: #1C1C1C;
+}
+
+.plans-archive-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.plans-archive-title {
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.plans-archive-subtitle {
+  color: var(--color-text-gray);
+  font-size: 1.25rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .plans-archive-section {
+    padding: 3rem 0;
+  }
+  
+  .plans-archive-title {
+    font-size: 2rem;
+  }
+  
+  .plans-archive-subtitle {
+    font-size: 1.1rem;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Plans Archive",
+  "settings": []
+}
+{% endschema %}
+
