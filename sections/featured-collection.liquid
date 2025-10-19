@@ -1,19 +1,19 @@
 {% comment %}
-  Featured Collection Section - Supabase Integration
-  Displays floor plans fetched from Supabase database
+  Featured Collection Section - Shopify Integration
+  Displays floor plans from Shopify collection
 {% endcomment %}
 
 <style>
-  .supabase-section {
+  .products-section {
     padding: 4rem 0;
   }
   
-  .supabase-header {
+  .products-header {
     text-align: center;
     margin-bottom: 3rem;
   }
   
-  .supabase-title {
+  .products-title {
     font-size: 2.5rem;
     font-weight: 700;
     background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
@@ -23,7 +23,7 @@
     margin-bottom: 1rem;
   }
   
-  .supabase-subtitle {
+  .products-subtitle {
     color: var(--color-text-gray);
     font-size: 1.125rem;
     max-width: 600px;
@@ -37,7 +37,7 @@
     margin: 2rem 0;
   }
   
-  .supabase-product-card {
+  .product-card {
     background: #2A2A2A;
     border: 1px solid #3A3A3A;
     border-radius: 8px;
@@ -47,27 +47,27 @@
     flex-direction: column;
   }
   
-  .supabase-product-card:hover {
+  .product-card:hover {
     border-color: #B8860B;
     box-shadow: 0 8px 24px rgba(184, 134, 11, 0.3);
     transform: translateY(-4px);
   }
   
-  .supabase-product-image {
+  .product-image {
     width: 100%;
     height: 300px;
     object-fit: cover;
     background: #f5f5f5;
   }
   
-  .supabase-product-content {
+  .product-content {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
   }
   
-  .supabase-product-title {
+  .product-title {
     font-size: 1.5rem;
     font-weight: 700;
     background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
@@ -78,7 +78,7 @@
     line-height: 1.3;
   }
   
-  .supabase-product-specs {
+  .product-specs {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -87,40 +87,40 @@
     font-size: 0.9rem;
   }
   
-  .supabase-product-specs span {
+  .product-specs span {
     display: flex;
     align-items: center;
     gap: 0.25rem;
   }
   
-  .supabase-product-description {
+  .product-description {
     color: #D1D5DB;
     font-size: 0.9rem;
     line-height: 1.6;
     margin-bottom: 1rem;
   }
   
-  .supabase-product-features {
+  .product-features {
     list-style: none;
     margin-bottom: 1.5rem;
     padding: 0;
   }
   
-  .supabase-product-features li {
+  .product-features li {
     color: #D1D5DB;
     padding: 0.35rem 0;
     font-size: 0.9rem;
     line-height: 1.4;
   }
   
-  .supabase-product-features li:before {
+  .product-features li:before {
     content: "✓ ";
     color: #B8860B;
     font-weight: bold;
     margin-right: 0.5rem;
   }
   
-  .supabase-product-price {
+  .product-price {
     color: #B8860B;
     font-size: 1.25rem;
     font-weight: 700;
@@ -128,12 +128,12 @@
     margin-top: auto;
   }
   
-  .supabase-product-buttons {
+  .product-buttons {
     display: flex;
     gap: 0.5rem;
   }
   
-  .supabase-product-buttons .btn {
+  .product-buttons .btn {
     flex: 1;
     text-align: center;
     justify-content: center;
@@ -164,12 +164,12 @@
     opacity: 0;
   }
   
-  .supabase-product-card:nth-child(1) { animation-delay: 0.1s; }
-  .supabase-product-card:nth-child(2) { animation-delay: 0.2s; }
-  .supabase-product-card:nth-child(3) { animation-delay: 0.3s; }
-  .supabase-product-card:nth-child(4) { animation-delay: 0.4s; }
-  .supabase-product-card:nth-child(5) { animation-delay: 0.5s; }
-  .supabase-product-card:nth-child(6) { animation-delay: 0.6s; }
+  .product-card:nth-child(1) { animation-delay: 0.1s; }
+  .product-card:nth-child(2) { animation-delay: 0.2s; }
+  .product-card:nth-child(3) { animation-delay: 0.3s; }
+  .product-card:nth-child(4) { animation-delay: 0.4s; }
+  .product-card:nth-child(5) { animation-delay: 0.5s; }
+  .product-card:nth-child(6) { animation-delay: 0.6s; }
   
   @media (max-width: 1024px) {
     .product-grid {
@@ -179,15 +179,15 @@
   }
   
   @media (max-width: 768px) {
-    .supabase-section {
+    .products-section {
       padding: 3rem 0;
     }
     
-    .supabase-title {
+    .products-title {
       font-size: 2rem;
     }
     
-    .supabase-subtitle {
+    .products-subtitle {
       font-size: 1rem;
     }
     
@@ -196,15 +196,15 @@
       gap: 1.5rem;
     }
     
-    .supabase-product-image {
+    .product-image {
       height: 250px;
     }
     
-    .supabase-product-title {
+    .product-title {
       font-size: 1.25rem;
     }
     
-    .supabase-product-buttons {
+    .product-buttons {
       flex-direction: column;
     }
   }
@@ -665,26 +665,26 @@
   }
 </style>
 
-<section class="supabase-section">
+<section class="products-section">
   <div class="container">
-    <div class="supabase-header">
+    <div class="products-header">
       {% if section.settings.title != blank %}
-        <h2 class="supabase-title">{{ section.settings.title }}</h2>
+        <h2 class="products-title">{{ section.settings.title }}</h2>
       {% else %}
-        <h2 class="supabase-title">Steel Building Floor Plans</h2>
+        <h2 class="products-title">Steel Building Floor Plans</h2>
       {% endif %}
       
       {% if section.settings.description != blank %}
-        <p class="supabase-subtitle">{{ section.settings.description }}</p>
+        <p class="products-subtitle">{{ section.settings.description }}</p>
       {% else %}
-        <p class="supabase-subtitle">
+        <p class="products-subtitle">
           Explore our premium steel building floor plans, designed for durability and customization.
         </p>
       {% endif %}
     </div>
     
-    <!-- Supabase Products Grid -->
-    <div id="supabase-products-grid" class="product-grid">
+    <!-- Products Grid -->
+    <div id="products-grid" class="product-grid">
       <div class="loading-message">
         <svg width="40" height="40" viewBox="0 0 40 40" style="margin: 0 auto 1rem; display: block;">
           <circle cx="20" cy="20" r="18" fill="none" stroke="#3A3A3A" stroke-width="4"/>
@@ -698,8 +698,8 @@
   </div>
 </section>
 
-<!-- Load Supabase Products Script -->
-<script src="{{ 'supabase-products.js' | asset_url }}" defer></script>
+<!-- Load Shopify Products Script -->
+<script src="{{ 'shopify-products.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
