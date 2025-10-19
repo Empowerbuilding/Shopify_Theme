@@ -20,7 +20,7 @@
           <div class="image-carousel" id="image-carousel">
             {% if product.images.size > 0 %}
               {% for image in product.images %}
-                <div class="carousel-image {% if forloop.first %}active{% endif %}">
+                <div class="carousel-image {% if forloop.first %}active{% endif %}" onclick="openLightbox({{ forloop.index0 }})" style="cursor: zoom-in;">
                   <img src="{{ image | img_url: '800x800' }}" 
                        alt="{{ image.alt | escape }}"
                        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
@@ -165,6 +165,45 @@
       </div>
     </div>
   </div>
+  
+  <!-- Image Lightbox Modal -->
+  <div id="image-lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close lightbox">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <div class="lightbox-content">
+      <div class="lightbox-images" id="lightbox-images">
+        {% if product.images.size > 0 %}
+          {% for image in product.images %}
+            <div class="lightbox-image {% if forloop.first %}active{% endif %}">
+              <img src="{{ image | img_url: '1200x1200' }}" 
+                   alt="{{ image.alt | escape }}"
+                   loading="lazy">
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      
+      {% if product.images.size > 1 %}
+        <button class="lightbox-nav prev" onclick="lightboxPrevious(event)" aria-label="Previous image">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="lightbox-nav next" onclick="lightboxNext(event)" aria-label="Next image">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+        
+        <div class="lightbox-counter" id="lightbox-counter">1 / {{ product.images.size }}</div>
+      {% endif %}
+    </div>
+  </div>
 </section>
 
 <script>
@@ -253,6 +292,83 @@
       nextImage();
     }
   });
+  
+  // Lightbox functionality
+  let lightboxCurrentIndex = 0;
+  const lightboxImages = document.querySelectorAll('.lightbox-image');
+  const lightbox = document.getElementById('image-lightbox');
+  const lightboxCounter = document.getElementById('lightbox-counter');
+  
+  // Open lightbox
+  function openLightbox(index) {
+    lightboxCurrentIndex = index;
+    updateLightboxImage();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  }
+  
+  // Close lightbox
+  function closeLightbox(event) {
+    if (event) {
+      event.stopPropagation();
+      // Only close if clicking the backdrop or close button
+      if (event.target === lightbox || event.currentTarget.classList.contains('lightbox-close')) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+      }
+    } else {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+  
+  // Update lightbox image
+  function updateLightboxImage() {
+    lightboxImages.forEach((img, idx) => {
+      img.classList.toggle('active', idx === lightboxCurrentIndex);
+    });
+    
+    if (lightboxCounter && lightboxImages.length > 1) {
+      lightboxCounter.textContent = `${lightboxCurrentIndex + 1} / ${lightboxImages.length}`;
+    }
+  }
+  
+  // Lightbox next image
+  function lightboxNext(event) {
+    if (event) event.stopPropagation();
+    lightboxCurrentIndex = (lightboxCurrentIndex + 1) % lightboxImages.length;
+    updateLightboxImage();
+  }
+  
+  // Lightbox previous image
+  function lightboxPrevious(event) {
+    if (event) event.stopPropagation();
+    lightboxCurrentIndex = (lightboxCurrentIndex - 1 + lightboxImages.length) % lightboxImages.length;
+    updateLightboxImage();
+  }
+  
+  // Lightbox keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('active')) return;
+    
+    if (e.key === 'Escape') {
+      closeLightbox();
+    } else if (e.key === 'ArrowLeft') {
+      lightboxPrevious();
+    } else if (e.key === 'ArrowRight') {
+      lightboxNext();
+    }
+  });
+  
+  // Prevent lightbox content clicks from closing
+  if (lightbox) {
+    const lightboxContent = lightbox.querySelector('.lightbox-content');
+    if (lightboxContent) {
+      lightboxContent.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    }
+  }
   
   // Update variant based on selected options
   function updateVariant() {
