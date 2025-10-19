@@ -208,6 +208,461 @@
       flex-direction: column;
     }
   }
+  
+  /* Plan Detail Modal */
+  .plan-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .plan-detail-modal.active {
+    opacity: 1;
+  }
+  
+  .plan-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(4px);
+  }
+  
+  .plan-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    margin: 5vh auto;
+    background: #2A2A2A;
+    border-radius: 16px;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .plan-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .plan-modal-close:hover {
+    background: #B8860B;
+    transform: rotate(90deg);
+  }
+  
+  .plan-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 3rem;
+  }
+  
+  .plan-modal-image-section {
+    position: relative;
+  }
+  
+  .plan-modal-image-wrapper {
+    position: relative;
+    background: #f5f5f5;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: zoom-in;
+    aspect-ratio: 4/3;
+  }
+  
+  .plan-modal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .plan-modal-image-wrapper:hover .plan-modal-image {
+    transform: scale(1.05);
+  }
+  
+  .zoom-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  .plan-modal-image-wrapper:hover .zoom-overlay {
+    opacity: 1;
+  }
+  
+  .zoom-overlay span {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .plan-modal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .plan-modal-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1.2;
+  }
+  
+  .plan-modal-specs {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .spec-badge {
+    flex: 1;
+    min-width: 140px;
+    background: #1C1C1C;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid #3A3A3A;
+  }
+  
+  .spec-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  
+  .spec-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #B8860B;
+    line-height: 1;
+  }
+  
+  .spec-label {
+    font-size: 0.85rem;
+    color: #D1D5DB;
+    margin-top: 0.25rem;
+  }
+  
+  .plan-modal-description {
+    color: #D1D5DB;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+  
+  .plan-modal-description p {
+    margin: 0;
+  }
+  
+  .plan-modal-features h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 0.75rem 0;
+  }
+  
+  .plan-modal-features ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .plan-modal-features li {
+    color: #D1D5DB;
+    padding: 0.5rem;
+    background: #1C1C1C;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    border: 1px solid #3A3A3A;
+  }
+  
+  .plan-modal-features li:before {
+    content: "✓ ";
+    color: #B8860B;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+  
+  .plan-modal-pricing {
+    background: linear-gradient(135deg, rgba(184, 134, 11, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+    padding: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid rgba(184, 134, 11, 0.3);
+  }
+  
+  .modal-price {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #B8860B;
+    margin: 0 0 0.25rem 0;
+  }
+  
+  .modal-price-note {
+    color: #D1D5DB;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+  
+  .plan-modal-actions {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .plan-modal-actions .btn {
+    flex: 1;
+    padding: 1rem 2rem;
+    text-align: center;
+    justify-content: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    font-size: 1rem;
+  }
+  
+  .plan-modal-actions .btn-secondary {
+    background: #3A3A3A;
+    border: 1px solid #4A4A4A;
+  }
+  
+  .plan-modal-actions .btn-secondary:hover {
+    background: #4A4A4A;
+    opacity: 1;
+  }
+  
+  /* Image Zoom Modal */
+  .image-zoom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .image-zoom-modal.active {
+    opacity: 1;
+  }
+  
+  .zoom-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    cursor: pointer;
+  }
+  
+  .zoom-modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .zoom-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10001;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .zoom-close:hover {
+    background: rgba(184, 134, 11, 0.8);
+    transform: rotate(90deg);
+  }
+  
+  .zoom-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    cursor: grab;
+    transition: transform 0.1s ease-out;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  
+  .zoom-image:active {
+    cursor: grabbing;
+  }
+  
+  .zoom-hint-text {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.75rem 1.5rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+    pointer-events: none;
+  }
+  
+  .mobile-hint {
+    display: none;
+  }
+  
+  /* Modal Mobile Responsive */
+  @media (max-width: 1024px) {
+    .plan-modal-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+    
+    .plan-modal-title {
+      font-size: 2rem;
+    }
+    
+    .plan-modal-specs {
+      flex-direction: column;
+    }
+    
+    .spec-badge {
+      min-width: auto;
+    }
+    
+    .plan-modal-features ul {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .plan-modal-content {
+      width: 95%;
+      margin: 2vh auto;
+      max-height: 96vh;
+    }
+    
+    .plan-modal-grid {
+      padding: 1.5rem;
+      gap: 1.25rem;
+    }
+    
+    .plan-modal-close {
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .plan-modal-title {
+      font-size: 1.75rem;
+    }
+    
+    .spec-value {
+      font-size: 1.25rem;
+    }
+    
+    .plan-modal-actions {
+      flex-direction: column;
+    }
+    
+    .plan-modal-actions .btn {
+      width: 100%;
+    }
+    
+    .zoom-modal-content {
+      padding: 1rem;
+    }
+    
+    .zoom-image {
+      max-width: 95%;
+      max-height: 95%;
+    }
+    
+    .zoom-close {
+      top: 1rem;
+      right: 1rem;
+      width: 40px;
+      height: 40px;
+    }
+    
+    .zoom-hint-text {
+      bottom: 1rem;
+      font-size: 0.8rem;
+      padding: 0.5rem 1rem;
+    }
+    
+    .desktop-hint {
+      display: none;
+    }
+    
+    .mobile-hint {
+      display: inline;
+    }
+  }
+  
+  /* Prevent body scroll when modal is open */
+  body:has(.plan-detail-modal),
+  body:has(.image-zoom-modal) {
+    overflow: hidden;
+  }
 </style>
 
 <section class="supabase-section">
@@ -239,7 +694,7 @@
         </svg>
         Loading floor plans...
       </div>
-    </div>
+      </div>
   </div>
 </section>
 
