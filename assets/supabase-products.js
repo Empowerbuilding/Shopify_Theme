@@ -478,6 +478,15 @@ function requestQuote(planTitle) {
 }
 
 /**
+ * Make functions globally accessible for onclick handlers
+ */
+window.openPlanDetailModal = openPlanDetailModal;
+window.closePlanDetailModal = closePlanDetailModal;
+window.openImageZoomModal = openImageZoomModal;
+window.closeImageZoom = closeImageZoom;
+window.requestQuote = requestQuote;
+
+/**
  * Escape key handler
  */
 document.addEventListener('keydown', function(e) {
