@@ -18,16 +18,6 @@
       "share_on_twitter": "Share on Twitter",
       "share_on_pinterest": "Pin on Pinterest"
     },
-    "search": {
-      "title": "Search",
-      "placeholder": "Search our store",
-      "submit": "Search",
-      "no_results": "No results found for \"{{ terms }}\"",
-      "results_with_count": {
-        "one": "{{ count }} result for \"{{ terms }}\"",
-        "other": "{{ count }} results for \"{{ terms }}\""
-      }
-    },
     "newsletter": {
       "label": "Email",
       "success": "Thanks for subscribing",
