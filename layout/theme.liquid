@@ -279,11 +279,6 @@
               <p class="cart-drawer-item-price">${formatMoney(item.final_line_price)}</p>
             </div>
             <div class="cart-drawer-item-actions">
-              <div class="cart-drawer-quantity">
-                <button onclick="updateCartItemQuantity('${item.key}', ${item.quantity - 1})" class="quantity-btn" ${item.quantity <= 1 ? 'disabled' : ''}>−</button>
-                <span class="quantity-value">${item.quantity}</span>
-                <button onclick="updateCartItemQuantity('${item.key}', ${item.quantity + 1})" class="quantity-btn">+</button>
-              </div>
               <button onclick="removeCartItem('${item.key}')" class="cart-drawer-item-remove" aria-label="Remove item">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3 6 5 6 21 6"></polyline>
