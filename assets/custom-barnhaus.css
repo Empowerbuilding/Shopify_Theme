@@ -1999,8 +1999,8 @@ textarea:focus {
 /* Mobile Cart Drawer */
 @media (max-width: 768px) {
   .cart-drawer-content {
-    width: 100%;
-    max-width: 100%;
+    width: 75%;
+    max-width: 400px;
   }
   
   .cart-drawer-header {
