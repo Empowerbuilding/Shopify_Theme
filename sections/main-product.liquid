@@ -446,6 +446,12 @@
         });
       
       button.textContent = 'Added! ✓';
+      
+      // Automatically open cart drawer
+      setTimeout(function() {
+        openCartDrawer();
+      }, 500);
+      
       setTimeout(function() {
         button.disabled = false;
         button.textContent = originalText;
