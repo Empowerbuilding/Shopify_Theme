@@ -87,14 +87,6 @@
           <span id="product-price">{{ product.price | money }}</span>
         </div>
         
-        {% if product.description != blank %}
-          <div class="product-description">
-            <div class="product-description-content">
-              {{ product.description }}
-            </div>
-          </div>
-        {% endif %}
-        
         <!-- Product Form -->
         <form method="post" action="/cart/add" id="product-form" class="product-form">
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
@@ -138,6 +130,14 @@
             {% endif %}
           </button>
         </form>
+        
+        {% if product.description != blank %}
+          <div class="product-description">
+            <div class="product-description-content">
+              {{ product.description }}
+            </div>
+          </div>
+        {% endif %}
         
         <!-- Additional Product Info -->
         {% if product.available %}
