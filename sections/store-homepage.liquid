@@ -1147,8 +1147,8 @@
 document.addEventListener('DOMContentLoaded', function() {
   const carouselTrack = document.getElementById('carousel-track');
   
-  // Fetch products from Shopify
-  fetch('/collections/all/products.json?limit=8')
+  // Fetch products from Shopify collection (same as catalog page)
+  fetch('/collections/floor-plans/products.json?limit=8')
     .then(response => response.json())
     .then(data => {
       if (data.products && data.products.length > 0) {
@@ -1159,13 +1159,19 @@ document.addEventListener('DOMContentLoaded', function() {
           card.href = `/products/${product.handle}`;
           card.className = 'carousel-card';
           
+          // Format price the same way as catalog page
+          const variant = product.variants[0];
+          const price = variant && variant.price 
+            ? parseFloat(variant.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            : '0.00';
+          
           card.innerHTML = `
             <img src="${product.images[0]?.src || ''}" 
                  alt="${product.title}" 
                  class="carousel-card-image">
             <div class="carousel-card-content">
               <h3 class="carousel-card-title">${product.title}</h3>
-              <div class="carousel-card-price">${formatMoney(product.variants[0].price)}</div>
+              <div class="carousel-card-price">$${price}</div>
             </div>
           `;
           
@@ -1179,7 +1185,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Extract specs from product title or tags
+// Extract specs from product title or tags (not currently used in carousel)
 function extractSpecs(product) {
   const specs = [];
   const title = product.title.toLowerCase();
@@ -1203,11 +1209,6 @@ function extractSpecs(product) {
   }
   
   return specs.join('');
-}
-
-// Format money (Shopify returns price in dollars, not cents)
-function formatMoney(price) {
-  return '$' + parseFloat(price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 </script>
 
