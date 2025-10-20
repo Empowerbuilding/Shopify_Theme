@@ -1205,9 +1205,9 @@ function extractSpecs(product) {
   return specs.join('');
 }
 
-// Format money
-function formatMoney(cents) {
-  return '$' + (cents / 100).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+// Format money (Shopify returns price in dollars, not cents)
+function formatMoney(price) {
+  return '$' + parseFloat(price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 </script>
 
