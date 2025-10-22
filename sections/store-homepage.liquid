@@ -58,43 +58,21 @@
   <!-- How It Works Section -->
   <section class="how-it-works-section">
     <div class="page-width">
-      <div class="section-header">
-        <h2 class="section-title">How It Works</h2>
-        <p class="section-subtitle">Three Simple Steps to Your Dream Home</p>
-      </div>
-      
-      <div class="steps-grid">
-        <!-- Step 1 -->
-        <div class="step-card">
-          <div class="step-number">01</div>
-          <div class="step-icon">🔍</div>
-          <h3 class="step-title">Find Your Perfect Plan</h3>
-          <p class="step-description">
-            Browse our curated collection of architect-designed barnhaus plans. 
-            Filter by size, bedrooms, or style to find the one that fits your vision.
-          </p>
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps-compact">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <span class="step-text">Browse Plans</span>
         </div>
-        
-        <!-- Step 2 -->
-        <div class="step-card">
-          <div class="step-number">02</div>
-          <div class="step-icon">📥</div>
-          <h3 class="step-title">Purchase & Instantly Download</h3>
-          <p class="step-description">
-            Complete your purchase and receive immediate access to your complete plan package, 
-            including detailed blueprints and specifications.
-          </p>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <span class="step-num">02</span>
+          <span class="step-text">Purchase & Download</span>
         </div>
-        
-        <!-- Step 3 -->
-        <div class="step-card">
-          <div class="step-number">03</div>
-          <div class="step-icon">🏗️</div>
-          <h3 class="step-title">Share with Your Builder</h3>
-          <p class="step-description">
-            Take your plans to your local builder or use our network of trusted contractors 
-            to bring your barnhaus to life.
-          </p>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <span class="step-num">03</span>
+          <span class="step-text">Build Your Home</span>
         </div>
       </div>
     </div>
@@ -661,56 +639,49 @@
    =================================== */
 
 .how-it-works-section {
-  padding: 4rem 0;
+  padding: 2.5rem 0;
   background: #252525;
-}
-
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.step-card {
-  background: #1C1C1C;
-  padding: 2rem;
-  border-radius: 8px;
-  border: 1px solid #333333;
-  transition: all 0.3s ease;
   text-align: center;
 }
 
-.step-card:hover {
-  border-color: #B8860B;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.2);
+.how-it-works-section .section-title {
+  margin-bottom: 2rem;
 }
 
-.step-number {
-  font-size: 3rem;
+.steps-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step-num {
+  font-size: 1.5rem;
   font-weight: 700;
   background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1rem;
 }
 
-.step-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.step-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 1rem;
-}
-
-.step-description {
+.step-text {
   color: #D1D5DB;
-  line-height: 1.6;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.step-arrow {
+  color: #B8860B;
+  font-size: 1.5rem;
+  font-weight: 300;
 }
 
 /* ===================================
@@ -1095,8 +1066,24 @@
     font-size: 2rem;
   }
   
-  .steps-grid {
-    grid-template-columns: 1fr;
+  .how-it-works-section {
+    padding: 2rem 0;
+  }
+  
+  .steps-compact {
+    gap: 1rem;
+  }
+  
+  .step-arrow {
+    display: none;
+  }
+  
+  .step-num {
+    font-size: 1.25rem;
+  }
+  
+  .step-text {
+    font-size: 0.875rem;
   }
   
   .stats-container {
@@ -1130,10 +1117,6 @@
 @media (max-width: 480px) {
   .section-title {
     font-size: 1.75rem;
-  }
-  
-  .step-number {
-    font-size: 2.5rem;
   }
   
   .stat-value {
