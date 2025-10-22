@@ -394,36 +394,66 @@ document.addEventListener('DOMContentLoaded', function() {
         tempDiv.innerHTML = product.body_html || '';
         const plainText = tempDiv.textContent || tempDiv.innerText || '';
         
+        // Combine all text sources for better matching
+        const allText = `${title} ${plainText}`;
+        
         // Extract beds, baths, and sqft from description or tags
         let beds = '';
         let baths = '';
         let sqft = '';
         
-        // Try to extract from title or description
-        const bedsMatch = plainText.match(/(\d+(?:\.\d+)?)\s*(?:bed|bedroom)/i) || title.match(/(\d+)\s*bed/i);
-        const bathsMatch = plainText.match(/(\d+(?:\.\d+)?)\s*(?:bath|bathroom)/i) || title.match(/(\d+(?:\.\d+)?)\s*bath/i);
-        const sqftMatch = plainText.match(/(\d+,?\d+)\s*(?:sq\s*ft|sqft|square\s*feet)/i) || title.match(/(\d+,?\d+)\s*(?:sq\s*ft|sqft)/i);
+        // Try to extract from title or description with multiple patterns
+        const bedsMatch = allText.match(/(\d+(?:\.\d+)?)\s*(?:bed|bedroom|br)/i);
+        const bathsMatch = allText.match(/(\d+(?:\.\d+)?)\s*(?:bath|bathroom|ba)/i);
+        // More flexible sqft matching - handles spaces, commas, and variations
+        const sqftMatch = allText.match(/(\d{1,3}(?:,\d{3})*)\s*(?:sq\.?\s*ft|sqft|square\s*(?:feet|foot)|sf)/i);
         
         if (bedsMatch) beds = bedsMatch[1];
         if (bathsMatch) baths = bathsMatch[1];
-        if (sqftMatch) sqft = sqftMatch[1].replace(',', ',');
+        if (sqftMatch) sqft = sqftMatch[1];
         
-        // Check product tags for specs
+        // Check product tags for specs (fallback)
         if (product.tags) {
           product.tags.forEach(tag => {
-            if (tag.includes('bed') && !beds) {
+            const tagLower = tag.toLowerCase();
+            
+            // Beds from tags
+            if (!beds && (tagLower.includes('bed') || tagLower.includes('br'))) {
               const match = tag.match(/(\d+)/);
               if (match) beds = match[1];
             }
-            if (tag.includes('bath') && !baths) {
+            
+            // Baths from tags
+            if (!baths && (tagLower.includes('bath') || tagLower.includes('ba'))) {
               const match = tag.match(/(\d+(?:\.\d+)?)/);
               if (match) baths = match[1];
             }
-            if (tag.includes('sqft') && !sqft) {
-              const match = tag.match(/(\d+,?\d+)/);
+            
+            // Sqft from tags - handle various formats
+            if (!sqft && (tagLower.includes('sqft') || tagLower.includes('sq') || tagLower.includes('sf'))) {
+              const match = tag.match(/(\d{1,3}(?:,?\d{3})*)/);
               if (match) sqft = match[1];
             }
           });
+        }
+        
+        // Last resort: try to extract from variant title or SKU
+        if (product.variants && product.variants.length > 0) {
+          const variant = product.variants[0];
+          const variantText = `${variant.title || ''} ${variant.sku || ''}`;
+          
+          if (!beds) {
+            const match = variantText.match(/(\d+)(?:bed|br)/i);
+            if (match) beds = match[1];
+          }
+          if (!baths) {
+            const match = variantText.match(/(\d+(?:\.\d+)?)(?:bath|ba)/i);
+            if (match) baths = match[1];
+          }
+          if (!sqft) {
+            const match = variantText.match(/(\d{1,3}(?:,?\d{3})*)(?:sqft|sq|sf)/i);
+            if (match) sqft = match[1];
+          }
         }
         
         // Build stats HTML
