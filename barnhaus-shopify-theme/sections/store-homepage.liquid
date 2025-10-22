@@ -142,16 +142,17 @@
       <div class="featured-project-container">
         <div class="featured-project-video">
           <div class="video-wrapper">
-            <iframe 
-              id="featured-project-iframe"
-              src=""
-              data-src="bC2V6SD-eHc"
-              title="Featured Project - Spring Mountain"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
-              allowfullscreen
+            <video 
+              id="featured-project-video"
+              class="featured-video"
+              loop
+              muted
               playsinline
-            ></iframe>
+              preload="metadata"
+            >
+              <source src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/Untitled%20video%20-%20Made%20with%20Clipchamp%20(19).mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           </div>
           <div class="featured-project-info">
             <h3>Spring Mountain Estate</h3>
@@ -170,33 +171,26 @@
       </div>
 
       <script>
-        // Auto-play YouTube video when it comes into view
+        // Auto-play video when it comes into view
         document.addEventListener('DOMContentLoaded', function() {
-          const iframe = document.getElementById('featured-project-iframe');
-          const videoId = iframe.getAttribute('data-src');
-          
-          // Set the YouTube embed URL with autoplay parameters
-          // mute=1 is required for autoplay to work in most browsers
-          // playsinline=1 is required for iOS
-          // enablejsapi=1 enables the YouTube API for better control
-          iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`;
+          const video = document.getElementById('featured-project-video');
           
           // Use Intersection Observer to start playing when visible
           const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
-                // Video is in view - try to play
-                iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                
-                // For mobile: also try to unmute and play after a short delay
-                setTimeout(() => {
-                  iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-                }, 500);
+                // Video is in view - play it
+                video.play().catch(error => {
+                  console.log('Autoplay prevented:', error);
+                });
+              } else {
+                // Video is out of view - pause it to save resources
+                video.pause();
               }
             });
-          }, { threshold: 0.25 }); // Play when 25% visible (earlier trigger for mobile)
+          }, { threshold: 0.25 }); // Play when 25% visible
           
-          observer.observe(iframe);
+          observer.observe(video);
         });
       </script>
     </div>
@@ -905,6 +899,7 @@
   overflow: hidden;
 }
 
+.video-wrapper video,
 .video-wrapper iframe {
   position: absolute;
   top: 0;
@@ -912,6 +907,11 @@
   width: 100%;
   height: 100%;
   border: none;
+  object-fit: cover;
+}
+
+.featured-video {
+  background: #000;
 }
 
 .featured-project-info {
