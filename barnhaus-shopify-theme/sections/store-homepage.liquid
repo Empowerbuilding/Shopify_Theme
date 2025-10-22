@@ -102,29 +102,22 @@
         </div>
       </div>
       
-      <!-- Built Homes Gallery -->
-      <div class="built-homes-grid">
-        <div class="built-home-card">
-          <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/projects/springMountain/feature.jpeg" alt="Spring Mountain">
-          <div class="built-home-overlay">
-            <h3>Spring Mountain</h3>
-            <p>Hill Country, Texas</p>
+      <!-- Featured Project Video -->
+      <div class="featured-project-container">
+        <div class="featured-project-video">
+          <div class="video-wrapper">
+            <iframe 
+              src="YOUR_VIDEO_EMBED_URL_HERE"
+              title="Featured Project - Spring Mountain"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
           </div>
-        </div>
-        
-        <div class="built-home-card">
-          <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/projects/yorkCreek/feature.jpeg" alt="York Creek">
-          <div class="built-home-overlay">
-            <h3>York Creek</h3>
-            <p>Hill Country, Texas</p>
-          </div>
-        </div>
-        
-        <div class="built-home-card">
-          <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/projects/whiskeyTrail/feature.jpeg" alt="Whiskey Trail">
-          <div class="built-home-overlay">
-            <h3>Whiskey Trail</h3>
-            <p>Texas Hill Country</p>
+          <div class="featured-project-info">
+            <h3>Spring Mountain Estate</h3>
+            <p class="project-location">📍 Hill Country, Texas</p>
+            <p class="project-description">A stunning 3,200 sq ft custom home featuring modern farmhouse design with panoramic hill country views.</p>
           </div>
         </div>
       </div>
@@ -724,65 +717,69 @@
   margin-top: 0.5rem;
 }
 
-/* Built Homes Gallery */
-.built-homes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+/* Featured Project Video */
+.featured-project-container {
   margin-bottom: 3rem;
 }
 
-.built-home-card {
-  position: relative;
-  aspect-ratio: 4/3;
-  border-radius: 8px;
+.featured-project-video {
+  background: #252525;
+  border-radius: 12px;
   overflow: hidden;
   border: 1px solid #333333;
-  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.built-home-card:hover {
+.featured-project-video:hover {
   border-color: #B8860B;
-  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.2);
 }
 
-.built-home-card img {
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  background: #1C1C1C;
+  overflow: hidden;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  border: none;
 }
 
-.built-home-card:hover img {
-  transform: scale(1.1);
+.featured-project-info {
+  padding: 2rem;
+  background: #252525;
 }
 
-.built-home-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-  transform: translateY(100%);
-  transition: transform 0.3s ease;
-}
-
-.built-home-card:hover .built-home-overlay {
-  transform: translateY(0);
-}
-
-.built-home-overlay h3 {
-  color: white;
-  font-size: 1.25rem;
+.featured-project-info h3 {
+  font-size: 1.75rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
+  color: white;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.built-home-overlay p {
+.project-location {
   color: #B8860B;
-  font-size: 0.875rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.project-description {
+  color: #D1D5DB;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* Testimonials */
@@ -1091,7 +1088,14 @@
     gap: 1rem;
   }
   
-  .built-homes-grid,
+  .featured-project-info {
+    padding: 1.5rem;
+  }
+  
+  .featured-project-info h3 {
+    font-size: 1.5rem;
+  }
+  
   .testimonials-grid {
     grid-template-columns: 1fr;
   }
