@@ -1233,8 +1233,8 @@
   
   .step-card {
     padding: 1.5rem;
-    flex-direction: row;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0;
     text-align: left;
     border-radius: 12px;
   }
@@ -1244,20 +1244,7 @@
   }
   
   .step-icon {
-    width: 48px;
-    height: 48px;
-    flex-shrink: 0;
-    margin: 0;
-    align-self: flex-start;
-  }
-  
-  .step-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .step-card:hover .step-icon {
-    transform: scale(1.05) rotate(0deg);
+    display: none;
   }
   
   .step-content {
