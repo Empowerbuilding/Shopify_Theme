@@ -87,18 +87,10 @@
       </div>
       
       <!-- Stats Bar -->
-      <div class="stats-container">
+      <div class="stats-container stats-single">
         <div class="stat-item">
-          <div class="stat-value">47+</div>
-          <div class="stat-label">Homes Built</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">$2.1M+</div>
-          <div class="stat-label">Client Savings</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value">100%</div>
-          <div class="stat-label">Satisfaction</div>
+          <div class="stat-value">400+</div>
+          <div class="stat-label">Homes Designed</div>
         </div>
       </div>
       
@@ -696,6 +688,14 @@
   padding: 2rem;
   border-radius: 8px;
   border: 1px solid #333333;
+}
+
+.stats-container.stats-single {
+  grid-template-columns: 1fr;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 .stat-item {
