@@ -257,11 +257,7 @@
             </div>
             <div class="feature-item">
               <span class="feature-icon">✓</span>
-              <span>Licensed & Insured</span>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">✓</span>
-              <span>Hill Country Specialists</span>
+              <span>Steel Frame Specialists</span>
             </div>
             <div class="feature-item">
               <span class="feature-icon">✓</span>
@@ -1075,9 +1071,15 @@
 
 .brand-features {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
+}
+
+@media (max-width: 968px) {
+  .brand-features {
+    grid-template-columns: 1fr;
+  }
 }
 
 .feature-item {
@@ -1412,10 +1414,6 @@
   }
   
   .testimonials-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .brand-features {
     grid-template-columns: 1fr;
   }
   
