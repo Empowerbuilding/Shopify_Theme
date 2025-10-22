@@ -126,54 +126,6 @@
     </div>
   </section>
 
-  <script>
-  // Add touch interaction for How It Works cards on mobile
-  (function() {
-    const stepCards = document.querySelectorAll('.step-card');
-    
-    stepCards.forEach(card => {
-      let touchStartY = 0;
-      let isScrolling = false;
-      
-      // Touch start - activate card immediately
-      card.addEventListener('touchstart', function(e) {
-        touchStartY = e.touches[0].clientY;
-        isScrolling = false;
-        this.classList.add('touch-active');
-      }, { passive: true });
-      
-      // Touch move - detect if scrolling
-      card.addEventListener('touchmove', function(e) {
-        const touchY = e.touches[0].clientY;
-        const moveDistance = Math.abs(touchY - touchStartY);
-        
-        // If moved more than 10px vertically, it's a scroll
-        if (moveDistance > 10) {
-          isScrolling = true;
-          this.classList.remove('touch-active');
-        }
-      }, { passive: true });
-      
-      // Touch end - keep active briefly if not scrolling
-      card.addEventListener('touchend', function() {
-        if (!isScrolling) {
-          // Keep active for 150ms then fade out
-          setTimeout(() => {
-            this.classList.remove('touch-active');
-          }, 150);
-        } else {
-          this.classList.remove('touch-active');
-        }
-      }, { passive: true });
-      
-      // Touch cancel - remove immediately
-      card.addEventListener('touchcancel', function() {
-        this.classList.remove('touch-active');
-      }, { passive: true });
-    });
-  })();
-  </script>
-
   <!-- Social Proof Section -->
   <section class="social-proof-section">
     <div class="page-width">
@@ -693,7 +645,7 @@
 
 .step-card {
   background: #1C1C1C;
-  border: 2px solid #333333;
+  border: 2px solid #B8860B;
   border-radius: 16px;
   padding: 2.5rem 2rem;
   transition: all 0.4s ease;
@@ -701,6 +653,8 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 0 20px rgba(184, 134, 11, 0.4), 0 0 40px rgba(184, 134, 11, 0.2);
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
 .step-content {
@@ -720,13 +674,21 @@
 }
 
 .step-card:hover {
-  border-color: #B8860B;
   transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(184, 134, 11, 0.3);
+  box-shadow: 0 0 40px rgba(184, 134, 11, 0.8), 0 12px 32px rgba(184, 134, 11, 0.4);
 }
 
 .step-card:hover::before {
   transform: scaleX(1);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(184, 134, 11, 0.4), 0 0 40px rgba(184, 134, 11, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(184, 134, 11, 0.6), 0 0 50px rgba(184, 134, 11, 0.3);
+  }
 }
 
 .step-icon {
@@ -1340,23 +1302,22 @@
     gap: 0;
     text-align: left;
     border-radius: 12px;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+    border-color: #B8860B;
+    box-shadow: 0 0 20px rgba(184, 134, 11, 0.4), 0 0 40px rgba(184, 134, 11, 0.2);
+    animation: pulse-glow 3s ease-in-out infinite;
   }
   
-  /* Mobile touch states */
-  .step-card:hover,
-  .step-card:active,
-  .step-card.touch-active {
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(184, 134, 11, 0.4), 0 0 40px rgba(184, 134, 11, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(184, 134, 11, 0.6), 0 0 50px rgba(184, 134, 11, 0.3);
+    }
+  }
+  
+  .step-card:hover {
     transform: translateY(-2px);
-    border-color: #B8860B !important;
-    box-shadow: 0 8px 24px rgba(184, 134, 11, 0.3) !important;
-    background: #252525 !important;
-  }
-  
-  .step-card:active::before,
-  .step-card.touch-active::before {
-    transform: scaleX(1) !important;
   }
   
   .step-icon {
