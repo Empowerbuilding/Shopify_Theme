@@ -64,11 +64,12 @@ body {
   flex-direction: column;
   margin: 0;
   padding: 0;
+  padding-top: 5rem; /* Adjust for floating header with margin */
 }
 
 /* Add padding for pages that don't have hero */
 .main-content {
-  padding-top: 80px;
+  padding-top: 1rem; /* Reduced since body now has padding */
 }
 
 /* Remove padding on homepage with hero */
@@ -149,23 +150,30 @@ img {
 }
 
 /* Header */
+/* Header - Rounded Floating Design */
 .site-header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 1rem; /* Space from top */
+  left: 1rem; /* Space from left */
+  right: 1rem; /* Space from right */
   z-index: 1000;
   background: rgba(28, 28, 28, 0.95);
   backdrop-filter: blur(10px);
-  border-bottom: none;
+  border: 1px solid rgba(58, 58, 58, 0.5); /* Subtle border */
+  border-radius: 16px; /* Rounded corners */
   transition: all 0.3s ease;
-  width: 100%;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); /* Floating shadow */
+}
+
+.site-header:hover {
+  box-shadow: 0 6px 32px rgba(184, 134, 11, 0.2);
+  border-color: rgba(184, 134, 11, 0.3);
 }
 
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 1.5rem;
+  padding: 1rem 2rem; /* Increased horizontal padding */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1349,17 +1357,23 @@ img {
 }
 
 /* Footer */
+/* Footer - Rounded Floating Design */
 .site-footer {
-  background-color: var(--color-card-bg);
-  border-top: 1px solid var(--color-border);
-  padding: 3rem 0 1.5rem;
+  background: transparent; /* Remove background from outer footer */
+  border-top: none; /* Remove border */
+  padding: 1rem; /* Outer padding for spacing */
   margin-top: auto;
 }
 
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 3rem 2rem 1.5rem 2rem; /* Inner padding */
+  background: rgba(37, 37, 37, 0.95); /* Dark background like header */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(58, 58, 58, 0.5); /* Subtle border matching header */
+  border-radius: 16px; /* Rounded corners */
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3); /* Floating shadow */
 }
 
 .footer-grid {
@@ -1469,13 +1483,34 @@ img {
   h2 { font-size: 1.75rem; }
   h3 { font-size: 1.25rem; }
   
+  /* Reduce margins on mobile for better space usage */
+  .site-header {
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    border-radius: 12px; /* Slightly less rounded on mobile */
+  }
+  
   /* Header - Mobile Layout */
   .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 0.75rem 1rem; /* Reduced padding on mobile */
     gap: 1rem;
+  }
+  
+  body {
+    padding-top: 4rem; /* Adjust for smaller mobile header */
+  }
+  
+  .site-footer {
+    padding: 0.5rem;
+  }
+  
+  .footer-container {
+    padding: 2rem 1rem 1rem 1rem;
+    border-radius: 12px;
   }
   
   /* Mobile Menu Toggle - Left */
@@ -1698,6 +1733,17 @@ img {
 }
 
 @media (max-width: 480px) {
+  .site-header {
+    top: 0.25rem;
+    left: 0.25rem;
+    right: 0.25rem;
+    border-radius: 8px;
+  }
+  
+  .footer-container {
+    border-radius: 8px;
+  }
+  
   .container {
     padding: 0 1rem;
   }
