@@ -370,6 +370,9 @@
   </div>
 </section>
 
+<!-- Load authoritative floor plans data -->
+<script src="{{ 'floor-plans-data.js' | asset_url }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const grid = document.getElementById('plans-grid');
@@ -412,86 +415,32 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const title = product.title || 'Untitled Product';
         
-        // Extract specs from description/tags
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = product.body_html || '';
-        const plainText = tempDiv.textContent || tempDiv.innerText || '';
+        // Get accurate specs from authoritative data using product handle
+        const specs = window.FloorPlansData ? window.FloorPlansData.getSpecs(product.handle) : null;
         
-        // Combine all text sources for better matching
-        const allText = `${title} ${plainText}`;
+        let beds = '—';
+        let baths = '—';
+        let sqft = '—';
         
-        // Extract beds, baths, and sqft from description or tags
-        let beds = '';
-        let baths = '';
-        let sqft = '';
-        
-        // Try to extract from title or description with multiple patterns
-        const bedsMatch = allText.match(/(\d+(?:\.\d+)?)\s*(?:bed|bedroom|br)/i);
-        const bathsMatch = allText.match(/(\d+(?:\.\d+)?)\s*(?:bath|bathroom|ba)/i);
-        // More flexible sqft matching - handles spaces, commas, and variations
-        const sqftMatch = allText.match(/(\d{1,3}(?:,\d{3})*)\s*(?:sq\.?\s*ft|sqft|square\s*(?:feet|foot)|sf)/i);
-        
-        if (bedsMatch) beds = bedsMatch[1];
-        if (bathsMatch) baths = bathsMatch[1];
-        if (sqftMatch) sqft = sqftMatch[1];
-        
-        // Check product tags for specs (fallback)
-        if (product.tags) {
-          product.tags.forEach(tag => {
-            const tagLower = tag.toLowerCase();
-            
-            // Beds from tags
-            if (!beds && (tagLower.includes('bed') || tagLower.includes('br'))) {
-              const match = tag.match(/(\d+)/);
-              if (match) beds = match[1];
-            }
-            
-            // Baths from tags
-            if (!baths && (tagLower.includes('bath') || tagLower.includes('ba'))) {
-              const match = tag.match(/(\d+(?:\.\d+)?)/);
-              if (match) baths = match[1];
-            }
-            
-            // Sqft from tags - handle various formats
-            if (!sqft && (tagLower.includes('sqft') || tagLower.includes('sq') || tagLower.includes('sf'))) {
-              const match = tag.match(/(\d{1,3}(?:,?\d{3})*)/);
-              if (match) sqft = match[1];
-            }
-          });
+        if (specs) {
+          beds = specs.beds || '—';
+          baths = specs.baths || '—';
+          sqft = specs.area ? window.FloorPlansData.formatArea(specs.area) : '—';
         }
         
-        // Last resort: try to extract from variant title or SKU
-        if (product.variants && product.variants.length > 0) {
-          const variant = product.variants[0];
-          const variantText = `${variant.title || ''} ${variant.sku || ''}`;
-          
-          if (!beds) {
-            const match = variantText.match(/(\d+)(?:bed|br)/i);
-            if (match) beds = match[1];
-          }
-          if (!baths) {
-            const match = variantText.match(/(\d+(?:\.\d+)?)(?:bath|ba)/i);
-            if (match) baths = match[1];
-          }
-          if (!sqft) {
-            const match = variantText.match(/(\d{1,3}(?:,?\d{3})*)(?:sqft|sq|sf)/i);
-            if (match) sqft = match[1];
-          }
-        }
-        
-        // Build stats HTML - ALWAYS show 3 stats with defaults if missing
+        // Build stats HTML - ALWAYS show 3 stats
         const statsHTML = `
           <div class="product-stats">
             <div class="stat-item">
-              <span class="stat-value">${beds || '—'}</span>
+              <span class="stat-value">${beds}</span>
               <span class="stat-label">Beds</span>
             </div>
             <div class="stat-item">
-              <span class="stat-value">${baths || '—'}</span>
+              <span class="stat-value">${baths}</span>
               <span class="stat-label">Baths</span>
             </div>
             <div class="stat-item">
-              <span class="stat-value">${sqft || '—'}</span>
+              <span class="stat-value">${sqft}</span>
               <span class="stat-label">Sq Ft</span>
             </div>
           </div>

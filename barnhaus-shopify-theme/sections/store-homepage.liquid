@@ -1454,6 +1454,9 @@
 }
 </style>
 
+<!-- Load authoritative floor plans data -->
+<script src="{{ 'floor-plans-data.js' | asset_url }}"></script>
+
 <script>
 // Load products into carousel
 document.addEventListener('DOMContentLoaded', function() {
@@ -1492,6 +1495,24 @@ document.addEventListener('DOMContentLoaded', function() {
           card.href = `/products/${product.handle}`;
           card.className = 'carousel-card';
           
+          // Get accurate specs from authoritative data
+          const specs = window.FloorPlansData ? window.FloorPlansData.getSpecs(product.handle) : null;
+          let specsHTML = '';
+          
+          if (specs) {
+            const beds = specs.beds || '—';
+            const baths = specs.baths || '—';
+            const sqft = specs.area ? window.FloorPlansData.formatArea(specs.area) : '—';
+            
+            specsHTML = `
+              <div class="carousel-card-specs">
+                <span><strong>${beds}</strong> Beds</span>
+                <span><strong>${baths}</strong> Baths</span>
+                <span><strong>${sqft}</strong> SF</span>
+              </div>
+            `;
+          }
+          
           // Format price the same way as catalog page
           const variant = product.variants[0];
           const price = variant && variant.price 
@@ -1504,6 +1525,7 @@ document.addEventListener('DOMContentLoaded', function() {
                  class="carousel-card-image">
             <div class="carousel-card-content">
               <h3 class="carousel-card-title">${product.title}</h3>
+              ${specsHTML}
               <div class="carousel-card-price">$${price}</div>
             </div>
           `;
