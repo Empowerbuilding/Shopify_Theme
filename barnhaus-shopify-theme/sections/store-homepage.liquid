@@ -99,10 +99,12 @@
         <div class="featured-project-video">
           <div class="video-wrapper">
             <iframe 
-              src="YOUR_VIDEO_EMBED_URL_HERE"
+              id="featured-project-iframe"
+              src=""
+              data-src="bC2V6SD-eHc"
               title="Featured Project - Spring Mountain"
               frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
               allowfullscreen
             ></iframe>
           </div>
@@ -113,6 +115,33 @@
           </div>
         </div>
       </div>
+
+      <script>
+        // Auto-play YouTube video when it comes into view
+        document.addEventListener('DOMContentLoaded', function() {
+          const iframe = document.getElementById('featured-project-iframe');
+          const videoId = iframe.getAttribute('data-src');
+          
+          // Set the YouTube embed URL with autoplay parameters
+          // mute=1 is required for autoplay to work in most browsers
+          iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&rel=0&modestbranding=1`;
+          
+          // Optional: Use Intersection Observer to only start playing when visible
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                // Video is in view
+                iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+              } else {
+                // Video is out of view (optional: pause it)
+                // iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+              }
+            });
+          }, { threshold: 0.5 }); // Play when 50% visible
+          
+          observer.observe(iframe);
+        });
+      </script>
       
       <!-- Testimonials -->
       <div class="testimonials-grid">
