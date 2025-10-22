@@ -150,6 +150,7 @@
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
               allowfullscreen
+              playsinline
             ></iframe>
           </div>
           <div class="featured-project-info">
@@ -176,20 +177,24 @@
           
           // Set the YouTube embed URL with autoplay parameters
           // mute=1 is required for autoplay to work in most browsers
-          iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&rel=0&modestbranding=1`;
+          // playsinline=1 is required for iOS
+          // enablejsapi=1 enables the YouTube API for better control
+          iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`;
           
-          // Optional: Use Intersection Observer to only start playing when visible
+          // Use Intersection Observer to start playing when visible
           const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
               if (entry.isIntersecting) {
-                // Video is in view
+                // Video is in view - try to play
                 iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-              } else {
-                // Video is out of view (optional: pause it)
-                // iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                
+                // For mobile: also try to unmute and play after a short delay
+                setTimeout(() => {
+                  iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                }, 500);
               }
             });
-          }, { threshold: 0.5 }); // Play when 50% visible
+          }, { threshold: 0.25 }); // Play when 25% visible (earlier trigger for mobile)
           
           observer.observe(iframe);
         });
