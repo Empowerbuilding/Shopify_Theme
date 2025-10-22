@@ -30,13 +30,6 @@
   <div class="product-carousel-section">
     <div class="page-width">
       <div class="carousel-header">
-        <a href="/pages/plans" class="view-all-link">
-          View All Plans
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </a>
         <h2 class="carousel-title">Featured Floor Plans</h2>
       </div>
       
@@ -51,6 +44,16 @@
             </circle>
           </svg>
         </div>
+      </div>
+      
+      <div class="carousel-footer">
+        <a href="/pages/plans" class="view-all-link">
+          View All Plans
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
       </div>
     </div>
   </div>
@@ -403,7 +406,7 @@
 
 .carousel-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 2rem;
 }
@@ -415,6 +418,13 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.carousel-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
 }
 
 .view-all-link {
@@ -554,13 +564,17 @@
   }
   
   .carousel-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
   }
   
   .carousel-title {
     font-size: 1.75rem;
+    text-align: center;
+  }
+  
+  .carousel-footer {
+    margin-top: 1.5rem;
   }
   
   .carousel-container {
