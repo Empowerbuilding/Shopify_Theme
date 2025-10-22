@@ -1,0 +1,34 @@
+{% comment %}
+  Custom 3D Icon Component
+  
+  Usage: {% render 'custom-icon', icon: 'star', size: 24, alt: 'Star Icon' %}
+  
+  Parameters:
+  - icon: (required) Name of the icon from the custom-icons library
+  - size: (optional) Size in pixels, default is 24
+  - alt: (optional) Alt text for accessibility, default is '3D Icon'
+  - class: (optional) Additional CSS classes
+{% endcomment %}
+
+{% render 'custom-icons' %}
+
+{% assign icon_url = custom_icons[icon] %}
+{% assign icon_size = size | default: 24 %}
+{% assign icon_alt = alt | default: '3D Icon' %}
+{% assign icon_class = class | default: '' %}
+
+{% if icon_url %}
+  <img 
+    src="{{ icon_url }}" 
+    alt="{{ icon_alt }}"
+    width="{{ icon_size }}"
+    height="{{ icon_size }}"
+    class="custom-3d-icon {{ icon_class }}"
+    style="width: {{ icon_size }}px; height: {{ icon_size }}px;"
+    loading="lazy"
+  >
+{% else %}
+  {% comment %}Fallback if icon not found{% endcomment %}
+  <span class="icon-fallback" style="width: {{ icon_size }}px; height: {{ icon_size }}px; display: inline-block;">⚠️</span>
+{% endif %}
+

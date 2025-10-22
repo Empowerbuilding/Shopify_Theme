@@ -23,6 +23,25 @@
   --shadow-hover: 0 8px 24px rgba(184, 134, 11, 0.3);
 }
 
+/* Custom 3D Icons */
+.custom-3d-icon {
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.custom-3d-icon:hover {
+  transform: scale(1.05);
+}
+
+.icon-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+}
+
 /* Reset and Base Styles */
 * {
   margin: 0;
