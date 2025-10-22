@@ -22,6 +22,9 @@
     </div>
     
     <div class="hero-content">
+      <div class="hero-text-content">
+        <a href="/pages/plans" class="hero-cta-btn">Browse Our Catalog</a>
+      </div>
       <p class="hero-tagline">Be Different</p>
     </div>
   </div>
@@ -343,9 +346,40 @@
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
+  gap: 2rem;
+}
+
+.hero-text-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.hero-cta-btn {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: rgba(28, 28, 28, 0.5);
+  border: 2px solid #FFFFFF;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.hero-cta-btn:hover {
+  background: rgba(184, 134, 11, 0.9);
+  border-color: #B8860B;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.4);
 }
 
 .hero-tagline {
@@ -353,6 +387,9 @@
   font-weight: 700;
   color: #1C1C1C;
   margin: 0;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
   letter-spacing: 1px;
   text-shadow: 
     0 0 20px rgba(255, 255, 255, 0.9),
@@ -377,8 +414,15 @@
     padding: 1.5rem;
   }
   
+  .hero-cta-btn {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+  
   .hero-tagline {
     font-size: 1.75rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
     text-shadow: 
       0 0 15px rgba(255, 255, 255, 0.9),
       0 0 30px rgba(255, 255, 255, 0.7),
