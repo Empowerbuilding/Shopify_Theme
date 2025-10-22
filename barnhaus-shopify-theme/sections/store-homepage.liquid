@@ -128,45 +128,50 @@
 
   <script>
   // Add touch interaction for How It Works cards on mobile
-  document.addEventListener('DOMContentLoaded', function() {
+  (function() {
     const stepCards = document.querySelectorAll('.step-card');
     
     stepCards.forEach(card => {
-      let touchTimer;
+      let touchStartY = 0;
+      let isScrolling = false;
       
-      // Touch start - activate card
+      // Touch start - activate card immediately
       card.addEventListener('touchstart', function(e) {
+        touchStartY = e.touches[0].clientY;
+        isScrolling = false;
         this.classList.add('touch-active');
+      }, { passive: true });
+      
+      // Touch move - detect if scrolling
+      card.addEventListener('touchmove', function(e) {
+        const touchY = e.touches[0].clientY;
+        const moveDistance = Math.abs(touchY - touchStartY);
         
-        // Auto-remove after 300ms if user is scrolling
-        touchTimer = setTimeout(() => {
+        // If moved more than 10px vertically, it's a scroll
+        if (moveDistance > 10) {
+          isScrolling = true;
           this.classList.remove('touch-active');
-        }, 300);
+        }
       }, { passive: true });
       
-      // Touch move - remove if scrolling
-      card.addEventListener('touchmove', function() {
-        clearTimeout(touchTimer);
-        this.classList.remove('touch-active');
-      }, { passive: true });
-      
-      // Touch end - keep active briefly
+      // Touch end - keep active briefly if not scrolling
       card.addEventListener('touchend', function() {
-        clearTimeout(touchTimer);
-        
-        // Keep active for a moment then fade out
-        setTimeout(() => {
+        if (!isScrolling) {
+          // Keep active for 150ms then fade out
+          setTimeout(() => {
+            this.classList.remove('touch-active');
+          }, 150);
+        } else {
           this.classList.remove('touch-active');
-        }, 200);
+        }
       }, { passive: true });
       
       // Touch cancel - remove immediately
       card.addEventListener('touchcancel', function() {
-        clearTimeout(touchTimer);
         this.classList.remove('touch-active');
       }, { passive: true });
     });
-  });
+  })();
   </script>
 
   <!-- Social Proof Section -->
@@ -463,12 +468,12 @@
 .view-all-link {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
-  padding: 0.875rem 1.75rem;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
   color: #1C1C1C;
   font-weight: 700;
-  font-size: 1.0625rem;
+  font-size: 0.9375rem;
   text-decoration: none;
   transition: all 0.3s ease;
   border-radius: 8px;
@@ -1336,19 +1341,22 @@
     text-align: left;
     border-radius: 12px;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
   
+  /* Mobile touch states */
   .step-card:hover,
   .step-card:active,
   .step-card.touch-active {
     transform: translateY(-2px);
-    border-color: #B8860B;
-    box-shadow: 0 8px 24px rgba(184, 134, 11, 0.3);
+    border-color: #B8860B !important;
+    box-shadow: 0 8px 24px rgba(184, 134, 11, 0.3) !important;
+    background: #252525 !important;
   }
   
   .step-card:active::before,
   .step-card.touch-active::before {
-    transform: scaleX(1);
+    transform: scaleX(1) !important;
   }
   
   .step-icon {
