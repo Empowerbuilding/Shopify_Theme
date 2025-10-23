@@ -78,19 +78,15 @@
   display: block;
 }
 
-/* PRODUCT STATS OVERLAY */
+/* PRODUCT STATS BELOW IMAGE */
 .product-stats {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85));
-  backdrop-filter: blur(12px);
+  background: #252525;
   padding: 1rem 0.5rem;
   gap: 0;
-  border-top: 1px solid rgba(184, 134, 11, 0.3);
+  border-top: 2px solid rgba(184, 134, 11, 0.3);
+  border-bottom: 1px solid #333333;
 }
 
 .stat-item {
@@ -455,8 +451,8 @@ document.addEventListener('DOMContentLoaded', function() {
         card.innerHTML = `
           <div class="product-image-wrapper">
             <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy">
-            ${statsHTML}
           </div>
+          ${statsHTML}
           <div class="product-content">
             <h3 class="product-title">${title}</h3>
             <div class="product-price">$${price}</div>
