@@ -195,10 +195,53 @@
   <section class="brand-story-section">
     <div class="page-width">
       <div class="brand-story-grid">
-        <!-- Image Side -->
+        <!-- Image Side - Carousel -->
         <div class="brand-story-image">
-          <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/floorplans/Copy%20of%20Apex.webp" 
-               alt="Barnhaus Floor Plan Design">
+          <div class="brand-story-carousel" id="brand-story-carousel">
+            <div class="brand-story-slide active">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/229%20Restless%20Wind-01.jpg" 
+                   alt="Barnhaus Custom Home 1">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/229%20Restless%20Wind-48%20(1).jpg" 
+                   alt="Barnhaus Custom Home 2">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/229%20Restless%20Wind-55.jpg" 
+                   alt="Barnhaus Custom Home 3">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/401-limestone-ln-driftwood-tx-78619-High-Res-12.jpg" 
+                   alt="Barnhaus Custom Home 4">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/401-limestone-ln-driftwood-tx-78619-High-Res-4.jpg" 
+                   alt="Barnhaus Custom Home 5">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/628WhiskeyTrail-65%20(1).jpg" 
+                   alt="Barnhaus Custom Home 6">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/960-pavo-springs-trail-driftwood-tx-78619-High-Res-14%20(1).jpg" 
+                   alt="Barnhaus Custom Home 7">
+            </div>
+          </div>
+          
+          <!-- Carousel Navigation -->
+          <button class="brand-story-nav prev" onclick="brandStoryPrevSlide()" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="brand-story-nav next" onclick="brandStoryNextSlide()" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+          
+          <!-- Carousel Indicators -->
+          <div class="brand-story-indicators" id="brand-story-indicators"></div>
         </div>
         
         <!-- Content Side -->
@@ -1073,18 +1116,94 @@
   background: #1a1a1a;
   border-radius: 8px;
   border: 1px solid #333333;
+  overflow: hidden;
+  height: 500px;
+}
+
+.brand-story-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-story-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
 }
 
-.brand-story-image img {
+.brand-story-slide.active {
+  opacity: 1;
+}
+
+.brand-story-slide img {
   width: 100%;
   height: 100%;
-  max-height: 500px;
-  object-fit: contain;
-  border-radius: 4px;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.brand-story-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: #FFFFFF;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.brand-story-nav:hover {
+  background: rgba(184, 134, 11, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.brand-story-nav.prev {
+  left: 1rem;
+}
+
+.brand-story-nav.next {
+  right: 1rem;
+}
+
+.brand-story-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.brand-story-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.brand-story-indicator.active {
+  background: #B8860B;
+  width: 30px;
+  border-radius: 5px;
 }
 
 .image-badge {
@@ -1359,6 +1478,10 @@
 @media (max-width: 1024px) {
   .brand-story-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .brand-story-image {
+    height: 400px;
   }
   
   .studio-features {
@@ -1644,6 +1767,71 @@ function extractSpecs(product) {
   }
   
   return specs.join('');
+}
+
+// Brand Story Carousel
+let brandStoryCurrentIndex = 0;
+const brandStorySlides = document.querySelectorAll('.brand-story-slide');
+const brandStoryIndicatorsContainer = document.getElementById('brand-story-indicators');
+let brandStoryAutoplayInterval;
+
+// Create indicators
+brandStorySlides.forEach((_, index) => {
+  const indicator = document.createElement('div');
+  indicator.className = 'brand-story-indicator';
+  if (index === 0) indicator.classList.add('active');
+  indicator.onclick = () => brandStoryGoToSlide(index);
+  brandStoryIndicatorsContainer.appendChild(indicator);
+});
+
+const brandStoryIndicators = document.querySelectorAll('.brand-story-indicator');
+
+function brandStoryGoToSlide(index) {
+  // Hide current slide
+  brandStorySlides[brandStoryCurrentIndex].classList.remove('active');
+  brandStoryIndicators[brandStoryCurrentIndex].classList.remove('active');
+  
+  // Show new slide
+  brandStoryCurrentIndex = index;
+  brandStorySlides[brandStoryCurrentIndex].classList.add('active');
+  brandStoryIndicators[brandStoryCurrentIndex].classList.add('active');
+  
+  // Reset autoplay
+  clearInterval(brandStoryAutoplayInterval);
+  startBrandStoryAutoplay();
+}
+
+function brandStoryNextSlide() {
+  const nextIndex = (brandStoryCurrentIndex + 1) % brandStorySlides.length;
+  brandStoryGoToSlide(nextIndex);
+}
+
+function brandStoryPrevSlide() {
+  const prevIndex = (brandStoryCurrentIndex - 1 + brandStorySlides.length) % brandStorySlides.length;
+  brandStoryGoToSlide(prevIndex);
+}
+
+function startBrandStoryAutoplay() {
+  brandStoryAutoplayInterval = setInterval(() => {
+    brandStoryNextSlide();
+  }, 4000); // Change slide every 4 seconds
+}
+
+// Start autoplay when page loads
+if (brandStorySlides.length > 1) {
+  startBrandStoryAutoplay();
+}
+
+// Pause autoplay on hover
+const brandStoryCarousel = document.getElementById('brand-story-carousel');
+if (brandStoryCarousel) {
+  brandStoryCarousel.addEventListener('mouseenter', () => {
+    clearInterval(brandStoryAutoplayInterval);
+  });
+  
+  brandStoryCarousel.addEventListener('mouseleave', () => {
+    startBrandStoryAutoplay();
+  });
 }
 </script>
 
