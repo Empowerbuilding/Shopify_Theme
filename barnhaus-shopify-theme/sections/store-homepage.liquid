@@ -379,10 +379,11 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .hero-section {
-    height: 100vh;
-    min-height: 100vh;
+    height: 100svh; /* Use small viewport height to account for mobile browser UI */
+    max-height: 100svh;
     margin-top: 0;
     padding-top: 0;
+    overflow: hidden; /* Prevent video overflow */
   }
   
   .hero-content {
@@ -407,7 +408,7 @@
     align-items: center;
     gap: 0.5rem;
     position: absolute;
-    bottom: 2rem;
+    bottom: 4rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
