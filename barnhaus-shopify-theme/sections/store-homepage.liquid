@@ -511,7 +511,12 @@
 
 .carousel-footer .cta-button-primary {
   display: inline-flex;
-  width: auto;
+}
+
+@media (min-width: 769px) {
+  .carousel-footer .cta-button-primary {
+    width: auto;
+  }
 }
 
 .view-all-link {
@@ -714,10 +719,6 @@
   
   .carousel-footer {
     margin-top: 1.5rem;
-  }
-  
-  .carousel-footer .cta-button-primary {
-    width: 100%;
   }
   
   .carousel-container {
