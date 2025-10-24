@@ -1885,6 +1885,36 @@ if (brandStoryCarousel) {
   brandStoryCarousel.addEventListener('mouseleave', () => {
     startBrandStoryAutoplay();
   });
+  
+  // Add touch/swipe support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  brandStoryCarousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    clearInterval(brandStoryAutoplayInterval);
+  }, { passive: true });
+  
+  brandStoryCarousel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    startBrandStoryAutoplay();
+  }, { passive: true });
+  
+  function handleSwipe() {
+    const swipeThreshold = 50; // Minimum distance for a swipe
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swiped left - go to next slide
+        brandStoryNextSlide();
+      } else {
+        // Swiped right - go to previous slide
+        brandStoryPrevSlide();
+      }
+    }
+  }
 }
 </script>
 
