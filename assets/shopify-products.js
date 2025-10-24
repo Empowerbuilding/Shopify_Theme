@@ -90,33 +90,26 @@ function createProductCard(product) {
   const specs = document.createElement('div');
   specs.className = 'product-specs';
   
-  const bedMatch = product.tags.find(tag => tag.toLowerCase().includes('bed'));
-  const bathMatch = product.tags.find(tag => tag.toLowerCase().includes('bath'));
-  const sqftMatch = product.tags.find(tag => tag.toLowerCase().includes('sqft') || tag.toLowerCase().includes('sf'));
+  // Get floor plan data from centralized data source
+  const planData = window.FloorPlansData ? window.FloorPlansData.getSpecs(product.handle) : null;
   
-  if (bedMatch) {
-    const beds = bedMatch.match(/\d+/)?.[0];
-    if (beds) {
+  if (planData) {
+    if (planData.beds) {
       const span = document.createElement('span');
-      span.innerHTML = `🛏️ ${beds} Bed${beds > 1 ? 's' : ''}`;
+      span.innerHTML = `🛏️ ${planData.beds} Bed${planData.beds > 1 ? 's' : ''}`;
       specs.appendChild(span);
     }
-  }
-  
-  if (bathMatch) {
-    const baths = bathMatch.match(/[\d.]+/)?.[0];
-    if (baths) {
+    
+    if (planData.baths) {
       const span = document.createElement('span');
-      span.innerHTML = `🚿 ${baths} Bath${baths > 1 ? 's' : ''}`;
+      span.innerHTML = `🚿 ${planData.baths} Bath${planData.baths > 1 ? 's' : ''}`;
       specs.appendChild(span);
     }
-  }
-  
-  if (sqftMatch) {
-    const sqft = sqftMatch.match(/[\d,]+/)?.[0];
-    if (sqft) {
+    
+    if (planData.area) {
       const span = document.createElement('span');
-      span.innerHTML = `📏 ${sqft} sq ft`;
+      const formattedArea = window.FloorPlansData ? window.FloorPlansData.formatArea(planData.area) : planData.area;
+      span.innerHTML = `📏 ${formattedArea} sq ft`;
       specs.appendChild(span);
     }
   }
