@@ -413,9 +413,19 @@
           drop-shadow(0 0 50px rgba(255, 255, 255, 0.5));
 }
 
-/* Hero Scroll Indicator - Hidden on Desktop */
+/* Hero Scroll Indicator */
 .hero-scroll-indicator {
-  display: none;
+  display: flex;
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 2;
+}
+
+.scroll-arrow {
+  color: #FFD700;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8))
+          drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
 }
 
 /* Mobile Responsive */
@@ -443,32 +453,10 @@
             drop-shadow(0 0 40px rgba(255, 255, 255, 0.5));
   }
   
-  /* Hero Scroll Indicator - Mobile Only */
+  /* Adjust scroll indicator position for mobile */
   .hero-scroll-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    bottom: 3rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-    animation: bounce 2s infinite;
-  }
-  
-  .scroll-arrow {
-    color: #FFD700;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8))
-            drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
-  }
-  
-  @keyframes bounce {
-    0%, 100% {
-      transform: translateX(-50%) translateY(0);
-    }
-    50% {
-      transform: translateX(-50%) translateY(-10px);
-    }
+    bottom: 1.5rem;
+    left: 1.5rem;
   }
   
   /* Ensure video starts at very top */
