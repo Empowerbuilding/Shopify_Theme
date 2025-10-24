@@ -2,9 +2,47 @@
  * Authoritative floor plan specifications
  * This data provides accurate beds, baths, and area for all floor plans
  * Data is matched to Shopify products using the product handle
+ * 
+ * HOW TO ADD YOUR PLANS:
+ * 1. Go to your Shopify product page URL (e.g., /products/york-creek)
+ * 2. The part after /products/ is your "handle" (e.g., "york-creek")
+ * 3. Add a line below with: "handle": { beds: #, baths: #, area: #### },
+ * 4. Use decimals for half baths (e.g., 2.5 baths)
+ * 5. Don't forget the comma at the end of each line (except the last one before })
  */
 
 const FLOOR_PLANS_DATA = {
+  // ========================================
+  // YOUR 20 FLOOR PLANS - EDIT THESE!
+  // ========================================
+  // Example: "product-handle": { beds: 4, baths: 3, area: 3200 },
+  
+  "york-creek": { beds: 4, baths: 4.5, area: 4200 },
+  "timber-trails": { beds: 6, baths: 5.5, area: 4850 },
+  "whiskey": { beds: 3, baths: 3.5, area: 2950 },
+  "vatican": { beds: 6, baths: 4.5, area: 4650 },
+  
+  // ADD YOUR OTHER 16 PLANS HERE (one per line):
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  // "plan-name-here": { beds: 0, baths: 0, area: 0 },
+  
+  // ========================================
+  // OLD PLANS BELOW (can be deleted if not needed)
+  // ========================================
   "mystique": { beds: 4, baths: 4, area: 4000 },
   "titan": { beds: 4, baths: 4, area: 5200 },
   "cloud-gate": { beds: 3, baths: 2.5, area: 2600 },
