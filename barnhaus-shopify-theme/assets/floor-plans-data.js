@@ -17,7 +17,7 @@ const FLOOR_PLANS_DATA = {
   // ========================================
   // Example: "product-handle": { beds: 4, baths: 3, area: 3200 },
   
-  "york-creek": { beds: 4, baths: 4.5, area: 4200 },
+  "york-creek-barndominium-plan-modern-farmhouse-steel-framed-4-bed-3-5-baths-design-blueprints": { beds: 4, baths: 4.5, area: 4200 },
   "timber-trails": { beds: 6, baths: 5.5, area: 4850 },
   "whiskey": { beds: 3, baths: 3.5, area: 2950 },
   "vatican": { beds: 6, baths: 4.5, area: 4650 },
