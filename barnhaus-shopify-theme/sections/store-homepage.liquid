@@ -1849,10 +1849,6 @@ function brandStoryGoToSlide(index) {
   brandStoryCurrentIndex = index;
   brandStorySlides[brandStoryCurrentIndex].classList.add('active');
   brandStoryIndicators[brandStoryCurrentIndex].classList.add('active');
-  
-  // Reset autoplay
-  clearInterval(brandStoryAutoplayInterval);
-  startBrandStoryAutoplay();
 }
 
 function brandStoryNextSlide() {
@@ -1865,41 +1861,19 @@ function brandStoryPrevSlide() {
   brandStoryGoToSlide(prevIndex);
 }
 
-function startBrandStoryAutoplay() {
-  brandStoryAutoplayInterval = setInterval(() => {
-    brandStoryNextSlide();
-  }, 4000); // Change slide every 4 seconds
-}
-
-// Start autoplay when page loads
-if (brandStorySlides.length > 1) {
-  startBrandStoryAutoplay();
-}
-
-// Pause autoplay on hover
+// Add touch/swipe support for mobile
 const brandStoryCarousel = document.getElementById('brand-story-carousel');
 if (brandStoryCarousel) {
-  brandStoryCarousel.addEventListener('mouseenter', () => {
-    clearInterval(brandStoryAutoplayInterval);
-  });
-  
-  brandStoryCarousel.addEventListener('mouseleave', () => {
-    startBrandStoryAutoplay();
-  });
-  
-  // Add touch/swipe support for mobile
   let touchStartX = 0;
   let touchEndX = 0;
   
   brandStoryCarousel.addEventListener('touchstart', (e) => {
     touchStartX = e.changedTouches[0].screenX;
-    clearInterval(brandStoryAutoplayInterval);
   }, { passive: true });
   
   brandStoryCarousel.addEventListener('touchend', (e) => {
     touchEndX = e.changedTouches[0].screenX;
     handleSwipe();
-    startBrandStoryAutoplay();
   }, { passive: true });
   
   function handleSwipe() {
