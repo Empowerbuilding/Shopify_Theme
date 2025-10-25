@@ -33,7 +33,13 @@
                       {% if media.preview_image %}poster="{{ media.preview_image | img_url: '800x800' }}"{% endif %}
                       alt="{{ media.alt | escape }}"
                       auto-rotate
+                      auto-rotate-delay="0"
                       camera-controls
+                      camera-orbit="0deg 75deg 2.5m"
+                      min-camera-orbit="auto auto 1m"
+                      max-camera-orbit="auto auto 10m"
+                      field-of-view="30deg"
+                      camera-target="auto auto auto"
                       ar
                       ar-modes="webxr scene-viewer quick-look"
                       shadow-intensity="1"
@@ -199,7 +205,13 @@
                   {% if media.preview_image %}poster="{{ media.preview_image | img_url: '1200x1200' }}"{% endif %}
                   alt="{{ media.alt | escape }}"
                   auto-rotate
+                  auto-rotate-delay="0"
                   camera-controls
+                  camera-orbit="0deg 75deg 2.5m"
+                  min-camera-orbit="auto auto 1m"
+                  max-camera-orbit="auto auto 10m"
+                  field-of-view="30deg"
+                  camera-target="auto auto auto"
                   ar
                   ar-modes="webxr scene-viewer quick-look"
                   shadow-intensity="1"
