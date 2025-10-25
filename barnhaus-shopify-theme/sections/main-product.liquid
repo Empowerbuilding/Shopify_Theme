@@ -28,8 +28,18 @@
                   </div>
                 {% elsif media.media_type == 'model' %}
                   <div class="carousel-image {% if forloop.first %}active{% endif %}" data-media-type="model">
+                    {% assign model_src = '' %}
+                    {% for source in media.sources %}
+                      {% if source.format == 'glb' %}
+                        {% assign model_src = source.url %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                    {% if model_src == '' %}
+                      {% assign model_src = media.sources[0].url %}
+                    {% endif %}
                     <model-viewer 
-                      src="{{ media.sources[1].url }}"
+                      src="{{ model_src }}"
                       {% if media.preview_image %}poster="{{ media.preview_image | img_url: '800x800' }}"{% endif %}
                       alt="{{ media.alt | escape }}"
                       auto-rotate
@@ -45,7 +55,8 @@
                       ar
                       ar-modes="webxr scene-viewer quick-look"
                       shadow-intensity="1"
-                      class="product-model-viewer">
+                      class="product-model-viewer"
+                      data-media-id="{{ media.id }}">
                     </model-viewer>
                   </div>
                 {% endif %}
@@ -202,8 +213,18 @@
               </div>
             {% elsif media.media_type == 'model' %}
               <div class="lightbox-image {% if forloop.first %}active{% endif %}" data-media-type="model">
+                {% assign model_src = '' %}
+                {% for source in media.sources %}
+                  {% if source.format == 'glb' %}
+                    {% assign model_src = source.url %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+                {% if model_src == '' %}
+                  {% assign model_src = media.sources[0].url %}
+                {% endif %}
                 <model-viewer 
-                  src="{{ media.sources[1].url }}"
+                  src="{{ model_src }}"
                   {% if media.preview_image %}poster="{{ media.preview_image | img_url: '1200x1200' }}"{% endif %}
                   alt="{{ media.alt | escape }}"
                   auto-rotate
@@ -219,7 +240,8 @@
                   ar
                   ar-modes="webxr scene-viewer quick-look"
                   shadow-intensity="1"
-                  class="lightbox-model-viewer">
+                  class="lightbox-model-viewer"
+                  data-media-id="{{ media.id }}">
                 </model-viewer>
               </div>
             {% endif %}
@@ -600,6 +622,57 @@
         }, 3000);
       });
     });
+  });
+  
+  // Debug 3D Model URLs and Loading
+  document.addEventListener('DOMContentLoaded', function() {
+    const modelViewers = document.querySelectorAll('model-viewer');
+    
+    console.log('=== 3D Model Viewer Debug Info ===');
+    console.log('Total model-viewer elements found:', modelViewers.length);
+    
+    modelViewers.forEach((mv, i) => {
+      const src = mv.getAttribute('src');
+      const mediaId = mv.getAttribute('data-media-id');
+      
+      console.log('\nModel ' + i + ':');
+      console.log('  Media ID:', mediaId);
+      console.log('  Source URL:', src);
+      console.log('  Poster:', mv.getAttribute('poster'));
+      
+      // Test if URL is accessible
+      if (src) {
+        fetch(src, { method: 'HEAD' })
+          .then(response => {
+            console.log('  Response Status:', response.status);
+            console.log('  Content-Type:', response.headers.get('content-type'));
+            console.log('  Content-Length:', response.headers.get('content-length'));
+            
+            if (response.status !== 200) {
+              console.error('  ❌ Model file returned non-200 status!');
+            } else {
+              console.log('  ✓ Model file is accessible');
+            }
+          })
+          .catch(error => {
+            console.error('  ❌ Fetch error:', error);
+          });
+      } else {
+        console.error('  ❌ No source URL found!');
+      }
+      
+      // Listen for model-viewer errors
+      mv.addEventListener('error', function(event) {
+        console.error('Model ' + i + ' error event:', event);
+      });
+      
+      // Listen for model load success
+      mv.addEventListener('load', function() {
+        console.log('✓ Model ' + i + ' loaded successfully!');
+      });
+    });
+    
+    console.log('=== End Debug Info ===\n');
   });
 </script>
 
