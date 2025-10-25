@@ -14,54 +14,85 @@
 
   <div class="container">
     <div class="product-main">
-      <!-- Product Gallery -->
+      <!-- Product Gallery (Images & 3D Models) -->
       <div class="product-gallery">
         <div class="product-image-main" id="product-image-main">
           <div class="image-carousel" id="image-carousel">
-            {% if product.images.size > 0 %}
-              {% for image in product.images %}
-                <div class="carousel-image {% if forloop.first %}active{% endif %}" onclick="openLightbox({{ forloop.index0 }})" style="cursor: zoom-in;">
-                  <img src="{{ image | img_url: '800x800' }}" 
-                       alt="{{ image.alt | escape }}"
-                       loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
-                </div>
+            {% if product.media.size > 0 %}
+              {% for media in product.media %}
+                {% if media.media_type == 'image' %}
+                  <div class="carousel-image {% if forloop.first %}active{% endif %}" onclick="openLightbox({{ forloop.index0 }})" style="cursor: zoom-in;" data-media-type="image">
+                    <img src="{{ media | img_url: '800x800' }}" 
+                         alt="{{ media.alt | escape }}"
+                         loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                  </div>
+                {% elsif media.media_type == 'model' %}
+                  <div class="carousel-image {% if forloop.first %}active{% endif %}" onclick="openLightbox({{ forloop.index0 }})" style="cursor: pointer;" data-media-type="model">
+                    <model-viewer 
+                      src="{{ media.sources[1].url }}"
+                      {% if media.preview_image %}poster="{{ media.preview_image | img_url: '800x800' }}"{% endif %}
+                      alt="{{ media.alt | escape }}"
+                      auto-rotate
+                      camera-controls
+                      ar
+                      ar-modes="webxr scene-viewer quick-look"
+                      shadow-intensity="1"
+                      class="product-model-viewer">
+                    </model-viewer>
+                  </div>
+                {% endif %}
               {% endfor %}
             {% else %}
-              <div class="carousel-image active">
+              <div class="carousel-image active" data-media-type="image">
                 <img src="{{ 'product-placeholder.png' | asset_url }}" alt="Product placeholder">
               </div>
             {% endif %}
           </div>
           
-          {% if product.images.size > 1 %}
-            <!-- Image Navigation Arrows -->
-            <button class="image-nav-btn prev" onclick="previousImage()" aria-label="Previous image">
+          {% if product.media.size > 1 %}
+            <!-- Media Navigation Arrows -->
+            <button class="image-nav-btn prev" onclick="previousImage()" aria-label="Previous media">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="15 18 9 12 15 6"></polyline>
               </svg>
             </button>
-            <button class="image-nav-btn next" onclick="nextImage()" aria-label="Next image">
+            <button class="image-nav-btn next" onclick="nextImage()" aria-label="Next media">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </button>
             
-            <!-- Image Indicators (Dots) -->
+            <!-- Media Indicators (Dots) -->
             <div class="image-indicators" id="image-indicators">
-              {% for image in product.images %}
+              {% for media in product.media %}
                 <span class="indicator {% if forloop.first %}active{% endif %}" onclick="goToImage({{ forloop.index0 }})"></span>
               {% endfor %}
             </div>
           {% endif %}
         </div>
         
-        {% if product.images.size > 1 %}
+        {% if product.media.size > 1 %}
           <div class="product-thumbnails">
-            {% for image in product.images %}
+            {% for media in product.media %}
               <div class="product-thumbnail {% if forloop.first %}active{% endif %}" 
                    data-image-index="{{ forloop.index0 }}"
+                   data-media-type="{{ media.media_type }}"
                    onclick="goToImage({{ forloop.index0 }})">
-                <img src="{{ image | img_url: '100x100' }}" alt="{{ image.alt | escape }}">
+                {% if media.media_type == 'image' %}
+                  <img src="{{ media | img_url: '100x100' }}" alt="{{ media.alt | escape }}">
+                {% elsif media.media_type == 'model' %}
+                  <div class="model-thumbnail-icon">
+                    <!-- 3D Cube Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                      <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    {% if media.preview_image %}
+                      <img src="{{ media.preview_image | img_url: '100x100' }}" alt="{{ media.alt | escape }}" style="opacity: 0.3; position: absolute; inset: 0; object-fit: cover;">
+                    {% endif %}
+                  </div>
+                {% endif %}
               </div>
             {% endfor %}
           </div>
@@ -142,7 +173,7 @@
     </div>
   </div>
   
-  <!-- Image Lightbox Modal -->
+  <!-- Media Lightbox Modal (Images & 3D Models) -->
   <div id="image-lightbox" class="lightbox" onclick="closeLightbox(event)">
     <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close lightbox">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -153,34 +184,53 @@
     
     <div class="lightbox-content">
       <div class="lightbox-images" id="lightbox-images">
-        {% if product.images.size > 0 %}
-          {% for image in product.images %}
-            <div class="lightbox-image {% if forloop.first %}active{% endif %}">
-              <img src="{{ image | img_url: '1200x1200' }}" 
-                   alt="{{ image.alt | escape }}"
-                   loading="lazy">
-            </div>
+        {% if product.media.size > 0 %}
+          {% for media in product.media %}
+            {% if media.media_type == 'image' %}
+              <div class="lightbox-image {% if forloop.first %}active{% endif %}" data-media-type="image">
+                <img src="{{ media | img_url: '1200x1200' }}" 
+                     alt="{{ media.alt | escape }}"
+                     loading="lazy">
+              </div>
+            {% elsif media.media_type == 'model' %}
+              <div class="lightbox-image {% if forloop.first %}active{% endif %}" data-media-type="model">
+                <model-viewer 
+                  src="{{ media.sources[1].url }}"
+                  {% if media.preview_image %}poster="{{ media.preview_image | img_url: '1200x1200' }}"{% endif %}
+                  alt="{{ media.alt | escape }}"
+                  auto-rotate
+                  camera-controls
+                  ar
+                  ar-modes="webxr scene-viewer quick-look"
+                  shadow-intensity="1"
+                  class="lightbox-model-viewer">
+                </model-viewer>
+              </div>
+            {% endif %}
           {% endfor %}
         {% endif %}
       </div>
       
-      {% if product.images.size > 1 %}
-        <button class="lightbox-nav prev" onclick="lightboxPrevious(event)" aria-label="Previous image">
+      {% if product.media.size > 1 %}
+        <button class="lightbox-nav prev" onclick="lightboxPrevious(event)" aria-label="Previous media">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 18 9 12 15 6"></polyline>
           </svg>
         </button>
-        <button class="lightbox-nav next" onclick="lightboxNext(event)" aria-label="Next image">
+        <button class="lightbox-nav next" onclick="lightboxNext(event)" aria-label="Next media">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
         </button>
         
-        <div class="lightbox-counter" id="lightbox-counter">1 / {{ product.images.size }}</div>
+        <div class="lightbox-counter" id="lightbox-counter">1 / {{ product.media.size }}</div>
       {% endif %}
     </div>
   </div>
 </section>
+
+<!-- Model Viewer Library -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
 <script>
   // Product variants data
@@ -454,6 +504,119 @@
     });
   });
 </script>
+
+<style>
+/* 3D Model Viewer Styles */
+model-viewer {
+  width: 100%;
+  height: 100%;
+  background-color: #1C1C1C;
+  --poster-color: #1C1C1C;
+}
+
+.product-model-viewer {
+  width: 100%;
+  min-height: 500px;
+  border-radius: 8px;
+}
+
+.lightbox-model-viewer {
+  width: 100%;
+  height: 80vh;
+  max-height: 800px;
+}
+
+/* Model Viewer AR Button Styling */
+model-viewer::part(default-ar-button) {
+  background-color: #B8860B;
+  color: #1C1C1C;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+model-viewer::part(default-ar-button):hover {
+  background-color: #FFD700;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.5);
+}
+
+/* Model Thumbnail Icon Styling */
+.model-thumbnail-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1C1C1C;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.model-thumbnail-icon svg {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.product-thumbnail[data-media-type="model"] {
+  border: 2px solid #B8860B;
+}
+
+.product-thumbnail[data-media-type="model"]:hover {
+  border-color: #FFD700;
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.4);
+}
+
+/* Model Viewer Loading State */
+model-viewer::part(default-progress-bar) {
+  background-color: #B8860B;
+}
+
+model-viewer::part(default-progress-bar-container) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Ensure model viewers are visible when active */
+.carousel-image[data-media-type="model"].active model-viewer,
+.lightbox-image[data-media-type="model"].active model-viewer {
+  display: block;
+}
+
+.carousel-image[data-media-type="model"]:not(.active) model-viewer,
+.lightbox-image[data-media-type="model"]:not(.active) model-viewer {
+  display: none;
+}
+
+/* Mobile Responsive Adjustments for Model Viewer */
+@media (max-width: 768px) {
+  .product-model-viewer {
+    min-height: 400px;
+  }
+  
+  .lightbox-model-viewer {
+    height: 70vh;
+  }
+  
+  model-viewer::part(default-ar-button) {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-model-viewer {
+    min-height: 300px;
+  }
+  
+  .lightbox-model-viewer {
+    height: 60vh;
+  }
+}
+</style>
 
 {% schema %}
 {
