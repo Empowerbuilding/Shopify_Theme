@@ -35,6 +35,8 @@
                       auto-rotate
                       auto-rotate-delay="0"
                       camera-controls
+                      interaction-prompt="auto"
+                      touch-action="pan-y"
                       camera-orbit="0deg 75deg 2.5m"
                       min-camera-orbit="auto auto 1m"
                       max-camera-orbit="auto auto 10m"
@@ -207,6 +209,8 @@
                   auto-rotate
                   auto-rotate-delay="0"
                   camera-controls
+                  interaction-prompt="auto"
+                  touch-action="pan-y"
                   camera-orbit="0deg 75deg 2.5m"
                   min-camera-orbit="auto auto 1m"
                   max-camera-orbit="auto auto 10m"
@@ -607,13 +611,21 @@ model-viewer {
   background-color: #1C1C1C;
   --poster-color: #1C1C1C;
   position: relative;
-  z-index: 1;
-  pointer-events: auto;
+  z-index: 2;
+  pointer-events: auto !important;
+  touch-action: pan-y;
   cursor: grab;
+  display: block;
 }
 
 model-viewer:active {
   cursor: grabbing;
+}
+
+/* Ensure interaction prompt is visible */
+model-viewer::part(interaction-prompt) {
+  color: #B8860B;
+  font-weight: 600;
 }
 
 .product-model-viewer {
@@ -686,12 +698,16 @@ model-viewer::part(default-progress-bar-container) {
 .carousel-image[data-media-type="model"],
 .lightbox-image[data-media-type="model"] {
   cursor: default;
+  position: relative;
+  z-index: 1;
 }
 
 .carousel-image[data-media-type="model"].active model-viewer,
 .lightbox-image[data-media-type="model"].active model-viewer {
   display: block;
-  pointer-events: auto;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 2;
 }
 
 .carousel-image[data-media-type="model"]:not(.active) model-viewer,
