@@ -241,8 +241,18 @@
   </div>
 </section>
 
-<!-- Model Viewer Library -->
+<!-- Model Viewer Library - Only load if product has 3D models -->
+{% assign has_3d_model = false %}
+{% for media in product.media %}
+  {% if media.media_type == 'model' %}
+    {% assign has_3d_model = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if has_3d_model %}
 <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+{% endif %}
 
 <script>
   // Product variants data
@@ -516,10 +526,15 @@
     });
   });
   
-  // 3D Model Viewer Interaction Handling
+  // 3D Model Viewer Interaction Handling - Only run if models exist
   document.addEventListener('DOMContentLoaded', function() {
-    // Get all model viewers in carousel
+    // Check if there are any 3D models on this page
     const carouselModels = document.querySelectorAll('.carousel-image[data-media-type="model"]');
+    
+    // Exit early if no 3D models found - improves performance
+    if (carouselModels.length === 0) {
+      return;
+    }
     
     carouselModels.forEach((modelContainer, index) => {
       const modelViewer = modelContainer.querySelector('model-viewer');
