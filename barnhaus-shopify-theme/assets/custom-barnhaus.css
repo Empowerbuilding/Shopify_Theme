@@ -861,7 +861,7 @@ img {
   .mobile-back-button {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 1.5rem;
     width: auto;
     height: auto;
     border-radius: 8px;
