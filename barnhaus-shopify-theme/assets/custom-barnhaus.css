@@ -856,6 +856,60 @@ img {
   height: 24px;
 }
 
+/* Desktop Back Button - Integrated with Content */
+@media (min-width: 1024px) {
+  .mobile-back-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    gap: 0.5rem;
+    background: rgba(42, 42, 42, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-back-button::before {
+    content: 'Back to Collection';
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  
+  .mobile-back-button:hover {
+    background: rgba(184, 134, 11, 0.15);
+    border-color: var(--color-primary-gold);
+    transform: translateX(0) translateY(-2px);
+    box-shadow: 0 4px 16px rgba(184, 134, 11, 0.25);
+    color: var(--color-primary-gold);
+  }
+  
+  .mobile-back-button:active {
+    transform: translateY(0);
+  }
+  
+  .mobile-back-button svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+  }
+  
+  /* Adjust product page layout to accommodate integrated back button */
+  .product-page {
+    padding-top: 5rem;
+  }
+  
+  .product-page .container {
+    position: relative;
+  }
+}
+
 .product-main {
   display: grid;
   grid-template-columns: 1fr;

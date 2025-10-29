@@ -1734,7 +1734,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Combine: priority products first (in order), then others
-        const orderedProducts = priorityProducts.filter(p => p).concat(otherProducts).slice(0, 8);
+        const orderedProducts = priorityProducts.filter(p => p).concat(otherProducts).slice(0, 5);
         
         orderedProducts.forEach(product => {
           const card = document.createElement('a');

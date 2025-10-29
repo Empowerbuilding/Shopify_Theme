@@ -1131,7 +1131,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const carouselTrack = document.getElementById('carousel-track');
   
   // Fetch products from Shopify collection (same as catalog page)
-  fetch('/collections/floor-plans/products.json?limit=8')
+  fetch('/collections/floor-plans/products.json?limit=5')
     .then(response => response.json())
     .then(data => {
       if (data.products && data.products.length > 0) {
