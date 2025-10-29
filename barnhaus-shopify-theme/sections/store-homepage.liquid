@@ -1741,7 +1741,11 @@
 function scrollToNextSection() {
   const nextSection = document.getElementById('featured-plans-section');
   if (nextSection) {
-    nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const offsetPosition = nextSection.getBoundingClientRect().top + window.pageYOffset - 100;
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
   }
 }
 
