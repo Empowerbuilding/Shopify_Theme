@@ -192,6 +192,28 @@
     </div>
   </section>
 
+  <!-- Customer Reviews Section -->
+  <section class="customer-reviews-section">
+    <div class="page-width">
+      <div class="reviews-header">
+        <h2 class="reviews-title">What Our Customers Say</h2>
+        <p class="reviews-subtitle">Real feedback from real builders who trust Barnhaus plans</p>
+      </div>
+      
+      <div class="reviews-grid" id="reviews-grid">
+        <!-- Reviews will be loaded here by JavaScript -->
+        <div class="reviews-loading">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#3A3A3A" stroke-width="4"/>
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#B8860B" stroke-width="4" stroke-dasharray="90, 150" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Brand Story Section -->
   <section class="brand-story-section">
     <div class="page-width">
@@ -1164,6 +1186,192 @@
 }
 
 /* ===================================
+   CUSTOMER REVIEWS SECTION
+   =================================== */
+
+.customer-reviews-section {
+  padding: 5rem 0;
+  background: #1C1C1C;
+}
+
+.reviews-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.reviews-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.reviews-subtitle {
+  color: #D1D5DB;
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.reviews-loading {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.review-card {
+  background: #252525;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  padding: 1.75rem;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.review-card:hover {
+  border-color: #B8860B;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.25);
+}
+
+.review-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.review-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1C1C1C;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(184, 134, 11, 0.3);
+}
+
+.review-header-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.review-author {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.star-icon {
+  color: #D1D5DB;
+  width: 16px;
+  height: 16px;
+}
+
+.star-icon.filled {
+  color: #F59E0B;
+}
+
+.review-date {
+  font-size: 0.875rem;
+  color: #9CA3AF;
+  margin-top: 0.125rem;
+}
+
+.review-body {
+  color: #D1D5DB;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  flex: 1;
+  margin: 0;
+}
+
+.review-verified {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: #B8860B;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.review-verified svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Mobile Reviews */
+@media (max-width: 768px) {
+  .customer-reviews-section {
+    padding: 3rem 0;
+  }
+
+  .reviews-header {
+    margin-bottom: 2rem;
+  }
+
+  .reviews-title {
+    font-size: 1.75rem;
+  }
+
+  .reviews-subtitle {
+    font-size: 1rem;
+  }
+
+  .reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .review-card {
+    padding: 1.5rem;
+  }
+
+  .review-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+
+  .review-author {
+    font-size: 1rem;
+  }
+
+  .review-body {
+    font-size: 0.875rem;
+  }
+}
+
+/* ===================================
    BRAND STORY SECTION
    =================================== */
 
@@ -1736,6 +1944,9 @@
 <!-- Load authoritative floor plans data -->
 <script src="{{ 'floor-plans-data.js' | asset_url }}"></script>
 
+<!-- Load reviews data -->
+<script src="{{ 'reviews-data.js' | asset_url }}"></script>
+
 <script>
 // Scroll to next section when arrow is clicked
 function scrollToNextSection() {
@@ -1940,6 +2151,52 @@ if (brandStoryCarousel) {
     }
   }
 }
+
+// Load and Render Customer Reviews
+document.addEventListener('DOMContentLoaded', function() {
+  const reviewsGrid = document.getElementById('reviews-grid');
+  
+  if (reviewsGrid && window.ReviewsData) {
+    // Get featured reviews (6 for desktop, showing in grid)
+    const reviews = window.ReviewsData.getFeaturedReviews(6);
+    
+    // Clear loading indicator
+    reviewsGrid.innerHTML = '';
+    
+    // Render each review
+    reviews.forEach(review => {
+      const reviewCard = document.createElement('div');
+      reviewCard.className = 'review-card';
+      
+      const initials = window.ReviewsData.getInitials(review.author);
+      const stars = window.ReviewsData.getStars(review.rating);
+      const formattedDate = window.ReviewsData.formatDate(review.published_at);
+      
+      reviewCard.innerHTML = `
+        <div class="review-header">
+          <div class="review-avatar">${initials}</div>
+          <div class="review-header-content">
+            <h3 class="review-author">${review.author}</h3>
+            <div class="review-rating">
+              ${stars}
+            </div>
+            <div class="review-date">${formattedDate}</div>
+          </div>
+        </div>
+        <p class="review-body">${review.body}</p>
+        <div class="review-verified">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Verified Purchase
+        </div>
+      `;
+      
+      reviewsGrid.appendChild(reviewCard);
+    });
+  }
+});
 </script>
 
 {% schema %}
