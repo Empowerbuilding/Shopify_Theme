@@ -2620,31 +2620,39 @@ document.addEventListener('DOMContentLoaded', function() {
       
       reviewsGrid.appendChild(reviewCard);
       
-      // Check if review needs expand button
+      // Check if review needs expand button after DOM renders
       const reviewBody = reviewCard.querySelector('.review-body');
       const expandBtn = reviewCard.querySelector('.review-expand-btn');
       const expandText = expandBtn.querySelector('.expand-text');
       
-      // Check if content is truncated (scrollHeight > clientHeight)
-      if (reviewBody.scrollHeight > reviewBody.clientHeight) {
-        reviewBody.classList.add('has-more');
-        expandBtn.style.display = 'flex';
+      // Use requestAnimationFrame to ensure accurate height measurement
+      requestAnimationFrame(() => {
+        // Force reflow to ensure layout is complete
+        reviewBody.offsetHeight;
         
-        // Add click handler for expand/collapse
-        expandBtn.addEventListener('click', () => {
-          const isExpanded = reviewBody.classList.contains('expanded');
+        // Check if content is truncated (scrollHeight > clientHeight + 5px threshold)
+        const isOverflowing = reviewBody.scrollHeight > (reviewBody.clientHeight + 5);
+        
+        if (isOverflowing) {
+          reviewBody.classList.add('has-more');
+          expandBtn.style.display = 'flex';
           
-          if (isExpanded) {
-            reviewBody.classList.remove('expanded');
-            expandBtn.classList.remove('expanded');
-            expandText.textContent = 'Read More';
-          } else {
-            reviewBody.classList.add('expanded');
-            expandBtn.classList.add('expanded');
-            expandText.textContent = 'Read Less';
-          }
-        });
-      }
+          // Add click handler for expand/collapse
+          expandBtn.addEventListener('click', () => {
+            const isExpanded = reviewBody.classList.contains('expanded');
+            
+            if (isExpanded) {
+              reviewBody.classList.remove('expanded');
+              expandBtn.classList.remove('expanded');
+              expandText.textContent = 'Read More';
+            } else {
+              reviewBody.classList.add('expanded');
+              expandBtn.classList.add('expanded');
+              expandText.textContent = 'Read Less';
+            }
+          });
+        }
+      });
     });
   }
 });
