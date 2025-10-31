@@ -238,59 +238,6 @@
     </div>
   </section>
 
-  <!-- Social Proof Section -->
-  <section class="social-proof-section">
-    <div class="page-width">
-      <!-- Featured Project Video -->
-      <div class="featured-project-container">
-        <div class="featured-project-video">
-          <div class="video-wrapper">
-            <video 
-              id="featured-project-video"
-              class="featured-video"
-              loop
-              muted
-              playsinline
-              preload="metadata"
-            >
-              <source src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/Untitled%20video%20-%20Made%20with%20Clipchamp%20(18)%20(1).mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div class="featured-project-info">
-            <h3>Spring Mountain Estate</h3>
-            <p class="project-location">📍 Hill Country, Texas</p>
-            <p class="project-description">A stunning 4,500 sq ft custom home featuring modern industrial design with panoramic hill country views.</p>
-          </div>
-        </div>
-      </div>
-
-      <script>
-        // Auto-play video when it comes into view
-        document.addEventListener('DOMContentLoaded', function() {
-          const video = document.getElementById('featured-project-video');
-          
-          // Use Intersection Observer to start playing when visible
-          const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                // Video is in view - play it
-                video.play().catch(error => {
-                  console.log('Autoplay prevented:', error);
-                });
-              } else {
-                // Video is out of view - pause it to save resources
-                video.pause();
-              }
-            });
-          }, { threshold: 0.25 }); // Play when 25% visible
-          
-          observer.observe(video);
-        });
-      </script>
-    </div>
-  </section>
-
   <!-- Customer Reviews Section -->
   <section class="customer-reviews-section">
     <div class="page-width">
@@ -404,6 +351,59 @@
           </svg>
         </a>
       </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Section -->
+  <section class="social-proof-section">
+    <div class="page-width">
+      <!-- Featured Project Video -->
+      <div class="featured-project-container">
+        <div class="featured-project-video">
+          <div class="video-wrapper">
+            <video 
+              id="featured-project-video"
+              class="featured-video"
+              loop
+              muted
+              playsinline
+              preload="metadata"
+            >
+              <source src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/Untitled%20video%20-%20Made%20with%20Clipchamp%20(18)%20(1).mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="featured-project-info">
+            <h3>Spring Mountain Estate</h3>
+            <p class="project-location">📍 Hill Country, Texas</p>
+            <p class="project-description">A stunning 4,500 sq ft custom home featuring modern industrial design with panoramic hill country views.</p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // Auto-play video when it comes into view
+        document.addEventListener('DOMContentLoaded', function() {
+          const video = document.getElementById('featured-project-video');
+          
+          // Use Intersection Observer to start playing when visible
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                // Video is in view - play it
+                video.play().catch(error => {
+                  console.log('Autoplay prevented:', error);
+                });
+              } else {
+                // Video is out of view - pause it to save resources
+                video.pause();
+              }
+            });
+          }, { threshold: 0.25 }); // Play when 25% visible
+          
+          observer.observe(video);
+        });
+      </script>
     </div>
   </section>
 
