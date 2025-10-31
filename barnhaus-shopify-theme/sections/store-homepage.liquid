@@ -1329,7 +1329,7 @@
   height: 14px;
 }
 
-/* Mobile Reviews */
+/* Mobile Reviews - Horizontal Scroll */
 @media (max-width: 768px) {
   .customer-reviews-section {
     padding: 3rem 0;
@@ -1348,12 +1348,45 @@
   }
 
   .reviews-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    grid-template-columns: none;
     gap: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #B8860B #2A2A2A;
+    padding: 0 0 1rem 0;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .reviews-grid::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .reviews-grid::-webkit-scrollbar-track {
+    background: #2A2A2A;
+    border-radius: 3px;
+  }
+
+  .reviews-grid::-webkit-scrollbar-thumb {
+    background: #B8860B;
+    border-radius: 3px;
+  }
+
+  .reviews-grid::-webkit-scrollbar-thumb:hover {
+    background: #FFD700;
   }
 
   .review-card {
+    flex: 0 0 85%;
+    max-width: 320px;
+    min-width: 280px;
     padding: 1.5rem;
+    scroll-snap-align: start;
   }
 
   .review-avatar {
