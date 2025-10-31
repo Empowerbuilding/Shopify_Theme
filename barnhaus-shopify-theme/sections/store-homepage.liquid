@@ -1336,6 +1336,13 @@
   flex-direction: column;
   gap: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  min-height: 320px;
+}
+
+.review-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .review-card:hover {
@@ -1406,6 +1413,59 @@
   font-size: 0.9375rem;
   line-height: 1.7;
   margin: 0;
+  position: relative;
+  max-height: 120px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.review-body.expanded {
+  max-height: none;
+}
+
+.review-body.has-more::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, #252525);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.review-body.expanded::after {
+  opacity: 0;
+}
+
+.review-expand-btn {
+  background: transparent;
+  border: none;
+  color: #B8860B;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0 0 0;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.review-expand-btn:hover {
+  color: #FFD700;
+}
+
+.review-expand-btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.review-expand-btn.expanded svg {
+  transform: rotate(180deg);
 }
 
 .review-verified {
@@ -1665,6 +1725,7 @@
     flex: 0 0 85%;
     max-width: 320px;
     min-width: 280px;
+    min-height: 300px;
     padding: 1.5rem;
     scroll-snap-align: start;
   }
@@ -1681,6 +1742,15 @@
 
   .review-body {
     font-size: 0.875rem;
+    max-height: 100px;
+  }
+
+  .review-body.has-more::after {
+    height: 35px;
+  }
+
+  .review-expand-btn {
+    font-size: 0.8125rem;
   }
 }
 
@@ -2529,7 +2599,15 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="review-date">${formattedDate}</div>
           </div>
         </div>
-        <p class="review-body">${review.body}</p>
+        <div class="review-content-wrapper">
+          <p class="review-body">${review.body}</p>
+          <button class="review-expand-btn" style="display: none;">
+            <span class="expand-text">Read More</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
         <div class="review-verified">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -2540,6 +2618,32 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
       
       reviewsGrid.appendChild(reviewCard);
+      
+      // Check if review needs expand button
+      const reviewBody = reviewCard.querySelector('.review-body');
+      const expandBtn = reviewCard.querySelector('.review-expand-btn');
+      const expandText = expandBtn.querySelector('.expand-text');
+      
+      // Check if content is truncated (scrollHeight > clientHeight)
+      if (reviewBody.scrollHeight > reviewBody.clientHeight) {
+        reviewBody.classList.add('has-more');
+        expandBtn.style.display = 'flex';
+        
+        // Add click handler for expand/collapse
+        expandBtn.addEventListener('click', () => {
+          const isExpanded = reviewBody.classList.contains('expanded');
+          
+          if (isExpanded) {
+            reviewBody.classList.remove('expanded');
+            expandBtn.classList.remove('expanded');
+            expandText.textContent = 'Read More';
+          } else {
+            reviewBody.classList.add('expanded');
+            expandBtn.classList.add('expanded');
+            expandText.textContent = 'Read Less';
+          }
+        });
+      }
     });
   }
 });
