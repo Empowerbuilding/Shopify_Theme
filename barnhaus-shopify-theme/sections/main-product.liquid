@@ -26,6 +26,20 @@
                          alt="{{ media.alt | escape }}"
                          loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
                   </div>
+                {% elsif media.media_type == 'video' %}
+                  <div class="carousel-image {% if forloop.first %}active{% endif %}" data-media-type="video">
+                    <video 
+                      class="product-video"
+                      controls
+                      playsinline
+                      preload="metadata"
+                      {% if media.preview_image %}poster="{{ media.preview_image | img_url: '800x800' }}"{% endif %}>
+                      {% for source in media.sources %}
+                        <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                      {% endfor %}
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
                 {% elsif media.media_type == 'model' %}
                   <div class="carousel-image {% if forloop.first %}active{% endif %}" data-media-type="model">
                     {% assign model_src = '' %}
@@ -99,6 +113,17 @@
                    onclick="goToImage({{ forloop.index0 }})">
                 {% if media.media_type == 'image' %}
                   <img src="{{ media | img_url: '100x100' }}" alt="{{ media.alt | escape }}">
+                {% elsif media.media_type == 'video' %}
+                  <div class="video-thumbnail-icon">
+                    <!-- Play Icon Overlay -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="#B8860B" stroke="#B8860B" stroke-width="2">
+                      <circle cx="12" cy="12" r="10" fill="rgba(184, 134, 11, 0.3)"></circle>
+                      <polygon points="10 8 16 12 10 16 10 8" fill="#B8860B"></polygon>
+                    </svg>
+                    {% if media.preview_image %}
+                      <img src="{{ media.preview_image | img_url: '100x100' }}" alt="{{ media.alt | escape }}" style="position: absolute; inset: 0; object-fit: cover; z-index: 0;">
+                    {% endif %}
+                  </div>
                 {% elsif media.media_type == 'model' %}
                   <div class="model-thumbnail-icon">
                     <!-- 3D Cube Icon -->
@@ -211,6 +236,20 @@
                      alt="{{ media.alt | escape }}"
                      loading="lazy">
               </div>
+            {% elsif media.media_type == 'video' %}
+              <div class="lightbox-image {% if forloop.first %}active{% endif %}" data-media-type="video">
+                <video 
+                  class="lightbox-video"
+                  controls
+                  playsinline
+                  preload="metadata"
+                  {% if media.preview_image %}poster="{{ media.preview_image | img_url: '1200x1200' }}"{% endif %}>
+                  {% for source in media.sources %}
+                    <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                  {% endfor %}
+                  Your browser does not support the video tag.
+                </video>
+              </div>
             {% elsif media.media_type == 'model' %}
               <div class="lightbox-image {% if forloop.first %}active{% endif %}" data-media-type="model">
                 {% assign model_src = '' %}
@@ -294,6 +333,12 @@
   // Go to specific image
   function goToImage(index) {
     if (index < 0 || index >= carouselImages.length) return;
+    
+    // Pause video in current slide if it exists
+    const currentVideo = carouselImages[currentImageIndex].querySelector('video');
+    if (currentVideo) {
+      currentVideo.pause();
+    }
     
     // Hide current image
     carouselImages[currentImageIndex].classList.remove('active');
@@ -399,7 +444,14 @@
   // Update lightbox image
   function updateLightboxImage() {
     lightboxImages.forEach((img, idx) => {
-      img.classList.toggle('active', idx === lightboxCurrentIndex);
+      const isActive = idx === lightboxCurrentIndex;
+      img.classList.toggle('active', isActive);
+      
+      // Pause videos that are not active
+      const video = img.querySelector('video');
+      if (video && !isActive) {
+        video.pause();
+      }
     });
     
     if (lightboxCounter && lightboxImages.length > 1) {
@@ -549,6 +601,36 @@
       button.disabled = false;
       button.textContent = originalText;
       alert('There was an error adding the product to your cart. Please try again.');
+    });
+  });
+  
+  // Video Interaction Handling - Prevent lightbox from opening when clicking on videos
+  document.addEventListener('DOMContentLoaded', function() {
+    const carouselVideos = document.querySelectorAll('.carousel-image[data-media-type="video"]');
+    
+    carouselVideos.forEach((videoContainer) => {
+      const video = videoContainer.querySelector('video');
+      
+      if (video) {
+        // Prevent lightbox from opening when clicking on video
+        video.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+        
+        videoContainer.onclick = function(e) {
+          // Prevent lightbox opening when clicking on video container
+          e.stopPropagation();
+        };
+      }
+    });
+    
+    // Handle lightbox videos - prevent closing when interacting
+    const lightboxVideos = document.querySelectorAll('.lightbox-image[data-media-type="video"] video');
+    
+    lightboxVideos.forEach((video) => {
+      video.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
     });
   });
   
@@ -812,6 +894,84 @@ model-viewer::part(default-progress-bar-container) {
   
   .lightbox-model-viewer {
     height: 60vh;
+  }
+}
+
+/* Product Video Styles */
+.product-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000;
+  border-radius: 8px;
+  display: block;
+}
+
+.lightbox-video {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  background-color: #000;
+  border-radius: 8px;
+}
+
+.carousel-image[data-media-type="video"] {
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Video Thumbnail Icon Styling */
+.video-thumbnail-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1C1C1C;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.video-thumbnail-icon svg {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.product-thumbnail[data-media-type="video"] {
+  border: 2px solid #B8860B;
+  position: relative;
+}
+
+.product-thumbnail[data-media-type="video"]:hover {
+  border-color: #FFD700;
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.4);
+}
+
+/* Mobile Responsive Adjustments for Videos */
+@media (max-width: 768px) {
+  .carousel-image[data-media-type="video"] {
+    min-height: 400px;
+  }
+  
+  .lightbox-video {
+    max-height: 70vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-image[data-media-type="video"] {
+    min-height: 300px;
+  }
+  
+  .lightbox-video {
+    max-height: 60vh;
   }
 }
 </style>
