@@ -30,15 +30,29 @@
                   <div class="carousel-image {% if forloop.first %}active{% endif %}" data-media-type="video">
                     <video 
                       class="product-video"
-                      controls
+                      autoplay
+                      muted
+                      loop
                       playsinline
-                      preload="metadata"
+                      preload="auto"
                       {% if media.preview_image %}poster="{{ media.preview_image | img_url: '800x800' }}"{% endif %}>
                       {% for source in media.sources %}
                         <source src="{{ source.url }}" type="{{ source.mime_type }}">
                       {% endfor %}
                       Your browser does not support the video tag.
                     </video>
+                    <button class="video-unmute-btn" onclick="toggleVideoMute(event, this)" aria-label="Unmute video">
+                      <svg class="muted-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                      </svg>
+                      <svg class="unmuted-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                      </svg>
+                    </button>
                   </div>
                 {% elsif media.media_type == 'model' %}
                   <div class="carousel-image {% if forloop.first %}active{% endif %}" data-media-type="model">
@@ -338,6 +352,7 @@
     const currentVideo = carouselImages[currentImageIndex].querySelector('video');
     if (currentVideo) {
       currentVideo.pause();
+      currentVideo.currentTime = 0; // Reset to start
     }
     
     // Hide current image
@@ -357,6 +372,14 @@
     }
     if (thumbnails[currentImageIndex]) {
       thumbnails[currentImageIndex].classList.add('active');
+    }
+    
+    // Auto-play video in new slide if it exists
+    const newVideo = carouselImages[currentImageIndex].querySelector('.product-video');
+    if (newVideo) {
+      newVideo.play().catch(error => {
+        console.log('Video autoplay prevented:', error);
+      });
     }
   }
   
@@ -602,6 +625,41 @@
       button.textContent = originalText;
       alert('There was an error adding the product to your cart. Please try again.');
     });
+  });
+  
+  // Toggle video mute/unmute
+  function toggleVideoMute(event, button) {
+    event.stopPropagation();
+    
+    const videoContainer = button.closest('.carousel-image');
+    const video = videoContainer.querySelector('video');
+    const mutedIcon = button.querySelector('.muted-icon');
+    const unmutedIcon = button.querySelector('.unmuted-icon');
+    
+    if (video.muted) {
+      video.muted = false;
+      mutedIcon.style.display = 'none';
+      unmutedIcon.style.display = 'block';
+      button.setAttribute('aria-label', 'Mute video');
+    } else {
+      video.muted = true;
+      mutedIcon.style.display = 'block';
+      unmutedIcon.style.display = 'none';
+      button.setAttribute('aria-label', 'Unmute video');
+    }
+  }
+  
+  // Auto-play first video on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const firstSlide = document.querySelector('.carousel-image.active');
+    if (firstSlide && firstSlide.getAttribute('data-media-type') === 'video') {
+      const video = firstSlide.querySelector('.product-video');
+      if (video) {
+        video.play().catch(error => {
+          console.log('Video autoplay on load prevented:', error);
+        });
+      }
+    }
   });
   
   // Video Interaction Handling - Prevent lightbox from opening when clicking on videos
@@ -907,6 +965,41 @@ model-viewer::part(default-progress-bar-container) {
   display: block;
 }
 
+/* Video Unmute Button */
+.video-unmute-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #B8860B;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  padding: 0;
+}
+
+.video-unmute-btn:hover {
+  background: rgba(184, 134, 11, 0.9);
+  border-color: #FFD700;
+  transform: scale(1.1);
+}
+
+.video-unmute-btn svg {
+  color: #FFD700;
+  stroke: #FFD700;
+}
+
+.video-unmute-btn:hover svg {
+  color: #1C1C1C;
+  stroke: #1C1C1C;
+}
+
 .lightbox-video {
   width: 100%;
   max-height: 80vh;
@@ -923,6 +1016,7 @@ model-viewer::part(default-progress-bar-container) {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 /* Video Thumbnail Icon Styling */
