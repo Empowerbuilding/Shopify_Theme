@@ -1,0 +1,95 @@
+{% comment %}
+  Custom 3D Icon Component
+  
+  Usage: {% render 'custom-icon', icon: 'star', size: 24, alt: 'Star Icon' %}
+  
+  Parameters:
+  - icon: (required) Name of the icon from the custom-icons library
+  - size: (optional) Size in pixels, default is 24
+  - alt: (optional) Alt text for accessibility, default is '3D Icon'
+  - class: (optional) Additional CSS classes
+{% endcomment %}
+
+{% assign icon_size = size | default: 24 %}
+{% assign icon_alt = alt | default: '3D Icon' %}
+{% assign icon_class = class | default: '' %}
+
+{% comment %}Map icon names to URLs using case/when{% endcomment %}
+{% case icon %}
+  {% when 'battery' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/battery-front-premium%20(1).png' %}
+  {% when 'bucket' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/bucket-front-premium.png' %}
+  {% when 'calculator' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/calculator-front-premium.png' %}
+  {% when 'calendar' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/calender-front-premium.png' %}
+  {% when 'camera' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/camera-front-premium.png' %}
+  {% when 'card' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/card-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'chart' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/chart-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'chatBubble' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/chat-bubble-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'clock' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/clock-front-premium.png' %}
+  {% when 'computer' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/computer-front-premium.png' %}
+  {% when 'dollar' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/dollar-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'key' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/key-front-premium.png' %}
+  {% when 'lock' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/lock-front-premium.png' %}
+  {% when 'mail' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/mail-front-premium.png' %}
+  {% when 'notebook' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/notebook-front-premium.png' %}
+  {% when 'phoneIncome' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/phone-income-front-premium.png' %}
+  {% when 'phoneRinging' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/phone-ringing-front-premium.png' %}
+  {% when 'rocket' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/rocket-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'setting' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/setting-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'star' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/star-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'thumbUp' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/thumb-up-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'tool' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/tool-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'videoCamera' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/video-camera-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'wifi' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/wifi-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'next' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/next-front-premium.png' %}
+  {% when 'zoom' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/zoom-front-premium%20-%20Copy%20-%20Copy.png' %}
+  {% when 'shield' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/sheild-front-premium.png' %}
+  {% when 'megaphone' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/megaphone-front-premium.png' %}
+  {% when 'mapPin' %}
+    {% assign icon_url = 'https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/icons/map-pin-front-premium.png' %}
+  {% else %}
+    {% assign icon_url = nil %}
+{% endcase %}
+
+{% if icon_url %}
+  <img 
+    src="{{ icon_url }}" 
+    alt="{{ icon_alt }}"
+    width="{{ icon_size }}"
+    height="{{ icon_size }}"
+    class="custom-3d-icon {{ icon_class }}"
+    style="width: {{ icon_size }}px; height: {{ icon_size }}px;"
+    loading="lazy"
+  >
+{% else %}
+  {% comment %}Fallback if icon not found{% endcomment %}
+  <span class="icon-fallback" style="width: {{ icon_size }}px; height: {{ icon_size }}px; display: inline-block;">⚠️</span>
+{% endif %}
+

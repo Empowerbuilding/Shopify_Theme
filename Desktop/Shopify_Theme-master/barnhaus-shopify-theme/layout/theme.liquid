@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  
+  <link rel="canonical" href="{{ canonical_url }}">
+  
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+  {%- endif -%}
+  
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags.join(', ') }}{% endif -%}
+    {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+  
+  {% render 'meta-tags' %}
+  
+  {{ content_for_header }}
+  
+  <link rel="stylesheet" href="{{ 'custom-barnhaus.css' | asset_url }}">
+  
+  <script>
+    window.theme = {
+      routes: {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}'
+      },
+      strings: {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }}
+      },
+      moneyFormat: {{ shop.money_format | json }},
+      cartCount: {{ cart.item_count }}
+    };
+  </script>
+  
+  <!-- Microsoft Clarity Tracking -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "sla91vr8ty");
+  </script>
+</head>
+
+<body class="template-{{ template.name }}">
+  
+  <!-- Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-container">
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-menu-toggle" aria-label="Menu" id="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <!-- Logo -->
+      <div class="header-logo">
+        <a href="/" class="logo-link">
+          <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/logos/logo1.png" 
+               alt="Barnhaus Steel Builders" 
+               class="logo-image"
+               style="max-height: 60px; width: auto;">
+        </a>
+      </div>
+      
+      <!-- Navigation -->
+      <nav class="header-nav">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="/pages/plans" class="nav-link">Catalog</a></li>
+          <li class="nav-item"><a href="/pages/cost-calculator" class="nav-link">Cost Calculator</a></li>
+          <li class="nav-item"><a href="/pages/faq" class="nav-link">FAQ</a></li>
+          <li class="nav-item"><a href="/pages/contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      
+      <!-- Header Icons -->
+      <div class="header-icons">
+        <!-- Cart Icon -->
+        <button onclick="openCartDrawer()" class="header-icon cart-icon" aria-label="Cart">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 14.667a.667.667 0 1 0 0-1.334.667.667 0 0 0 0 1.334ZM13.333 14.667a.667.667 0 1 0 0-1.334.667.667 0 0 0 0 1.334ZM.667 1.333H3.333l1.787 8.934a1.333 1.333 0 0 0 1.333 1.066h6.487a1.333 1.333 0 0 0 1.333-1.066L15 4.667H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {%- if cart.item_count > 0 -%}
+            <span class="cart-count" id="cart-count">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobile-nav">
+      <ul class="mobile-nav-list">
+        <li class="mobile-nav-item"><a href="/" class="mobile-nav-link">Home</a></li>
+        <li class="mobile-nav-item"><a href="/pages/plans" class="mobile-nav-link">Catalog</a></li>
+        <li class="mobile-nav-item"><a href="/pages/cost-calculator" class="mobile-nav-link">Cost Calculator</a></li>
+        <li class="mobile-nav-item"><a href="/pages/faq" class="mobile-nav-link">FAQ</a></li>
+        <li class="mobile-nav-item"><a href="/pages/contact" class="mobile-nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="main-content" id="main-content" role="main">
+    {{ content_for_layout }}
+  </main>
+  
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <!-- Quick Links -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="/" class="footer-link">Home</a></li>
+            <li><a href="/pages/plans" class="footer-link">Catalog</a></li>
+            <li><a href="/pages/cost-calculator" class="footer-link">Cost Calculator</a></li>
+            <li><a href="/pages/faq" class="footer-link">FAQ</a></li>
+            <li><a href="/pages/contact" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+        
+        <!-- Customer Service -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Customer Service</h3>
+          <ul class="footer-links">
+            <li><a href="/pages/shipping" class="footer-link">Shipping Information</a></li>
+            <li><a href="/pages/returns" class="footer-link">Returns & Exchanges</a></li>
+            <li><a href="/pages/faq" class="footer-link">FAQ</a></li>
+            <li><a href="/pages/privacy" class="footer-link">Privacy Policy</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact Info -->
+        <div class="footer-column">
+          <h3 class="footer-heading">Get In Touch</h3>
+          <ul class="footer-contact">
+            <li class="footer-text">larry@barnhaussteelbuilders.com</li>
+            <li class="footer-text">(210) 390-6521</li>
+            <li class="footer-text">Spring Branch, TX</li>
+            <li class="footer-text">Mon-Fri 8AM-6PM</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p class="footer-copyright">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+      const mobileNav = document.getElementById('mobile-nav');
+      
+      if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', function() {
+          this.classList.toggle('active');
+          mobileNav.classList.toggle('active');
+          document.body.classList.toggle('mobile-menu-open');
+        });
+      }
+      
+      // Close mobile menu when clicking a link
+      const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+      mobileNavLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenuToggle.classList.remove('active');
+          mobileNav.classList.remove('active');
+          document.body.classList.remove('mobile-menu-open');
+        });
+      });
+    });
+    
+    // Cart functionality
+    function updateCartCount(count) {
+      const cartCountElement = document.getElementById('cart-count');
+      if (cartCountElement) {
+        cartCountElement.textContent = count;
+        if (count > 0) {
+          cartCountElement.style.display = 'flex';
+        } else {
+          cartCountElement.style.display = 'none';
+        }
+      }
+    }
+  </script>
+  
+  <!-- Cart Drawer -->
+  <div id="cart-drawer" class="cart-drawer">
+    <div class="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+    <div class="cart-drawer-content">
+      <div class="cart-drawer-header">
+        <h2 class="cart-drawer-title">Your Cart</h2>
+        <button onclick="closeCartDrawer()" class="cart-drawer-close" aria-label="Close cart">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="cart-drawer-body" id="cart-drawer-items">
+        <!-- Cart items will be loaded here -->
+        <div class="cart-loading">Loading cart...</div>
+      </div>
+      
+      <div class="cart-drawer-footer">
+        <div class="cart-drawer-total">
+          <span class="cart-total-label">Subtotal:</span>
+          <span class="cart-total-price" id="cart-total-price">$0.00</span>
+        </div>
+        <a href="/checkout" class="btn btn-full-width cart-checkout-btn">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Cart Drawer Functions
+    function openCartDrawer() {
+      const drawer = document.getElementById('cart-drawer');
+      drawer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      loadCartItems();
+    }
+    
+    function closeCartDrawer() {
+      const drawer = document.getElementById('cart-drawer');
+      drawer.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    function loadCartItems() {
+      fetch('/cart.js')
+        .then(response => response.json())
+        .then(cart => {
+          renderCartItems(cart);
+        })
+        .catch(error => {
+          console.error('Error loading cart:', error);
+          document.getElementById('cart-drawer-items').innerHTML = 
+            '<div class="cart-empty">Error loading cart. Please try again.</div>';
+        });
+    }
+    
+    function renderCartItems(cart) {
+      const container = document.getElementById('cart-drawer-items');
+      
+      if (cart.items.length === 0) {
+        container.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+        document.getElementById('cart-total-price').textContent = '$0.00';
+        return;
+      }
+      
+      let html = '';
+      cart.items.forEach(item => {
+        html += `
+          <div class="cart-drawer-item">
+            <img src="${item.image}" alt="${item.title}" class="cart-drawer-item-image">
+            <div class="cart-drawer-item-details">
+              <h4 class="cart-drawer-item-title">${item.title}</h4>
+              ${item.variant_title ? `<p class="cart-drawer-item-variant">${item.variant_title}</p>` : ''}
+              <p class="cart-drawer-item-price">${formatMoney(item.final_line_price)}</p>
+            </div>
+            <div class="cart-drawer-item-actions">
+              <button onclick="removeCartItem('${item.key}')" class="cart-drawer-item-remove" aria-label="Remove item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+      document.getElementById('cart-total-price').textContent = formatMoney(cart.total_price);
+    }
+    
+    function updateCartItemQuantity(key, quantity) {
+      if (quantity < 1) quantity = 0;
+      
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: key,
+          quantity: quantity
+        })
+      })
+      .then(response => response.json())
+      .then(cart => {
+        renderCartItems(cart);
+        updateCartCount(cart.item_count);
+      })
+      .catch(error => {
+        console.error('Error updating cart:', error);
+      });
+    }
+    
+    function removeCartItem(key) {
+      updateCartItemQuantity(key, 0);
+    }
+    
+    function formatMoney(cents) {
+      return '$' + (cents / 100).toFixed(2);
+    }
+  </script>
+</body>
+</html>
+

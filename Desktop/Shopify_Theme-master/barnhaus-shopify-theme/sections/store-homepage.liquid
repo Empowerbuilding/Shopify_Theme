@@ -1,0 +1,2680 @@
+{% comment %}
+  Store Homepage Section
+  Features hero section with CTAs and features grid
+{% endcomment %}
+
+<div class="store-homepage">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-image-wrapper">
+      <video 
+        class="hero-video"
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        preload="metadata"
+        poster="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/deliverables_27lNpFf469RNpcJBqpyI_DSC00501_2048x1536_jnhz.jpg"
+      >
+        <source src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/Untitled%20video%20-%20Made%20with%20Clipchamp%20(19)%20(1).mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
+    
+    <div class="hero-content">
+      <h1 class="hero-tagline">Steel Frame Home Plans</h1>
+    </div>
+    
+    <!-- Scroll Indicator with Circle -->
+    <div class="hero-scroll-indicator" onclick="scrollToNextSection()" style="cursor: pointer;">
+      <div class="scroll-circle">
+        <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+          <polyline points="16 12 12 16 8 12"></polyline>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Horizontal Product Carousel -->
+  <div class="product-carousel-section" id="featured-plans-section">
+    <div class="page-width">
+      <div class="carousel-header">
+        <h2 class="carousel-title">Featured Floor Plans</h2>
+      </div>
+      
+      <div class="carousel-container">
+        <div class="carousel-track" id="carousel-track">
+        <!-- Products will be loaded here dynamically -->
+        <div class="carousel-loading">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#3A3A3A" stroke-width="4"/>
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#B8860B" stroke-width="4" stroke-dasharray="90, 150" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+      </div>
+      
+      <div class="carousel-footer">
+        <a href="/pages/plans" class="cta-button-primary">
+          View All Plans
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works-section">
+    <div class="page-width">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Your dream home is just three simple steps away</p>
+      
+      <div class="steps-grid">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-icon">
+            {% render 'custom-icon', icon: 'zoom', size: 56, alt: 'Browse Plans Icon' %}
+          </div>
+          <div class="step-content">
+            <div class="step-number">01</div>
+            <h3 class="step-title">Browse Plans</h3>
+            <p class="step-description">Explore our collection of professionally designed floor plans. Filter by size, style, and features to find your perfect match.</p>
+            <ul class="step-features">
+              <li>✓ Unique custom designs</li>
+              <li>✓ Detailed specifications</li>
+              <li>✓ One format - easy to use</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-icon">
+            {% render 'custom-icon', icon: 'card', size: 56, alt: 'Purchase & Download Icon' %}
+          </div>
+          <div class="step-content">
+            <div class="step-number">02</div>
+            <h3 class="step-title">Purchase & Download</h3>
+            <p class="step-description">Complete your secure purchase and instantly download your comprehensive plan package with all the files you need.</p>
+            <ul class="step-features">
+              <li>✓ Instant digital delivery</li>
+              <li>✓ PDF format</li>
+              <li>✓ Construction-ready plans</li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-icon">
+            {% render 'custom-icon', icon: 'tool', size: 56, alt: 'Build Your Dream Icon' %}
+          </div>
+          <div class="step-content">
+            <div class="step-number">03</div>
+            <h3 class="step-title">Build Your Dream</h3>
+            <p class="step-description">Take your plans to your builder or contractor and start construction. Our detailed plans make the building process smooth and efficient.</p>
+            <ul class="step-features">
+              <li>✓ Builder-approved format</li>
+              <li>✓ Permit-ready documents</li>
+              <li>✓ Ongoing support included</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="how-it-works-cta">
+        <a href="/pages/plans" class="cta-button-primary">
+          Start Browsing Plans
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Story Section -->
+  <section class="brand-story-section">
+    <div class="page-width">
+      <div class="brand-story-grid">
+        <!-- Image Side - Carousel -->
+        <div class="brand-story-image">
+          <div class="brand-story-carousel" id="brand-story-carousel">
+            <div class="brand-story-slide active">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/New%20version%20pics/d8410f33b89bc8bcbb9318b239d209fb-uncropped_scaled_within_1536_1152.webp" 
+                   alt="Barnhaus Custom Home 1">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/New%20version%20pics/628WhiskeyTrail-613.jpg" 
+                   alt="Barnhaus Custom Home 2">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/New%20version%20pics/20221115_092624.jpg" 
+                   alt="Barnhaus Custom Home 3">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/229%20Restless%20Wind-01.jpg" 
+                   alt="Barnhaus Custom Home 4">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/229%20Restless%20Wind-48%20(1).jpg" 
+                   alt="Barnhaus Custom Home 5">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/401-limestone-ln-driftwood-tx-78619-High-Res-12.jpg" 
+                   alt="Barnhaus Custom Home 6">
+            </div>
+            <div class="brand-story-slide">
+              <img src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/barnhaus/Website%202/960-pavo-springs-trail-driftwood-tx-78619-High-Res-14%20(1).jpg" 
+                   alt="Barnhaus Custom Home 7">
+            </div>
+          </div>
+          
+          <!-- Carousel Navigation -->
+          <button class="brand-story-nav prev" onclick="brandStoryPrevSlide()" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="brand-story-nav next" onclick="brandStoryNextSlide()" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+          
+          <!-- Carousel Indicators -->
+          <div class="brand-story-indicators" id="brand-story-indicators"></div>
+        </div>
+        
+        <!-- Content Side -->
+        <div class="brand-story-content">
+          <h2 class="brand-story-title">From Plans to Reality</h2>
+          
+          <div class="brand-story-text">
+            <p>
+              Every plan in our collection is designed by the team at <strong>Barnhaus Steel Builders</strong>—a 
+              premium design service backed by real-world building experience. We understand what makes a home 
+              both beautiful and buildable because we've been there on the job site.
+            </p>
+            <p>
+              Our plans aren't just drawings—they're the result of years of hands-on construction knowledge. 
+              Each design reflects practical building experience, ensuring your builder can execute with confidence.
+            </p>
+          </div>
+          
+          <!-- Features -->
+          <div class="brand-features">
+            <div class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span>47+ Custom Homes Built</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span>Steel Frame Specialists</span>
+            </div>
+            <div class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span>Transparent Pricing</span>
+            </div>
+          </div>
+          
+          <!-- CTAs -->
+          <div class="brand-story-ctas">
+            <a href="/pages/plans" class="btn btn-primary">
+              Browse Catalog
+            </a>
+            <a href="/pages/contact" class="btn btn-secondary">
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Reviews Section -->
+  <section class="customer-reviews-section">
+    <div class="page-width">
+      <div class="reviews-header">
+        <h2 class="reviews-title">What Our Customers Say</h2>
+        <p class="reviews-subtitle">Real feedback from real builders who trust Barnhaus plans</p>
+      </div>
+      
+      <div class="reviews-grid" id="reviews-grid">
+        <!-- Reviews will be loaded here by JavaScript -->
+        <div class="reviews-loading">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#3A3A3A" stroke-width="4"/>
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#B8860B" stroke-width="4" stroke-dasharray="90, 150" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Homepage FAQ Section -->
+  <section class="homepage-faq-section">
+    <div class="page-width">
+      <div class="homepage-faq-header">
+        <h2 class="homepage-faq-title">Frequently Asked Questions</h2>
+        <p class="homepage-faq-subtitle">Get answers to our most common questions</p>
+      </div>
+
+      <div class="homepage-faq-accordion">
+        
+        <div class="homepage-faq-item">
+          <button class="homepage-faq-question" aria-expanded="false">
+            <span class="homepage-faq-question-text">What exactly do I receive when I purchase a home design plan?</span>
+            <svg class="homepage-faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="homepage-faq-answer">
+            <div class="homepage-faq-answer-content">
+              <p>When you purchase a plan from us, you receive a complete set of construction-ready documents including detailed floor plans, exterior elevations, building sections, electrical layouts, foundation plans, roof framing plans, and comprehensive specifications. All plans are provided in PDF format for easy sharing with builders and contractors. Depending on the plan package you select, you may also receive editable CAD files that your architect or engineer can modify to meet local building codes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="homepage-faq-item">
+          <button class="homepage-faq-question" aria-expanded="false">
+            <span class="homepage-faq-question-text">Can I customize or modify the plans I purchase?</span>
+            <svg class="homepage-faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="homepage-faq-answer">
+            <div class="homepage-faq-answer-content">
+              <p>Absolutely! We offer several levels of customization. Minor modifications (moving doors, windows, or interior walls) can often be handled by your local builder or architect. For more extensive changes—like adding square footage, changing the roofline, or reconfiguring room layouts—we offer professional modification services for an additional fee. You can also purchase editable CAD files and work with your own architect or designer to make changes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="homepage-faq-item">
+          <button class="homepage-faq-question" aria-expanded="false">
+            <span class="homepage-faq-question-text">How much does it typically cost to modify a plan?</span>
+            <svg class="homepage-faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="homepage-faq-answer">
+            <div class="homepage-faq-answer-content">
+              <p>Modification costs vary based on the complexity of changes. Simple modifications (relocating doors, adjusting window sizes, or changing finishes) typically range from $500-$1,500. More substantial changes like adding square footage, changing the foundation type, or reconfiguring major rooms can range from $2,000-$5,000 or more. We provide free estimates for all modification requests—just send us a detailed list of the changes you'd like to make, and we'll give you a quote within 2-3 business days.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="homepage-faq-item">
+          <button class="homepage-faq-question" aria-expanded="false">
+            <span class="homepage-faq-question-text">What are the different plan packages you offer?</span>
+            <svg class="homepage-faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="homepage-faq-answer">
+            <div class="homepage-faq-answer-content">
+              <p>We offer three main packages: (1) PDF Package - includes full construction drawings in PDF format, perfect for getting estimates and submitting for permits; (2) CAD Package - includes editable AutoCAD files plus PDFs, allowing your architect or engineer to make modifications; (3) Multiple Build License - includes PDF and CAD files with the right to build the home multiple times (typically 3-5 builds). Most homeowners building a single home choose the PDF or CAD package.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="homepage-faq-item">
+          <button class="homepage-faq-question" aria-expanded="false">
+            <span class="homepage-faq-question-text">What should I do first after purchasing plans?</span>
+            <svg class="homepage-faq-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="homepage-faq-answer">
+            <div class="homepage-faq-answer-content">
+              <p>Your first step should be to meet with your local building department to understand permit requirements and any plan modifications needed for local codes. Simultaneously, share the plans with 3-5 licensed contractors to get competitive bids. Many clients also consult with a local architect or engineer at this stage to review the plans and make any site-specific adjustments. We recommend creating a project binder to organize all documents, estimates, and correspondence.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="homepage-faq-cta">
+        <a href="/pages/faq" class="btn btn-large homepage-faq-btn">
+          View All FAQs
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Section -->
+  <section class="social-proof-section">
+    <div class="page-width">
+      <!-- Featured Project Video -->
+      <div class="featured-project-container">
+        <div class="featured-project-video">
+          <div class="video-wrapper">
+            <video 
+              id="featured-project-video"
+              class="featured-video"
+              loop
+              muted
+              playsinline
+              preload="metadata"
+            >
+              <source src="https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/Untitled%20video%20-%20Made%20with%20Clipchamp%20(18)%20(1).mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="featured-project-info">
+            <h3>Spring Mountain Estate</h3>
+            <p class="project-location">📍 Hill Country, Texas</p>
+            <p class="project-description">A stunning 4,500 sq ft custom home featuring modern industrial design with panoramic hill country views.</p>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // Auto-play video when it comes into view
+        document.addEventListener('DOMContentLoaded', function() {
+          const video = document.getElementById('featured-project-video');
+          
+          // Use Intersection Observer to start playing when visible
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                // Video is in view - play it
+                video.play().catch(error => {
+                  console.log('Autoplay prevented:', error);
+                });
+              } else {
+                // Video is out of view - pause it to save resources
+                video.pause();
+              }
+            });
+          }, { threshold: 0.25 }); // Play when 25% visible
+          
+          observer.observe(video);
+        });
+      </script>
+    </div>
+  </section>
+
+  <!-- Custom Design Studio CTA Section -->
+  <section class="custom-studio-section">
+    <div class="page-width">
+      <div class="studio-cta-container">
+        <div class="studio-cta-content">
+          <div class="studio-badge">✨ Custom Design</div>
+          <h2 class="studio-title">Can't Find What You're Looking For?</h2>
+          <p class="studio-subtitle">Try our Concept Studio to create your own custom floor plan and get a price for a completely unique design tailored to your vision.</p>
+          
+          <div class="studio-features">
+            <div class="studio-feature">
+              {% render 'custom-icon', icon: 'notebook', size: 32, alt: 'Design Your Vision Icon' %}
+              <div>
+                <h4>Design Your Vision</h4>
+                <p>Start from scratch or modify existing plans</p>
+              </div>
+            </div>
+            
+            <div class="studio-feature">
+              {% render 'custom-icon', icon: 'calculator', size: 32, alt: 'Instant Pricing Icon' %}
+              <div>
+                <h4>Instant Pricing</h4>
+                <p>Get a custom quote based on your specifications</p>
+              </div>
+            </div>
+            
+            <div class="studio-feature">
+              {% render 'custom-icon', icon: 'chatBubble', size: 32, alt: 'Expert Guidance Icon' %}
+              <div>
+                <h4>Expert Guidance</h4>
+                <p>Work with our design team every step of the way</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="studio-cta-buttons">
+            <a href="https://3d.barnhaussteelbuilders.com" class="btn-studio-primary" target="_blank" rel="noopener">
+              Launch Concept Studio
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <a href="/pages/contact" class="btn-studio-secondary">Contact Our Team</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+/* Store Homepage Styles */
+.store-homepage {
+  background: #1C1C1C;
+}
+
+/* Page Width Container - Aligns with header (1200px) */
+.page-width {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Hero Section */
+.hero-section {
+  position: relative;
+  height: 60vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.hero-image-wrapper {
+  position: absolute;
+  inset: 0;
+  background: #1C1C1C;
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: #1C1C1C;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(28, 28, 28, 0.3), rgba(28, 28, 28, 0.4));
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.hero-tagline {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #FFFFFF !important;
+  margin: 0;
+  letter-spacing: 1px;
+  text-align: center;
+  text-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(0, 0, 0, 0.7),
+    0 2px 10px rgba(0, 0, 0, 0.8);
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: #FFFFFF;
+  background-clip: initial;
+}
+
+/* Hero Scroll Indicator */
+.hero-scroll-indicator {
+  display: flex;
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.hero-scroll-indicator:hover {
+  transform: translateX(-50%) translateY(5px);
+}
+
+.scroll-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #FFD700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(28, 28, 28, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.hero-scroll-indicator:hover .scroll-circle {
+  background: rgba(184, 134, 11, 0.5);
+  border-color: #B8860B;
+  box-shadow: 0 0 20px rgba(184, 134, 11, 0.6);
+}
+
+.scroll-arrow {
+  color: #FFD700;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hero-section {
+    height: 100svh; /* Use small viewport height to account for mobile browser UI */
+    max-height: 100svh;
+    margin-top: 0;
+    padding-top: 0;
+    overflow: hidden; /* Prevent video overflow */
+  }
+  
+  .hero-content {
+    display: flex;
+    padding: 0 1.5rem;
+    position: absolute;
+    top: 75%; /* Position 75% down */
+    transform: translateY(-50%);
+  }
+  
+  .hero-tagline {
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF;
+    text-shadow: 
+      0 0 20px rgba(0, 0, 0, 0.9),
+      0 0 40px rgba(0, 0, 0, 0.7),
+      0 2px 10px rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Show and position scroll indicator for mobile */
+  .hero-scroll-indicator {
+    display: flex;
+    bottom: 2rem;
+  }
+  
+  .scroll-circle {
+    width: 50px;
+    height: 50px;
+  }
+  
+  /* Ensure video starts at very top */
+  .hero-image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+/* Horizontal Product Carousel */
+.product-carousel-section {
+  padding: 4rem 0 8rem 0;
+  background: #1C1C1C;
+  overflow: hidden;
+}
+
+.carousel-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.carousel-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.carousel-footer {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+@media (min-width: 769px) {
+  .carousel-footer .cta-button-primary {
+    width: auto;
+  }
+}
+
+.view-all-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  color: #1C1C1C;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.3);
+}
+
+.view-all-link:hover {
+  background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(184, 134, 11, 0.5);
+  gap: 0.875rem;
+}
+
+.view-all-link svg {
+  transition: transform 0.3s ease;
+  stroke-width: 2.5;
+}
+
+.view-all-link:hover svg {
+  transform: translateX(4px);
+}
+
+.carousel-container {
+  position: relative;
+  margin: 0 -1.5rem;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #B8860B #2A2A2A;
+  padding: 0 1.5rem 1rem 1.5rem;
+}
+
+.carousel-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carousel-track::-webkit-scrollbar-track {
+  background: #2A2A2A;
+  border-radius: 4px;
+}
+
+.carousel-track::-webkit-scrollbar-thumb {
+  background: #B8860B;
+  border-radius: 4px;
+}
+
+.carousel-track::-webkit-scrollbar-thumb:hover {
+  background: #FFD700;
+}
+
+.carousel-card {
+  flex: 0 0 320px;
+  background: #2A2A2A;
+  border: 1px solid #3A3A3A;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-card:hover {
+  border-color: #B8860B;
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
+  transform: translateY(-5px);
+}
+
+.carousel-card-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-card-image {
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  background: #1C1C1C;
+  transition: transform 0.3s ease;
+}
+
+.carousel-card:hover .carousel-card-image {
+  transform: scale(1.05);
+}
+
+/* Stats styling - matching catalog */
+.carousel-card .product-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #252525;
+  padding: 1rem 0.5rem;
+  gap: 0;
+  border-top: 2px solid rgba(184, 134, 11, 0.3);
+  border-bottom: 1px solid #333333;
+}
+
+.carousel-card .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  color: #FFFFFF;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0 0.25rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.carousel-card .stat-item:last-child {
+  border-right: none;
+}
+
+.carousel-card .stat-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #FFD700;
+}
+
+.carousel-card .stat-label {
+  font-size: 0.6875rem;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.carousel-card-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.carousel-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.86rem;
+  max-height: 2.86rem;
+  margin-bottom: 0.5rem;
+}
+
+.carousel-card-specs strong {
+  color: #FFD700;
+  font-weight: 700;
+}
+
+.carousel-card-price {
+  color: #B8860B;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.carousel-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+/* Carousel Mobile Responsive */
+@media (max-width: 768px) {
+  .product-carousel-section {
+    padding: 3rem 0 6rem 0;
+  }
+  
+  .carousel-header {
+    justify-content: flex-start;
+    margin-bottom: 1.5rem;
+  }
+  
+  .carousel-title {
+    font-size: 1.75rem;
+    text-align: left;
+  }
+  
+  .carousel-footer {
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+    padding: 0 1rem;
+  }
+  
+  .carousel-container {
+    margin: 0 -1rem;
+  }
+  
+  .carousel-track {
+    padding: 0 1rem 1rem 1rem;
+  }
+  
+  .carousel-card {
+    flex: 0 0 280px;
+  }
+  
+  .carousel-card-image {
+    height: 280px;
+  }
+  
+  .carousel-card .product-stats {
+    padding: 0.75rem 0.25rem;
+  }
+  
+  .carousel-card .stat-item {
+    font-size: 0.625rem;
+    gap: 0.25rem;
+    padding: 0 0.125rem;
+  }
+  
+  .carousel-card .stat-value {
+    font-size: 0.9375rem;
+  }
+  
+  .carousel-card .stat-label {
+    font-size: 0.625rem;
+  }
+  
+  .carousel-card-content {
+    padding: 1rem;
+  }
+  
+  .carousel-card-title {
+    font-size: 1rem;
+    min-height: 2.6rem;
+    max-height: 2.6rem;
+  }
+  
+  .carousel-card-price {
+    font-size: 0.85rem;
+  }
+}
+
+/* ===================================
+   SHARED SECTION STYLES
+   =================================== */
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  color: #D1D5DB;
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   HOW IT WORKS SECTION
+   =================================== */
+
+.how-it-works-section {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+  text-align: center;
+}
+
+.how-it-works-section .section-title {
+  margin-bottom: 0.5rem;
+}
+
+.how-it-works-section .section-subtitle {
+  margin-bottom: 3rem;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.step-card {
+  background: #1C1C1C;
+  border: 2px solid #B8860B;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 12px rgba(184, 134, 11, 0.25), 0 0 24px rgba(184, 134, 11, 0.1);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.step-content {
+  display: contents;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #B8860B 0%, #FFD700 100%);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 0 20px rgba(184, 134, 11, 0.5), 0 12px 32px rgba(184, 134, 11, 0.25);
+}
+
+.step-card:hover::before {
+  transform: scaleX(1);
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(184, 134, 11, 0.25), 0 0 24px rgba(184, 134, 11, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(184, 134, 11, 0.35), 0 0 32px rgba(184, 134, 11, 0.15);
+  }
+}
+
+.step-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  padding: 0.5rem;
+}
+
+.step-card:hover .step-icon {
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.2) 0%, rgba(255, 215, 0, 0.2) 100%);
+  transform: scale(1.1) rotate(5deg);
+}
+
+.step-icon .custom-3d-icon {
+  filter: drop-shadow(0 0 8px rgba(184, 134, 11, 0.4));
+}
+
+.step-card:hover .step-icon .custom-3d-icon {
+  transform: scale(1.15) rotate(-5deg);
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.6));
+}
+
+.step-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #B8860B;
+  letter-spacing: 2px;
+  margin-bottom: 0.75rem;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.step-description {
+  color: #D1D5DB;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.step-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  background: #252525;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #333333;
+}
+
+.step-features li {
+  color: #D1D5DB;
+  font-size: 0.9rem;
+  padding: 0.4rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.how-it-works-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.cta-button-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  color: #1C1C1C;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.3);
+}
+
+.cta-button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.5);
+  background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+}
+
+.cta-button-primary svg {
+  transition: transform 0.3s ease;
+}
+
+.cta-button-primary:hover svg {
+  transform: translateX(4px);
+}
+
+/* ===================================
+   SOCIAL PROOF SECTION
+   =================================== */
+
+.social-proof-section {
+  padding: 4rem 0;
+  background: #1C1C1C;
+}
+
+/* Stats Bar */
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+  background: #252525;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #333333;
+}
+
+.stats-container.stats-single {
+  grid-template-columns: 1fr;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  color: #D1D5DB;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Featured Project Video */
+.featured-project-container {
+  margin-bottom: 3rem;
+}
+
+.featured-project-video {
+  background: #252525;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #333333;
+  transition: all 0.3s ease;
+}
+
+.featured-project-video:hover {
+  border-color: #B8860B;
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.2);
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  background: #1C1C1C;
+  overflow: hidden;
+}
+
+.video-wrapper video,
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  object-fit: cover;
+}
+
+.featured-video {
+  background: #000;
+}
+
+.featured-project-info {
+  padding: 2rem;
+  background: #252525;
+}
+
+.featured-project-info h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.project-location {
+  color: #B8860B;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.project-description {
+  color: #D1D5DB;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Testimonials */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: #252525;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #333333;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  border-color: #B8860B;
+  transform: translateY(-2px);
+}
+
+.testimonial-stars {
+  color: #DAA520;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.testimonial-quote {
+  color: #D1D5DB;
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  color: #B8860B;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.testimonial-plan {
+  color: #999;
+  font-size: 0.875rem;
+}
+
+/* ===================================
+   CUSTOMER REVIEWS SECTION
+   =================================== */
+
+.customer-reviews-section {
+  padding: 5rem 0;
+  background: #1C1C1C;
+}
+
+.reviews-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.reviews-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.reviews-subtitle {
+  color: #D1D5DB;
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: start;
+  padding: 0.5rem;
+}
+
+.reviews-loading {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.review-card {
+  background: #252525;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  padding: 1.75rem;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  min-height: 320px;
+}
+
+.review-content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-card:hover {
+  border-color: #B8860B;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.25);
+}
+
+.review-header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.review-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1C1C1C;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(184, 134, 11, 0.3);
+}
+
+.review-header-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.review-author {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.star-icon {
+  color: #D1D5DB;
+  width: 16px;
+  height: 16px;
+}
+
+.star-icon.filled {
+  color: #F59E0B;
+}
+
+.review-date {
+  font-size: 0.875rem;
+  color: #9CA3AF;
+  margin-top: 0.125rem;
+}
+
+.review-body {
+  color: #D1D5DB;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  margin: 0;
+  position: relative;
+  max-height: 120px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.review-body.expanded {
+  max-height: none;
+}
+
+.review-body.has-more::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, transparent, #252525);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.review-body.expanded::after {
+  opacity: 0;
+}
+
+.review-expand-btn {
+  background: transparent;
+  border: none;
+  color: #B8860B;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0 0 0;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.review-expand-btn:hover {
+  color: #FFD700;
+}
+
+.review-expand-btn svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.review-expand-btn.expanded svg {
+  transform: rotate(180deg);
+}
+
+.review-verified {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: #B8860B;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.review-verified svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===================================
+   HOMEPAGE FAQ SECTION
+   =================================== */
+
+.homepage-faq-section {
+  padding: 5rem 0;
+  background: #252525;
+}
+
+.homepage-faq-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.homepage-faq-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+}
+
+.homepage-faq-subtitle {
+  color: #D1D5DB;
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.homepage-faq-accordion {
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.homepage-faq-item {
+  background: #1C1C1C;
+  border: 1px solid #333333;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.homepage-faq-item:hover {
+  border-color: #B8860B;
+}
+
+.homepage-faq-item.active {
+  border-color: #B8860B;
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.15);
+}
+
+.homepage-faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.homepage-faq-question:hover {
+  color: #FFD700;
+}
+
+.homepage-faq-question-text {
+  flex: 1;
+}
+
+.homepage-faq-chevron {
+  flex-shrink: 0;
+  color: #B8860B;
+  transition: transform 0.3s ease;
+}
+
+.homepage-faq-item.active .homepage-faq-chevron {
+  transform: rotate(180deg);
+}
+
+.homepage-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.homepage-faq-item.active .homepage-faq-answer {
+  max-height: 1000px;
+}
+
+.homepage-faq-answer-content {
+  padding: 1rem 1.5rem 1.5rem 1.5rem;
+  color: #D1D5DB;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.homepage-faq-answer-content p {
+  margin: 0;
+}
+
+.homepage-faq-cta {
+  text-align: center;
+}
+
+.homepage-faq-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  color: #1C1C1C;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.3);
+}
+
+.homepage-faq-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.5);
+  background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+  color: #1C1C1C;
+}
+
+.homepage-faq-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.homepage-faq-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* Mobile Homepage FAQ */
+@media (max-width: 768px) {
+  .homepage-faq-section {
+    padding: 3rem 0;
+  }
+
+  .homepage-faq-header {
+    margin-bottom: 2rem;
+  }
+
+  .homepage-faq-title {
+    font-size: 1.75rem;
+  }
+
+  .homepage-faq-subtitle {
+    font-size: 1rem;
+  }
+
+  .homepage-faq-accordion {
+    margin-bottom: 2rem;
+  }
+
+  .homepage-faq-question {
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  .homepage-faq-answer-content {
+    padding: 0.875rem 1.25rem 1.25rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .homepage-faq-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile Reviews - Horizontal Scroll */
+@media (max-width: 768px) {
+  .customer-reviews-section {
+    padding: 3rem 0;
+  }
+
+  .reviews-header {
+    margin-bottom: 2rem;
+  }
+
+  .reviews-title {
+    font-size: 1.75rem;
+  }
+
+  .reviews-subtitle {
+    font-size: 1rem;
+  }
+
+  .reviews-grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: visible;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #B8860B #2A2A2A;
+    padding: 0.5rem 0 1rem 0;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .reviews-grid::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .reviews-grid::-webkit-scrollbar-track {
+    background: #2A2A2A;
+    border-radius: 3px;
+  }
+
+  .reviews-grid::-webkit-scrollbar-thumb {
+    background: #B8860B;
+    border-radius: 3px;
+  }
+
+  .reviews-grid::-webkit-scrollbar-thumb:hover {
+    background: #FFD700;
+  }
+
+  .review-card {
+    flex: 0 0 85%;
+    max-width: 320px;
+    min-width: 280px;
+    min-height: 300px;
+    padding: 1.5rem;
+    scroll-snap-align: start;
+  }
+
+  .review-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+
+  .review-author {
+    font-size: 1rem;
+  }
+
+  .review-body {
+    font-size: 0.875rem;
+    max-height: 100px;
+  }
+
+  .review-body.has-more::after {
+    height: 35px;
+  }
+
+  .review-expand-btn {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ===================================
+   BRAND STORY SECTION
+   =================================== */
+
+.brand-story-section {
+  padding: 4rem 0;
+  background: #252525;
+}
+
+.brand-story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.brand-story-image {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #333333;
+  overflow: hidden;
+  height: 500px;
+}
+
+.brand-story-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.brand-story-carousel:active {
+  cursor: grabbing;
+}
+
+.brand-story-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-story-slide.active {
+  opacity: 1;
+}
+
+.brand-story-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.brand-story-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: #FFFFFF;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.brand-story-nav:hover {
+  background: rgba(184, 134, 11, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.brand-story-nav.prev {
+  left: 1rem;
+}
+
+.brand-story-nav.next {
+  right: 1rem;
+}
+
+.brand-story-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.brand-story-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.brand-story-indicator.active {
+  background: #B8860B;
+  width: 30px;
+  border-radius: 5px;
+}
+
+.image-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #B8860B;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.content-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(184, 134, 11, 0.1);
+  border: 1px solid #B8860B;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  color: #DAA520;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.brand-story-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.brand-story-text {
+  color: #D1D5DB;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.brand-story-text p {
+  margin-bottom: 1rem;
+}
+
+.brand-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 968px) {
+  .brand-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #D1D5DB;
+}
+
+.feature-icon {
+  color: #DAA520;
+  font-weight: 700;
+}
+
+.brand-story-ctas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.875rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #966F09 0%, #B8860B 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.4);
+}
+
+.btn-secondary {
+  border: 2px solid #B8860B;
+  color: #B8860B;
+  background: transparent;
+}
+
+.btn-secondary:hover {
+  border-color: #DAA520;
+  color: #DAA520;
+  background: rgba(184, 134, 11, 0.1);
+}
+
+/* ===================================
+   CUSTOM STUDIO CTA SECTION
+   =================================== */
+
+.custom-studio-section {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, rgba(37, 37, 37, 0.9) 0%, rgba(28, 28, 28, 0.9) 100%),
+              url('https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/Screenshot%202025-10-21%20212237.png') center/cover no-repeat;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.studio-cta-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.studio-cta-content {
+  text-align: center;
+}
+
+.studio-badge {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: rgba(184, 134, 11, 0.1);
+  border: 1px solid #B8860B;
+  border-radius: 50px;
+  color: #DAA520;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.studio-title {
+  font-size: 2.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.studio-subtitle {
+  font-size: 1.25rem;
+  color: #D1D5DB;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.studio-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.studio-feature {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.5rem;
+  background: #1C1C1C;
+  border: 1px solid #333333;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.studio-feature:hover {
+  border-color: #B8860B;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.2);
+}
+
+.studio-feature .custom-3d-icon {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+  filter: drop-shadow(0 0 8px rgba(184, 134, 11, 0.3));
+}
+
+.studio-feature:hover .custom-3d-icon {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 12px rgba(184, 134, 11, 0.5));
+}
+
+.studio-feature h4 {
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.studio-feature p {
+  color: #D1D5DB;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.studio-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-studio-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.125rem 2.5rem;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  color: #1C1C1C;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(184, 134, 11, 0.4);
+}
+
+.btn-studio-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.6);
+  background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+}
+
+.btn-studio-primary svg {
+  transition: transform 0.3s ease;
+}
+
+.btn-studio-primary:hover svg {
+  transform: translateX(4px);
+}
+
+.btn-studio-secondary {
+  padding: 1.125rem 2.5rem;
+  background: transparent;
+  border: 2px solid #B8860B;
+  color: #B8860B;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-studio-secondary:hover {
+  background: rgba(184, 134, 11, 0.1);
+  border-color: #DAA520;
+  color: #DAA520;
+  transform: translateY(-2px);
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+@media (max-width: 1024px) {
+  .brand-story-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .brand-story-image {
+    height: 400px;
+  }
+  
+  .studio-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-width {
+    padding: 0 1rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .how-it-works-section {
+    padding: 2.5rem 0;
+  }
+  
+  .how-it-works-section .section-subtitle {
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+  
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .step-card {
+    padding: 1.5rem;
+    flex-direction: column;
+    gap: 0;
+    text-align: left;
+    border-radius: 12px;
+    border-color: #B8860B;
+    box-shadow: 0 0 10px rgba(184, 134, 11, 0.2), 0 0 20px rgba(184, 134, 11, 0.08);
+    animation: pulse-glow-mobile 3s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-glow-mobile {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(184, 134, 11, 0.2), 0 0 20px rgba(184, 134, 11, 0.08);
+    }
+    50% {
+      box-shadow: 0 0 14px rgba(184, 134, 11, 0.3), 0 0 28px rgba(184, 134, 11, 0.12);
+    }
+  }
+  
+  .step-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .step-icon {
+    display: none;
+  }
+  
+  .step-content {
+    display: block;
+    flex: 1;
+  }
+  
+  .step-number {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .step-title {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .step-description {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+  
+  .step-features {
+    padding: 0.75rem 1rem;
+  }
+  
+  .step-features li {
+    font-size: 0.8rem;
+    padding: 0.25rem 0;
+  }
+  
+  .cta-button-primary {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .featured-project-container {
+    margin-bottom: 2rem;
+  }
+  
+  .video-wrapper {
+    padding-bottom: 90%; /* Taller aspect ratio on mobile - more vertical space */
+  }
+  
+  .featured-project-info {
+    padding: 1.5rem;
+  }
+  
+  .featured-project-info h3 {
+    font-size: 1.5rem;
+  }
+  
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .brand-story-ctas {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .custom-studio-section {
+    padding: 3rem 0;
+    background: linear-gradient(135deg, rgba(37, 37, 37, 0.9) 0%, rgba(28, 28, 28, 0.9) 100%),
+                url('https://hbfjdfxephlczkfgpceg.supabase.co/storage/v1/object/public/website/demos/Screenshot%202025-10-21%20212237.png') left center/cover no-repeat !important;
+    background-attachment: scroll !important;
+  }
+  
+  .studio-title {
+    font-size: 2rem;
+  }
+  
+  .studio-subtitle {
+    font-size: 1rem;
+  }
+  
+  .studio-features {
+    gap: 1rem;
+  }
+  
+  .studio-feature {
+    padding: 1.25rem;
+  }
+  
+  .studio-cta-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-studio-primary,
+  .btn-studio-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+  }
+}
+</style>
+
+<!-- Load authoritative floor plans data -->
+<script src="{{ 'floor-plans-data.js' | asset_url }}"></script>
+
+<!-- Load reviews data -->
+<script src="{{ 'reviews-data.js' | asset_url }}"></script>
+
+<script>
+// Scroll to next section when arrow is clicked
+function scrollToNextSection() {
+  const nextSection = document.getElementById('featured-plans-section');
+  if (nextSection) {
+    const offsetPosition = nextSection.getBoundingClientRect().top + window.pageYOffset - 100;
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
+  }
+}
+
+// Load products into carousel
+document.addEventListener('DOMContentLoaded', function() {
+  const carouselTrack = document.getElementById('carousel-track');
+  
+  // Fetch products from Shopify collection
+  fetch('/collections/floor-plans/products.json?limit=20')
+    .then(response => response.json())
+    .then(data => {
+      if (data.products && data.products.length > 0) {
+        carouselTrack.innerHTML = '';
+        
+        // Define the priority order for first 4 products
+        const priorityOrder = ['pedernales', 'serenity', 'whiskey', 'york-creek'];
+        
+        // Separate priority products and remaining products
+        const priorityProducts = [];
+        const otherProducts = [];
+        
+        data.products.forEach(product => {
+          const handle = product.handle.toLowerCase();
+          const priorityIndex = priorityOrder.findIndex(name => handle.includes(name));
+          
+          if (priorityIndex !== -1) {
+            priorityProducts[priorityIndex] = product;
+          } else {
+            otherProducts.push(product);
+          }
+        });
+        
+        // Combine: priority products first (in order), then others
+        const orderedProducts = priorityProducts.filter(p => p).concat(otherProducts).slice(0, 5);
+        
+        orderedProducts.forEach(product => {
+          const card = document.createElement('a');
+          card.href = `/products/${product.handle}`;
+          card.className = 'carousel-card';
+          
+          // Get accurate specs from authoritative data
+          const specs = window.FloorPlansData ? window.FloorPlansData.getSpecs(product.handle) : null;
+          
+          let beds = '—';
+          let baths = '—';
+          let sqft = '—';
+          
+          if (specs) {
+            beds = specs.beds || '—';
+            baths = specs.baths || '—';
+            sqft = specs.area ? window.FloorPlansData.formatArea(specs.area) : '—';
+          }
+          
+          // Build stats HTML - ALWAYS show 3 stats
+          const statsHTML = `
+            <div class="product-stats">
+              <div class="stat-item">
+                <span class="stat-value">${beds}</span>
+                <span class="stat-label">BEDS</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">${baths}</span>
+                <span class="stat-label">BATHS</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-value">${sqft}</span>
+                <span class="stat-label">SQ FT</span>
+              </div>
+            </div>
+          `;
+          
+          // Format price the same way as catalog page
+          const variant = product.variants[0];
+          const price = variant && variant.price 
+            ? parseFloat(variant.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            : '0.00';
+          
+          card.innerHTML = `
+            <div class="carousel-card-image-wrapper">
+              <img src="${product.images[0]?.src || ''}" 
+                   alt="${product.title}" 
+                   class="carousel-card-image">
+            </div>
+            ${statsHTML}
+            <div class="carousel-card-content">
+              <h3 class="carousel-card-title">${product.title}</h3>
+              <div class="carousel-card-price">$${price}</div>
+            </div>
+          `;
+          
+          carouselTrack.appendChild(card);
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error loading products:', error);
+      carouselTrack.innerHTML = '<p style="color: #D1D5DB; text-align: center; width: 100%;">Unable to load products</p>';
+    });
+});
+
+// Extract specs from product title or tags (not currently used in carousel)
+function extractSpecs(product) {
+  const specs = [];
+  const title = product.title.toLowerCase();
+  
+  // Try to extract dimensions from title
+  const sizeMatch = title.match(/(\d+)\s*x\s*(\d+)/);
+  if (sizeMatch) {
+    specs.push(`<span>📐 ${sizeMatch[1]}' x ${sizeMatch[2]}'</span>`);
+  }
+  
+  // Try to extract bedrooms
+  const bedMatch = title.match(/(\d+)\s*bed/i);
+  if (bedMatch) {
+    specs.push(`<span>🛏️ ${bedMatch[1]} Bed</span>`);
+  }
+  
+  // Try to extract bathrooms
+  const bathMatch = title.match(/(\d+(?:\.\d+)?)\s*bath/i);
+  if (bathMatch) {
+    specs.push(`<span>🚿 ${bathMatch[1]} Bath</span>`);
+  }
+  
+  return specs.join('');
+}
+
+// Brand Story Carousel
+let brandStoryCurrentIndex = 0;
+const brandStorySlides = document.querySelectorAll('.brand-story-slide');
+const brandStoryIndicatorsContainer = document.getElementById('brand-story-indicators');
+let brandStoryAutoplayInterval;
+
+// Create indicators
+brandStorySlides.forEach((_, index) => {
+  const indicator = document.createElement('div');
+  indicator.className = 'brand-story-indicator';
+  if (index === 0) indicator.classList.add('active');
+  indicator.onclick = () => brandStoryGoToSlide(index);
+  brandStoryIndicatorsContainer.appendChild(indicator);
+});
+
+const brandStoryIndicators = document.querySelectorAll('.brand-story-indicator');
+
+function brandStoryGoToSlide(index) {
+  // Hide current slide
+  brandStorySlides[brandStoryCurrentIndex].classList.remove('active');
+  brandStoryIndicators[brandStoryCurrentIndex].classList.remove('active');
+  
+  // Show new slide
+  brandStoryCurrentIndex = index;
+  brandStorySlides[brandStoryCurrentIndex].classList.add('active');
+  brandStoryIndicators[brandStoryCurrentIndex].classList.add('active');
+}
+
+function brandStoryNextSlide() {
+  const nextIndex = (brandStoryCurrentIndex + 1) % brandStorySlides.length;
+  brandStoryGoToSlide(nextIndex);
+}
+
+function brandStoryPrevSlide() {
+  const prevIndex = (brandStoryCurrentIndex - 1 + brandStorySlides.length) % brandStorySlides.length;
+  brandStoryGoToSlide(prevIndex);
+}
+
+// Add touch/swipe support for mobile
+const brandStoryCarousel = document.getElementById('brand-story-carousel');
+if (brandStoryCarousel) {
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  brandStoryCarousel.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  
+  brandStoryCarousel.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+  
+  function handleSwipe() {
+    const swipeThreshold = 50; // Minimum distance for a swipe
+    const diff = touchStartX - touchEndX;
+    
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        // Swiped left - go to next slide
+        brandStoryNextSlide();
+      } else {
+        // Swiped right - go to previous slide
+        brandStoryPrevSlide();
+      }
+    }
+  }
+}
+
+// Homepage FAQ Accordion
+document.addEventListener('DOMContentLoaded', function() {
+  const homepageFaqItems = document.querySelectorAll('.homepage-faq-item');
+  
+  homepageFaqItems.forEach(item => {
+    const question = item.querySelector('.homepage-faq-question');
+    
+    question.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+      
+      // Close all items
+      homepageFaqItems.forEach(i => {
+        i.classList.remove('active');
+        i.querySelector('.homepage-faq-question').setAttribute('aria-expanded', 'false');
+      });
+      
+      // Open clicked item if it wasn't active
+      if (!isActive) {
+        item.classList.add('active');
+        question.setAttribute('aria-expanded', 'true');
+      }
+    });
+    
+    // Keyboard navigation
+    question.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        question.click();
+      }
+    });
+  });
+});
+
+// Load and Render Customer Reviews
+document.addEventListener('DOMContentLoaded', function() {
+  const reviewsGrid = document.getElementById('reviews-grid');
+  
+  if (reviewsGrid && window.ReviewsData) {
+    // Get featured reviews (6 for desktop, showing in grid)
+    const reviews = window.ReviewsData.getFeaturedReviews(6);
+    
+    // Clear loading indicator
+    reviewsGrid.innerHTML = '';
+    
+    // Render each review
+    reviews.forEach(review => {
+      const reviewCard = document.createElement('div');
+      reviewCard.className = 'review-card';
+      
+      const initials = window.ReviewsData.getInitials(review.author);
+      const stars = window.ReviewsData.getStars(review.rating);
+      const formattedDate = window.ReviewsData.formatDate(review.published_at);
+      
+      reviewCard.innerHTML = `
+        <div class="review-header">
+          <div class="review-avatar">${initials}</div>
+          <div class="review-header-content">
+            <h3 class="review-author">${review.author}</h3>
+            <div class="review-rating">
+              ${stars}
+            </div>
+            <div class="review-date">${formattedDate}</div>
+          </div>
+        </div>
+        <div class="review-content-wrapper">
+          <p class="review-body">${review.body}</p>
+          <button class="review-expand-btn" style="display: none;">
+            <span class="expand-text">Read More</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div class="review-verified">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          Verified Purchase
+        </div>
+      `;
+      
+      reviewsGrid.appendChild(reviewCard);
+      
+      // Check if review needs expand button after DOM renders
+      const reviewBody = reviewCard.querySelector('.review-body');
+      const expandBtn = reviewCard.querySelector('.review-expand-btn');
+      const expandText = expandBtn.querySelector('.expand-text');
+      
+      // Use requestAnimationFrame to ensure accurate height measurement
+      requestAnimationFrame(() => {
+        // Force reflow to ensure layout is complete
+        reviewBody.offsetHeight;
+        
+        // Check if content is truncated (scrollHeight > clientHeight + 5px threshold)
+        const isOverflowing = reviewBody.scrollHeight > (reviewBody.clientHeight + 5);
+        
+        if (isOverflowing) {
+          reviewBody.classList.add('has-more');
+          expandBtn.style.display = 'flex';
+          
+          // Add click handler for expand/collapse
+          expandBtn.addEventListener('click', () => {
+            const isExpanded = reviewBody.classList.contains('expanded');
+            
+            if (isExpanded) {
+              reviewBody.classList.remove('expanded');
+              expandBtn.classList.remove('expanded');
+              expandText.textContent = 'Read More';
+            } else {
+              reviewBody.classList.add('expanded');
+              expandBtn.classList.add('expanded');
+              expandText.textContent = 'Read Less';
+            }
+          });
+        }
+      });
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Store Homepage",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Hero Title",
+      "default": "Premium Steel Building Plans"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store Homepage"
+    }
+  ]
+}
+{% endschema %}
+

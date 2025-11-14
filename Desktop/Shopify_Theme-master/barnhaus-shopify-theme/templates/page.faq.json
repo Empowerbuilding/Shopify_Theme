@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "faq-content": {
+      "type": "page-faq",
+      "settings": {}
+    }
+  },
+  "order": ["faq-content"]
+}
+
