@@ -1,12 +1,11 @@
 {% comment %}
-  Cost Calculator Section - Clean version without CTA
-  Use this AFTER updating main site to hide header with ?source=shopify
+  Cost Calculator Section - Uses CSS zoom to hide header naturally
 {% endcomment %}
 
-<section class="calculator-section" style="background: #1C1C1C; padding: 0;">
-  <div class="page-width" style="max-width: 100%; padding: 0;">
-    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden;">
-      <div class="calculator-wrapper" style="position: relative;">
+<section class="calculator-section" style="background: #1C1C1C; padding: 0; margin: 0;">
+  <div class="page-width" style="max-width: 100%; padding: 0; margin: 0;">
+    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden; margin: 0;">
+      <div class="calculator-wrapper">
         <iframe 
           id="cost-calculator-iframe"
           src="{{ section.settings.calculator_url }}" 
@@ -20,7 +19,7 @@
         ></iframe>
         
         {% if section.settings.show_loading %}
-        <div id="calculator-loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+        <div id="calculator-loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; z-index: 10;">
           <div style="width: 50px; height: 50px; border: 4px solid #DAA520; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
           <p style="color: #DAA520; margin-top: 15px; font-weight: bold;">Loading Calculator...</p>
         </div>
@@ -35,25 +34,60 @@
     to { transform: rotate(360deg); }
   }
 
-  .calculator-section iframe {
-    max-width: 100%;
+  /* Remove default spacing */
+  .calculator-section,
+  .calculator-section .page-width,
+  .calculator-embed {
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
-  /* No negative margins needed - main site handles it */
+  .calculator-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: #1C1C1C;
+  }
+
+  /* Desktop - zoom and position to hide header naturally */
   #cost-calculator-iframe {
-    margin-top: 0;
+    transform-origin: top center;
+    transform: scale(1.15) translateY(-120px);
+    width: 100%;
   }
 
-  /* Responsive heights only */
+  /* Tablet - adjust zoom and position */
   @media screen and (max-width: 768px) {
     #cost-calculator-iframe {
-      height: 2500px !important;
+      height: 2800px !important;
+      transform: scale(1.12) translateY(-100px);
+    }
+    
+    .calculator-wrapper {
+      height: 2500px;
     }
   }
 
+  /* Mobile - more aggressive zoom to hide header */
   @media screen and (max-width: 480px) {
     #cost-calculator-iframe {
-      height: 3000px !important;
+      height: 3200px !important;
+      transform: scale(1.08) translateY(-80px);
+    }
+    
+    .calculator-wrapper {
+      height: 2900px;
+    }
+  }
+
+  /* Small phones - fine tune */
+  @media screen and (max-width: 375px) {
+    #cost-calculator-iframe {
+      height: 3400px !important;
+      transform: scale(1.06) translateY(-70px);
+    }
+    
+    .calculator-wrapper {
+      height: 3100px;
     }
   }
 </style>
@@ -81,10 +115,21 @@
       if (e.data && e.data.type === 'calculator-height') {
         var iframe = document.getElementById('cost-calculator-iframe');
         if (iframe && e.data.height) {
-          iframe.style.height = e.data.height + 'px';
+          var wrapper = document.querySelector('.calculator-wrapper');
+          if (wrapper && window.innerWidth > 768) {
+            // Adjust wrapper height based on content
+            wrapper.style.height = (e.data.height * 1.15 - 120) + 'px';
+          }
         }
       }
     }, false);
+
+    // Recalculate on orientation change
+    window.addEventListener('orientationchange', function() {
+      setTimeout(function() {
+        location.reload();
+      }, 100);
+    });
   })();
 </script>
 
@@ -100,19 +145,19 @@
       "type": "text",
       "id": "calculator_url",
       "label": "Calculator URL",
-      "default": "https://barnhaussteelbuilders.com/cost-calculator?source=shopify",
+      "default": "https://barnhaussteelbuilders.com/cost-calculator",
       "info": "Full URL to your cost calculator"
     },
     {
       "type": "range",
       "id": "iframe_height",
       "min": 1000,
-      "max": 3500,
+      "max": 4000,
       "step": 100,
       "unit": "px",
-      "label": "Calculator Height",
-      "default": 2200,
-      "info": "Adjust if calculator is cut off or has too much space"
+      "label": "Calculator Height (Desktop)",
+      "default": 2400,
+      "info": "Adjust if calculator is cut off or has too much space on desktop"
     },
     {
       "type": "checkbox",
@@ -129,4 +174,3 @@
   ]
 }
 {% endschema %}
-
