@@ -1,0 +1,30 @@
+{
+  "sections": {
+    "main": {
+      "type": "calculator-section",
+      "settings": {
+        "calculator_url": "https://barnhaussteelbuilders.com/cost-calculator",
+        "iframe_height": 2000,
+        "show_loading": true,
+        "show_header": true,
+        "heading": "Construction Cost Calculator",
+        "heading_color": "#DAA520",
+        "subheading": "Get an instant estimate for your steel frame home or barndominium",
+        "subheading_color": "#666666",
+        "background_color": "#ffffff",
+        "section_padding": 60,
+        "show_cta": true,
+        "cta_heading": "Ready to Get Started?",
+        "cta_heading_color": "#1C1C1C",
+        "cta_text": "Browse our collection of pre-designed floor plans or schedule a consultation",
+        "cta_text_color": "#666666",
+        "cta_background": "#F5F5F5",
+        "cta_button_text_label": "Browse Floor Plans",
+        "cta_link": "/collections/floor-plans",
+        "cta_button_bg": "#1C1C1C",
+        "cta_button_text": "#DAA520"
+      }
+    }
+  },
+  "order": ["main"]
+}

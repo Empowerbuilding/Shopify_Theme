@@ -1,0 +1,307 @@
+{% comment %}
+  Cost Calculator Section
+  This section can be added to any page through the Shopify theme editor
+{% endcomment %}
+
+<section class="calculator-section" style="background: {{ section.settings.background_color }}; padding: {{ section.settings.section_padding }}px 0;">
+  <div class="page-width">
+    {% if section.settings.show_header %}
+    <div class="calculator-section-header" style="text-align: center; padding-bottom: 40px;">
+      <h2 style="color: {{ section.settings.heading_color }}; font-size: 2.5rem; margin-bottom: 15px;">
+        {{ section.settings.heading | default: "Construction Cost Calculator" }}
+      </h2>
+      {% if section.settings.subheading %}
+      <p style="color: {{ section.settings.subheading_color }}; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+        {{ section.settings.subheading }}
+      </p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="calculator-embed" style="background: #1C1C1C; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <div class="calculator-wrapper" style="position: relative; overflow: hidden;">
+        <iframe 
+          id="cost-calculator-iframe"
+          src="{{ section.settings.calculator_url }}" 
+          width="100%" 
+          height="{{ section.settings.iframe_height }}px"
+          frameborder="0"
+          scrolling="no"
+          style="border: none; display: block; width: 100%;"
+          title="Construction Cost Calculator"
+          loading="lazy"
+        ></iframe>
+        
+        {% if section.settings.show_loading %}
+        <div id="calculator-loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none;">
+          <div style="width: 50px; height: 50px; border: 4px solid #DAA520; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+          <p style="color: #DAA520; margin-top: 15px; font-weight: bold;">Loading Calculator...</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if section.settings.show_cta %}
+    <div class="calculator-cta" style="text-align: center; margin-top: 40px; padding: 30px; background: {{ section.settings.cta_background }}; border-radius: 8px;">
+      <h3 style="color: {{ section.settings.cta_heading_color }}; margin-bottom: 15px;">
+        {{ section.settings.cta_heading | default: "Ready to Get Started?" }}
+      </h3>
+      {% if section.settings.cta_text %}
+      <p style="color: {{ section.settings.cta_text_color }}; margin-bottom: 20px; font-size: 1.05rem;">
+        {{ section.settings.cta_text }}
+      </p>
+      {% endif %}
+      <a href="{{ section.settings.cta_link }}" 
+         class="button"
+         style="background: {{ section.settings.cta_button_bg }}; 
+                color: {{ section.settings.cta_button_text }}; 
+                padding: 15px 40px; 
+                border-radius: 4px; 
+                text-decoration: none; 
+                font-weight: bold; 
+                display: inline-block;
+                transition: all 0.3s ease;">
+        {{ section.settings.cta_button_text_label | default: "Browse Floor Plans" }}
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .calculator-section iframe {
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .calculator-embed {
+      padding: 10px !important;
+      margin-left: -20px;
+      margin-right: -20px;
+      border-radius: 0 !important;
+    }
+
+    .calculator-section-header h2 {
+      font-size: 1.8rem !important;
+    }
+
+    #cost-calculator-iframe {
+      height: 2500px !important;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    #cost-calculator-iframe {
+      height: 3000px !important;
+    }
+  }
+
+  /* Smooth hover effect for CTA button */
+  .calculator-cta .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+</style>
+
+<script>
+  (function() {
+    // Hide loading spinner once iframe loads
+    {% if section.settings.show_loading %}
+    var iframe = document.getElementById('cost-calculator-iframe');
+    if (iframe) {
+      iframe.addEventListener('load', function() {
+        var loader = document.getElementById('calculator-loading');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(function() {
+            loader.style.display = 'none';
+          }, 300);
+        }
+      });
+    }
+    {% endif %}
+
+    // Listen for height messages from calculator
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'calculator-height') {
+        var iframe = document.getElementById('cost-calculator-iframe');
+        if (iframe && e.data.height) {
+          iframe.style.height = e.data.height + 'px';
+        }
+      }
+    }, false);
+
+    // Track calculator interactions
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'calculator-interaction') {
+        // Optional: Add analytics tracking here
+        console.log('Calculator interaction:', e.data);
+      }
+    }, false);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cost Calculator",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Calculator Settings"
+    },
+    {
+      "type": "text",
+      "id": "calculator_url",
+      "label": "Calculator URL",
+      "default": "https://barnhaussteelbuilders.com/cost-calculator",
+      "info": "Full URL to your cost calculator"
+    },
+    {
+      "type": "range",
+      "id": "iframe_height",
+      "min": 1000,
+      "max": 3500,
+      "step": 100,
+      "unit": "px",
+      "label": "Calculator Height",
+      "default": 2000,
+      "info": "Adjust if calculator is cut off or has too much space"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_loading",
+      "label": "Show loading spinner",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show section header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Construction Cost Calculator"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#DAA520"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Get an instant estimate for your steel frame home or barndominium"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Section Styling"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Section padding",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA heading",
+      "default": "Ready to Get Started?"
+    },
+    {
+      "type": "color",
+      "id": "cta_heading_color",
+      "label": "CTA heading color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Browse our collection of pre-designed floor plans or schedule a consultation"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "cta_background",
+      "label": "CTA background color",
+      "default": "#DAA520"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text_label",
+      "label": "Button text",
+      "default": "Browse Floor Plans"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_bg",
+      "label": "Button background",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_text",
+      "label": "Button text color",
+      "default": "#DAA520"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cost Calculator",
+      "category": "Tools"
+    }
+  ]
+}
+{% endschema %}
+
+
