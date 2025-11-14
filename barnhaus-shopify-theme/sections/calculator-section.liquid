@@ -1,10 +1,10 @@
 {% comment %}
-  Cost Calculator Section - Mobile Optimized
+  Cost Calculator Section - Properly hides embedded header
 {% endcomment %}
 
 <section class="calculator-section" style="background: #1C1C1C; padding: 0; margin: 0;">
   <div class="page-width" style="max-width: 100%; padding: 0; margin: 0;">
-    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden; margin: 0;">
+    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden; margin: 0; position: relative;">
       <div class="calculator-wrapper" style="position: relative; margin: 0;">
         <iframe 
           id="cost-calculator-iframe"
@@ -34,7 +34,7 @@
     to { transform: rotate(360deg); }
   }
 
-  /* Remove any default padding/margins that might cause issues */
+  /* Remove any default padding/margins */
   .calculator-section,
   .calculator-section .page-width,
   .calculator-embed,
@@ -47,42 +47,59 @@
     max-width: 100%;
   }
 
-  /* Desktop - keep existing adjustment */
+  /* Create an overlay to hide the embedded header */
+  .calculator-embed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px; /* Height of embedded header to hide */
+    background: #1C1C1C;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  /* Desktop - hide embedded header */
   #cost-calculator-iframe {
     margin-top: -100px;
+    position: relative;
+    z-index: 1;
   }
 
   /* Tablet adjustments */
   @media screen and (max-width: 768px) {
-    #cost-calculator-iframe {
-      height: 2400px !important; /* Slightly reduced */
-      margin-top: -70px !important; /* Less aggressive cut */
+    .calculator-embed::before {
+      height: 80px; /* Adjust overlay height for tablet */
     }
     
-    /* Remove any page-level padding on mobile */
-    .calculator-section {
-      margin-top: -20px; /* Pull up to header */
+    #cost-calculator-iframe {
+      height: 2500px !important;
+      margin-top: -80px !important;
     }
   }
 
   /* Mobile adjustments */
   @media screen and (max-width: 480px) {
-    #cost-calculator-iframe {
-      height: 2800px !important; /* Adjusted height */
-      margin-top: -50px !important; /* Even less aggressive */
+    .calculator-embed::before {
+      height: 150px; /* Larger overlay for mobile to hide entire embedded header/nav */
     }
     
-    /* Tighter integration with page */
-    .calculator-section {
-      margin-top: -20px; /* Pull up to header */
+    #cost-calculator-iframe {
+      height: 2800px !important;
+      margin-top: -150px !important; /* Match the overlay height */
     }
   }
 
   /* Extra small phones */
   @media screen and (max-width: 375px) {
+    .calculator-embed::before {
+      height: 140px;
+    }
+    
     #cost-calculator-iframe {
       height: 3000px !important;
-      margin-top: -40px !important;
+      margin-top: -140px !important;
     }
   }
 </style>
@@ -110,8 +127,7 @@
       if (e.data && e.data.type === 'calculator-height') {
         var iframe = document.getElementById('cost-calculator-iframe');
         if (iframe && e.data.height) {
-          // Adjust height based on screen size
-          var adjustment = window.innerWidth <= 480 ? 50 : window.innerWidth <= 768 ? 70 : 100;
+          var adjustment = window.innerWidth <= 480 ? 150 : window.innerWidth <= 768 ? 80 : 100;
           iframe.style.height = (e.data.height - adjustment) + 'px';
         }
       }
@@ -122,7 +138,11 @@
       setTimeout(function() {
         var iframe = document.getElementById('cost-calculator-iframe');
         if (iframe) {
-          iframe.style.height = window.innerWidth <= 480 ? '2800px' : window.innerWidth <= 768 ? '2400px' : iframe.style.height;
+          if (window.innerWidth <= 480) {
+            iframe.style.height = '2800px';
+          } else if (window.innerWidth <= 768) {
+            iframe.style.height = '2500px';
+          }
         }
       }, 100);
     });
@@ -170,8 +190,3 @@
   ]
 }
 {% endschema %}
-
-
-
-
-
