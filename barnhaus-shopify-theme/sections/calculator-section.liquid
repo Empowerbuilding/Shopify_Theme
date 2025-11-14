@@ -1,11 +1,12 @@
 {% comment %}
-  Cost Calculator Section - Properly hides embedded header
+  Cost Calculator Section - Clean version without CTA
+  Use this AFTER updating main site to hide header with ?source=shopify
 {% endcomment %}
 
-<section class="calculator-section" style="background: #1C1C1C; padding: 0; margin: 0;">
-  <div class="page-width" style="max-width: 100%; padding: 0; margin: 0;">
-    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden; margin: 0; position: relative;">
-      <div class="calculator-wrapper" style="position: relative; margin: 0;">
+<section class="calculator-section" style="background: #1C1C1C; padding: 0;">
+  <div class="page-width" style="max-width: 100%; padding: 0;">
+    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden;">
+      <div class="calculator-wrapper" style="position: relative;">
         <iframe 
           id="cost-calculator-iframe"
           src="{{ section.settings.calculator_url }}" 
@@ -13,7 +14,7 @@
           height="{{ section.settings.iframe_height }}px"
           frameborder="0"
           scrolling="no"
-          style="border: none; display: block; width: 100%; margin: 0;"
+          style="border: none; display: block; width: 100%;"
           title="Construction Cost Calculator"
           loading="lazy"
         ></iframe>
@@ -34,72 +35,25 @@
     to { transform: rotate(360deg); }
   }
 
-  /* Remove any default padding/margins */
-  .calculator-section,
-  .calculator-section .page-width,
-  .calculator-embed,
-  .calculator-wrapper {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
   .calculator-section iframe {
     max-width: 100%;
   }
 
-  /* Create an overlay to hide the embedded header */
-  .calculator-embed::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100px; /* Height of embedded header to hide */
-    background: #1C1C1C;
-    z-index: 10;
-    pointer-events: none;
-  }
-
-  /* Desktop - hide embedded header */
+  /* No negative margins needed - main site handles it */
   #cost-calculator-iframe {
-    margin-top: -100px;
-    position: relative;
-    z-index: 1;
+    margin-top: 0;
   }
 
-  /* Tablet adjustments */
+  /* Responsive heights only */
   @media screen and (max-width: 768px) {
-    .calculator-embed::before {
-      height: 80px; /* Adjust overlay height for tablet */
-    }
-    
     #cost-calculator-iframe {
       height: 2500px !important;
-      margin-top: -80px !important;
     }
   }
 
-  /* Mobile adjustments */
   @media screen and (max-width: 480px) {
-    .calculator-embed::before {
-      height: 150px; /* Larger overlay for mobile to hide entire embedded header/nav */
-    }
-    
-    #cost-calculator-iframe {
-      height: 2800px !important;
-      margin-top: -150px !important; /* Match the overlay height */
-    }
-  }
-
-  /* Extra small phones */
-  @media screen and (max-width: 375px) {
-    .calculator-embed::before {
-      height: 140px;
-    }
-    
     #cost-calculator-iframe {
       height: 3000px !important;
-      margin-top: -140px !important;
     }
   }
 </style>
@@ -127,25 +81,10 @@
       if (e.data && e.data.type === 'calculator-height') {
         var iframe = document.getElementById('cost-calculator-iframe');
         if (iframe && e.data.height) {
-          var adjustment = window.innerWidth <= 480 ? 150 : window.innerWidth <= 768 ? 80 : 100;
-          iframe.style.height = (e.data.height - adjustment) + 'px';
+          iframe.style.height = e.data.height + 'px';
         }
       }
     }, false);
-
-    // Recalculate on orientation change
-    window.addEventListener('orientationchange', function() {
-      setTimeout(function() {
-        var iframe = document.getElementById('cost-calculator-iframe');
-        if (iframe) {
-          if (window.innerWidth <= 480) {
-            iframe.style.height = '2800px';
-          } else if (window.innerWidth <= 768) {
-            iframe.style.height = '2500px';
-          }
-        }
-      }, 100);
-    });
   })();
 </script>
 
@@ -171,9 +110,9 @@
       "max": 3500,
       "step": 100,
       "unit": "px",
-      "label": "Calculator Height (Desktop)",
+      "label": "Calculator Height",
       "default": 2200,
-      "info": "Adjust if calculator is cut off or has too much space on desktop"
+      "info": "Adjust if calculator is cut off or has too much space"
     },
     {
       "type": "checkbox",
@@ -190,3 +129,4 @@
   ]
 }
 {% endschema %}
+
