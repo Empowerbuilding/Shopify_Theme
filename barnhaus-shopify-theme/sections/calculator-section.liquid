@@ -1,11 +1,11 @@
 {% comment %}
-  Cost Calculator Section - Clean version without CTA
+  Cost Calculator Section - Mobile Optimized
 {% endcomment %}
 
-<section class="calculator-section" style="background: #1C1C1C; padding: 0;">
-  <div class="page-width" style="max-width: 100%; padding: 0;">
-    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden;">
-      <div class="calculator-wrapper" style="position: relative;">
+<section class="calculator-section" style="background: #1C1C1C; padding: 0; margin: 0;">
+  <div class="page-width" style="max-width: 100%; padding: 0; margin: 0;">
+    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden; margin: 0;">
+      <div class="calculator-wrapper" style="position: relative; margin: 0;">
         <iframe 
           id="cost-calculator-iframe"
           src="{{ section.settings.calculator_url }}" 
@@ -13,7 +13,7 @@
           height="{{ section.settings.iframe_height }}px"
           frameborder="0"
           scrolling="no"
-          style="border: none; display: block; width: 100%;"
+          style="border: none; display: block; width: 100%; margin: 0;"
           title="Construction Cost Calculator"
           loading="lazy"
         ></iframe>
@@ -34,26 +34,55 @@
     to { transform: rotate(360deg); }
   }
 
+  /* Remove any default padding/margins that might cause issues */
+  .calculator-section,
+  .calculator-section .page-width,
+  .calculator-embed,
+  .calculator-wrapper {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
   .calculator-section iframe {
     max-width: 100%;
   }
 
-  /* Hide the header and navigation inside the iframe */
+  /* Desktop - keep existing adjustment */
   #cost-calculator-iframe {
-    margin-top: -100px; /* Adjusted to show the title */
+    margin-top: -100px;
   }
 
+  /* Tablet adjustments */
   @media screen and (max-width: 768px) {
     #cost-calculator-iframe {
-      height: 2500px !important;
-      margin-top: -80px; /* Adjust for mobile */
+      height: 2400px !important; /* Slightly reduced */
+      margin-top: -70px !important; /* Less aggressive cut */
+    }
+    
+    /* Remove any page-level padding on mobile */
+    .calculator-section {
+      margin-top: -20px; /* Pull up to header */
     }
   }
 
+  /* Mobile adjustments */
   @media screen and (max-width: 480px) {
     #cost-calculator-iframe {
+      height: 2800px !important; /* Adjusted height */
+      margin-top: -50px !important; /* Even less aggressive */
+    }
+    
+    /* Tighter integration with page */
+    .calculator-section {
+      margin-top: -20px; /* Pull up to header */
+    }
+  }
+
+  /* Extra small phones */
+  @media screen and (max-width: 375px) {
+    #cost-calculator-iframe {
       height: 3000px !important;
-      margin-top: -60px;
+      margin-top: -40px !important;
     }
   }
 </style>
@@ -81,10 +110,22 @@
       if (e.data && e.data.type === 'calculator-height') {
         var iframe = document.getElementById('cost-calculator-iframe');
         if (iframe && e.data.height) {
-          iframe.style.height = (e.data.height - 100) + 'px';
+          // Adjust height based on screen size
+          var adjustment = window.innerWidth <= 480 ? 50 : window.innerWidth <= 768 ? 70 : 100;
+          iframe.style.height = (e.data.height - adjustment) + 'px';
         }
       }
     }, false);
+
+    // Recalculate on orientation change
+    window.addEventListener('orientationchange', function() {
+      setTimeout(function() {
+        var iframe = document.getElementById('cost-calculator-iframe');
+        if (iframe) {
+          iframe.style.height = window.innerWidth <= 480 ? '2800px' : window.innerWidth <= 768 ? '2400px' : iframe.style.height;
+        }
+      }, 100);
+    });
   })();
 </script>
 
@@ -110,9 +151,9 @@
       "max": 3500,
       "step": 100,
       "unit": "px",
-      "label": "Calculator Height",
+      "label": "Calculator Height (Desktop)",
       "default": 2200,
-      "info": "Adjust if calculator is cut off or has too much space"
+      "info": "Adjust if calculator is cut off or has too much space on desktop"
     },
     {
       "type": "checkbox",
@@ -129,6 +170,8 @@
   ]
 }
 {% endschema %}
+
+
 
 
 
