@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% comment %}
   Cost Calculator Section
   This section can be added to any page through the Shopify theme editor
@@ -305,3 +306,344 @@
 {% endschema %}
 
 
+=======
+{{ 'component-rte.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .calculator-section {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .calculator-heading {
+    color: {{ section.settings.heading_color }};
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .calculator-container {
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .calculator-iframe-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+  }
+
+  .calculator-iframe {
+    width: 100%;
+    height: {{ section.settings.mobile_height }}px;
+    border: none;
+    display: block;
+  }
+
+  .calculator-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  .calculator-spinner {
+    border: 4px solid {{ section.settings.spinner_background }};
+    border-top: 4px solid {{ section.settings.spinner_color }};
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .calculator-cta {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: {{ section.settings.cta_background }};
+    border-radius: 8px;
+  }
+
+  .calculator-cta h3 {
+    color: {{ section.settings.cta_heading_color }};
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .calculator-cta p {
+    color: {{ section.settings.cta_text_color }};
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .calculator-cta-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background-color: {{ section.settings.cta_button_background }};
+    color: {{ section.settings.cta_button_text }};
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    border: 2px solid {{ section.settings.cta_button_background }};
+  }
+
+  .calculator-cta-button:hover {
+    background-color: {{ section.settings.cta_button_hover }};
+    border-color: {{ section.settings.cta_button_hover }};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  @media screen and (min-width: 750px) {
+    .calculator-iframe {
+      height: {{ section.settings.tablet_height }}px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .calculator-iframe {
+      height: {{ section.settings.desktop_height }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="calculator-section section-{{ section.id }}-padding">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="calculator-heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="calculator-container">
+      <div class="calculator-iframe-wrapper">
+        <div class="calculator-loading" id="calculator-loading-{{ section.id }}">
+          <div class="calculator-spinner"></div>
+        </div>
+        <iframe
+          id="calculator-iframe-{{ section.id }}"
+          class="calculator-iframe"
+          src="{{ section.settings.calculator_url }}"
+          title="Cost Calculator"
+          loading="lazy"
+          onload="document.getElementById('calculator-loading-{{ section.id }}').style.display='none';"
+        ></iframe>
+      </div>
+
+      {% if section.settings.show_cta %}
+        <div class="calculator-cta">
+          <h3>{{ section.settings.cta_heading }}</h3>
+          <p>{{ section.settings.cta_text }}</p>
+          <a href="{{ section.settings.cta_link }}" class="calculator-cta-button">
+            {{ section.settings.cta_button_text }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cost Calculator",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Steel Building Cost Calculator"
+    },
+    {
+      "type": "url",
+      "id": "calculator_url",
+      "label": "Calculator URL",
+      "default": "https://barnhaussteelbuilders.com/cost-calculator"
+    },
+    {
+      "type": "header",
+      "content": "Calculator Height Settings"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 1000,
+      "max": 3000,
+      "step": 100,
+      "unit": "px",
+      "label": "Desktop Height",
+      "default": 2000
+    },
+    {
+      "type": "range",
+      "id": "tablet_height",
+      "min": 1000,
+      "max": 3500,
+      "step": 100,
+      "unit": "px",
+      "label": "Tablet Height",
+      "default": 2500
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 1500,
+      "max": 4000,
+      "step": 100,
+      "unit": "px",
+      "label": "Mobile Height",
+      "default": 3000
+    },
+    {
+      "type": "header",
+      "content": "Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "color",
+      "id": "spinner_color",
+      "label": "Loading Spinner Color",
+      "default": "#DAA520"
+    },
+    {
+      "type": "color",
+      "id": "spinner_background",
+      "label": "Loading Spinner Background",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "header",
+      "content": "Call-to-Action Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show CTA Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "Ready to Build Your Dream?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "CTA Text",
+      "default": "Explore our collection of pre-designed floor plans to get started on your custom steel building project."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "CTA Button Text",
+      "default": "View Floor Plans"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link",
+      "default": "/collections/floor-plans"
+    },
+    {
+      "type": "color",
+      "id": "cta_background",
+      "label": "CTA Background Color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "cta_heading_color",
+      "label": "CTA Heading Color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "CTA Text Color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_background",
+      "label": "CTA Button Background",
+      "default": "#DAA520"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_text",
+      "label": "CTA Button Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "cta_button_hover",
+      "label": "CTA Button Hover Color",
+      "default": "#B8860B"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cost Calculator"
+    }
+  ]
+}
+{% endschema %}
+>>>>>>> 3c341c3 (Add cost calculator integration with responsive iframe embed)
