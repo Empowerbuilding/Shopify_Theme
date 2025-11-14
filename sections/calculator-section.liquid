@@ -1,23 +1,10 @@
 {% comment %}
-  Cost Calculator Section - Updated to hide duplicate header
+  Cost Calculator Section - Clean version without CTA
 {% endcomment %}
 
-<section class="calculator-section" style="background: {{ section.settings.background_color }}; padding: {{ section.settings.section_padding }}px 0;">
-  <div class="page-width">
-    {% if section.settings.show_header %}
-    <div class="calculator-section-header" style="text-align: center; padding-bottom: 40px;">
-      <h2 style="color: {{ section.settings.heading_color }}; font-size: 2.5rem; margin-bottom: 15px;">
-        {{ section.settings.heading | default: "Construction Cost Calculator" }}
-      </h2>
-      {% if section.settings.subheading %}
-      <p style="color: {{ section.settings.subheading_color }}; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
-        {{ section.settings.subheading }}
-      </p>
-      {% endif %}
-    </div>
-    {% endif %}
-
-    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+<section class="calculator-section" style="background: #1C1C1C; padding: 0;">
+  <div class="page-width" style="max-width: 100%; padding: 0;">
+    <div class="calculator-embed" style="background: #1C1C1C; padding: 0; overflow: hidden;">
       <div class="calculator-wrapper" style="position: relative;">
         <iframe 
           id="cost-calculator-iframe"
@@ -39,31 +26,6 @@
         {% endif %}
       </div>
     </div>
-
-    {% if section.settings.show_cta %}
-    <div class="calculator-cta" style="text-align: center; margin-top: 40px; padding: 30px; background: {{ section.settings.cta_background }}; border-radius: 8px;">
-      <h3 style="color: {{ section.settings.cta_heading_color }}; margin-bottom: 15px;">
-        {{ section.settings.cta_heading | default: "Ready to Get Started?" }}
-      </h3>
-      {% if section.settings.cta_text %}
-      <p style="color: {{ section.settings.cta_text_color }}; margin-bottom: 20px; font-size: 1.05rem;">
-        {{ section.settings.cta_text }}
-      </p>
-      {% endif %}
-      <a href="{{ section.settings.cta_link }}" 
-         class="button"
-         style="background: {{ section.settings.cta_button_bg }}; 
-                color: {{ section.settings.cta_button_text }}; 
-                padding: 15px 40px; 
-                border-radius: 4px; 
-                text-decoration: none; 
-                font-weight: bold; 
-                display: inline-block;
-                transition: all 0.3s ease;">
-        {{ section.settings.cta_button_text_label | default: "Browse Floor Plans" }}
-      </a>
-    </div>
-    {% endif %}
   </div>
 </section>
 
@@ -78,38 +40,21 @@
 
   /* Hide the header and navigation inside the iframe */
   #cost-calculator-iframe {
-    margin-top: -200px; /* Adjust this value to hide the header */
+    margin-top: -100px; /* Adjusted to show the title */
   }
 
   @media screen and (max-width: 768px) {
-    .calculator-embed {
-      padding: 0 !important;
-      margin-left: -20px;
-      margin-right: -20px;
-      border-radius: 0 !important;
-    }
-
-    .calculator-section-header h2 {
-      font-size: 1.8rem !important;
-    }
-
     #cost-calculator-iframe {
       height: 2500px !important;
-      margin-top: -180px; /* Adjust for mobile */
+      margin-top: -80px; /* Adjust for mobile */
     }
   }
 
   @media screen and (max-width: 480px) {
     #cost-calculator-iframe {
       height: 3000px !important;
-      margin-top: -160px;
+      margin-top: -60px;
     }
-  }
-
-  /* Smooth hover effect for CTA button */
-  .calculator-cta .button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 </style>
 
@@ -136,7 +81,7 @@
       if (e.data && e.data.type === 'calculator-height') {
         var iframe = document.getElementById('cost-calculator-iframe');
         if (iframe && e.data.height) {
-          iframe.style.height = e.data.height + 'px';
+          iframe.style.height = (e.data.height - 100) + 'px';
         }
       }
     }, false);
@@ -174,123 +119,6 @@
       "id": "show_loading",
       "label": "Show loading spinner",
       "default": true
-    },
-    {
-      "type": "header",
-      "content": "Section Header"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_header",
-      "label": "Show section header",
-      "default": false
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Construction Cost Calculator"
-    },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading color",
-      "default": "#DAA520"
-    },
-    {
-      "type": "textarea",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Get an instant estimate for your steel frame home or barndominium"
-    },
-    {
-      "type": "color",
-      "id": "subheading_color",
-      "label": "Subheading color",
-      "default": "#666666"
-    },
-    {
-      "type": "header",
-      "content": "Section Styling"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Section background color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "range",
-      "id": "section_padding",
-      "min": 0,
-      "max": 100,
-      "step": 10,
-      "unit": "px",
-      "label": "Section padding",
-      "default": 60
-    },
-    {
-      "type": "header",
-      "content": "Call to Action"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_cta",
-      "label": "Show CTA section",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "cta_heading",
-      "label": "CTA heading",
-      "default": "Ready to Get Started?"
-    },
-    {
-      "type": "color",
-      "id": "cta_heading_color",
-      "label": "CTA heading color",
-      "default": "#1C1C1C"
-    },
-    {
-      "type": "textarea",
-      "id": "cta_text",
-      "label": "CTA text",
-      "default": "Browse our collection of pre-designed floor plans"
-    },
-    {
-      "type": "color",
-      "id": "cta_text_color",
-      "label": "CTA text color",
-      "default": "#666666"
-    },
-    {
-      "type": "color",
-      "id": "cta_background",
-      "label": "CTA background color",
-      "default": "#DAA520"
-    },
-    {
-      "type": "text",
-      "id": "cta_button_text_label",
-      "label": "Button text",
-      "default": "Browse Floor Plans"
-    },
-    {
-      "type": "url",
-      "id": "cta_link",
-      "label": "Button link"
-    },
-    {
-      "type": "color",
-      "id": "cta_button_bg",
-      "label": "Button background",
-      "default": "#1C1C1C"
-    },
-    {
-      "type": "color",
-      "id": "cta_button_text",
-      "label": "Button text color",
-      "default": "#DAA520"
     }
   ],
   "presets": [
@@ -301,4 +129,6 @@
   ]
 }
 {% endschema %}
+
+
 
