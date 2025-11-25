@@ -638,6 +638,17 @@ img {
 .product-page {
   padding: 1rem 0 3rem 0;
   position: relative;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.product-page > .container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
 }
 
 /* Image Lightbox */
@@ -859,8 +870,8 @@ img {
 /* Desktop Back Button - Integrated with Content */
 @media (min-width: 1024px) {
   .mobile-back-button {
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 90px;
     left: 1.5rem;
     width: auto;
     height: auto;
@@ -872,7 +883,7 @@ img {
     border: 1px solid var(--color-border);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    margin-bottom: 1.5rem;
+    z-index: 999;
   }
   
   .mobile-back-button::before {
@@ -899,15 +910,6 @@ img {
     height: 20px;
     stroke-width: 2.5;
   }
-  
-  /* Adjust product page layout to accommodate integrated back button */
-  .product-page {
-    padding-top: 5rem;
-  }
-  
-  .product-page .container {
-    position: relative;
-  }
 }
 
 .product-main {
@@ -916,13 +918,21 @@ img {
   gap: 3rem;
   margin-bottom: 3rem;
   max-width: 900px;
+  width: 100%;
   margin: 0 auto 3rem auto;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .product-gallery {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  max-width: 100%;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .product-image-main {
@@ -1089,11 +1099,20 @@ img {
 .product-info {
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .product-title {
   font-size: 2rem;
   margin-bottom: 1rem;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .product-price {
@@ -1107,6 +1126,9 @@ img {
   margin-top: 2rem;
   margin-bottom: 2rem;
   line-height: 1.7;
+  max-width: 100%;
+  overflow-x: hidden;
+  word-wrap: break-word;
 }
 
 /* Product Description Content Formatting */
@@ -1119,6 +1141,9 @@ img {
 .product-description-content p {
   margin-bottom: 1rem;
   white-space: pre-line;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .product-description-content p:last-child {
@@ -1129,6 +1154,21 @@ img {
 .product-description-content ol {
   margin: 1rem 0;
   padding-left: 1.5rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Fix for deeply nested lists that break layout */
+.product-description-content ul ul,
+.product-description-content ol ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+/* Prevent nested lists from breaking grid */
+.product-description-content li > ul,
+.product-description-content li > ol {
+  margin-top: 0.5rem;
 }
 
 .product-description-content li {
@@ -1176,6 +1216,60 @@ img {
 
 .product-description-content a:hover {
   color: #FFD700;
+}
+
+/* Handle embedded iframes (YouTube videos, etc.) */
+.product-description-content iframe {
+  max-width: 100%;
+  width: 100% !important;
+  height: auto;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+/* Prevent any embedded content from breaking layout */
+.product-description-content > * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Force all product page elements to stay contained */
+.product-page * {
+  box-sizing: border-box;
+}
+
+.product-page .product-main > * {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Clear any floats and ensure proper flow */
+.product-main::before,
+.product-main::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Ensure product page doesn't have layout shifts */
+body .product-page {
+  clear: both;
+  display: block;
+  width: 100%;
+}
+
+/* NUCLEAR OPTION: Force absolute centering on desktop */
+@media (min-width: 769px) {
+  .product-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .product-page > .container {
+    flex-shrink: 0;
+  }
 }
 
 .product-description-content br {
