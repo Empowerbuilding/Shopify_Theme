@@ -521,6 +521,138 @@
     }
   }
   
+  // Advanced Mobile Image Zoom & Pan
+  document.addEventListener('DOMContentLoaded', function() {
+    const lightboxImages = document.querySelectorAll('.lightbox-image img');
+    
+    lightboxImages.forEach(img => {
+      let scale = 1;
+      let translateX = 0;
+      let translateY = 0;
+      let lastTouchDistance = 0;
+      let lastTouchX = 0;
+      let lastTouchY = 0;
+      let isDragging = false;
+      let lastTap = 0;
+      
+      // Double-tap to zoom
+      img.addEventListener('touchend', function(e) {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTap;
+        
+        if (tapLength < 300 && tapLength > 0) {
+          // Double tap detected
+          e.preventDefault();
+          
+          if (scale === 1) {
+            // Zoom in to 2.5x at tap location
+            const rect = img.getBoundingClientRect();
+            const touch = e.changedTouches[0];
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            
+            scale = 2.5;
+            translateX = (rect.width / 2 - x) * (scale - 1);
+            translateY = (rect.height / 2 - y) * (scale - 1);
+          } else {
+            // Zoom out
+            scale = 1;
+            translateX = 0;
+            translateY = 0;
+          }
+          
+          updateTransform(img);
+        }
+        
+        lastTap = currentTime;
+      });
+      
+      // Pinch to zoom
+      img.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          lastTouchDistance = getDistance(e.touches[0], e.touches[1]);
+        } else if (e.touches.length === 1) {
+          isDragging = true;
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
+        }
+      }, { passive: false });
+      
+      img.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 2) {
+          // Pinch zoom
+          e.preventDefault();
+          const currentDistance = getDistance(e.touches[0], e.touches[1]);
+          
+          if (lastTouchDistance > 0) {
+            const scaleDelta = currentDistance / lastTouchDistance;
+            scale *= scaleDelta;
+            scale = Math.max(1, Math.min(scale, 5)); // Limit between 1x and 5x
+          }
+          
+          lastTouchDistance = currentDistance;
+          updateTransform(img);
+        } else if (e.touches.length === 1 && isDragging && scale > 1) {
+          // Pan image when zoomed
+          e.preventDefault();
+          const deltaX = e.touches[0].clientX - lastTouchX;
+          const deltaY = e.touches[0].clientY - lastTouchY;
+          
+          translateX += deltaX;
+          translateY += deltaY;
+          
+          // Constrain panning to image bounds
+          const maxTranslate = (scale - 1) * img.offsetWidth / 2;
+          const maxTranslateY = (scale - 1) * img.offsetHeight / 2;
+          translateX = Math.max(-maxTranslate, Math.min(translateX, maxTranslate));
+          translateY = Math.max(-maxTranslateY, Math.min(translateY, maxTranslateY));
+          
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
+          
+          updateTransform(img);
+        }
+      }, { passive: false });
+      
+      img.addEventListener('touchend', function(e) {
+        if (e.touches.length === 0) {
+          isDragging = false;
+          lastTouchDistance = 0;
+        }
+      });
+      
+      // Reset zoom when lightbox closes
+      const lightboxElement = img.closest('.lightbox');
+      if (lightboxElement) {
+        const closeBtn = lightboxElement.querySelector('.lightbox-close');
+        const overlay = lightboxElement;
+        
+        [closeBtn, overlay].forEach(el => {
+          if (el) {
+            el.addEventListener('click', function() {
+              scale = 1;
+              translateX = 0;
+              translateY = 0;
+              updateTransform(img);
+            });
+          }
+        });
+      }
+      
+      function updateTransform(element) {
+        element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        element.style.transition = isDragging ? 'none' : 'transform 0.3s ease-out';
+      }
+      
+      function getDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+      }
+    });
+  });
+  
   // Update variant based on selected options
   function updateVariant() {
     const selectedOptions = [];
