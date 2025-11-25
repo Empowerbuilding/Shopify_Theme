@@ -701,6 +701,7 @@ img {
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  touch-action: none; /* Enable custom touch handling */
 }
 
 .lightbox-image.active {

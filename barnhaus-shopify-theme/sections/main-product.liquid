@@ -567,28 +567,43 @@
         lastTap = currentTime;
       });
       
-      // Pinch to zoom
-      img.addEventListener('touchstart', function(e) {
+      // Improved pinch to zoom with better touch handling
+      const parentContainer = img.closest('.lightbox-image');
+      
+      parentContainer.addEventListener('touchstart', function(e) {
         if (e.touches.length === 2) {
           e.preventDefault();
+          e.stopPropagation();
           lastTouchDistance = getDistance(e.touches[0], e.touches[1]);
-        } else if (e.touches.length === 1) {
+          isDragging = false;
+        } else if (e.touches.length === 1 && scale > 1) {
           isDragging = true;
           lastTouchX = e.touches[0].clientX;
           lastTouchY = e.touches[0].clientY;
         }
       }, { passive: false });
       
-      img.addEventListener('touchmove', function(e) {
+      parentContainer.addEventListener('touchmove', function(e) {
         if (e.touches.length === 2) {
           // Pinch zoom
           e.preventDefault();
+          e.stopPropagation();
+          
           const currentDistance = getDistance(e.touches[0], e.touches[1]);
           
           if (lastTouchDistance > 0) {
             const scaleDelta = currentDistance / lastTouchDistance;
-            scale *= scaleDelta;
-            scale = Math.max(1, Math.min(scale, 5)); // Limit between 1x and 5x
+            const newScale = scale * scaleDelta;
+            
+            // Smooth scale change
+            scale = Math.max(1, Math.min(newScale, 5)); // Limit between 1x and 5x
+            
+            // If zooming back to 1x, reset position
+            if (scale <= 1.05) {
+              scale = 1;
+              translateX = 0;
+              translateY = 0;
+            }
           }
           
           lastTouchDistance = currentDistance;
@@ -596,6 +611,8 @@
         } else if (e.touches.length === 1 && isDragging && scale > 1) {
           // Pan image when zoomed
           e.preventDefault();
+          e.stopPropagation();
+          
           const deltaX = e.touches[0].clientX - lastTouchX;
           const deltaY = e.touches[0].clientY - lastTouchY;
           
@@ -615,12 +632,16 @@
         }
       }, { passive: false });
       
-      img.addEventListener('touchend', function(e) {
+      parentContainer.addEventListener('touchend', function(e) {
         if (e.touches.length === 0) {
           isDragging = false;
           lastTouchDistance = 0;
+        } else if (e.touches.length === 1) {
+          // One finger left, might switch to dragging
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
         }
-      });
+      }, { passive: true });
       
       // Reset zoom when lightbox closes
       const lightboxElement = img.closest('.lightbox');
