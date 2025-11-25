@@ -533,6 +533,7 @@
       let lastTouchX = 0;
       let lastTouchY = 0;
       let isDragging = false;
+      let isPinching = false;
       let lastTap = 0;
       
       // Double-tap to zoom
@@ -574,17 +575,21 @@
         if (e.touches.length === 2) {
           e.preventDefault();
           e.stopPropagation();
+          isPinching = true;
           lastTouchDistance = getDistance(e.touches[0], e.touches[1]);
           isDragging = false;
+          // Disable transitions while pinching
+          img.style.transition = 'none';
         } else if (e.touches.length === 1 && scale > 1) {
           isDragging = true;
           lastTouchX = e.touches[0].clientX;
           lastTouchY = e.touches[0].clientY;
+          img.style.transition = 'none';
         }
       }, { passive: false });
       
       parentContainer.addEventListener('touchmove', function(e) {
-        if (e.touches.length === 2) {
+        if (e.touches.length === 2 && isPinching) {
           // Pinch zoom
           e.preventDefault();
           e.stopPropagation();
@@ -607,7 +612,9 @@
           }
           
           lastTouchDistance = currentDistance;
-          updateTransform(img);
+          // Apply transform immediately without transition
+          img.style.transition = 'none';
+          img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
         } else if (e.touches.length === 1 && isDragging && scale > 1) {
           // Pan image when zoomed
           e.preventDefault();
@@ -628,30 +635,40 @@
           lastTouchX = e.touches[0].clientX;
           lastTouchY = e.touches[0].clientY;
           
-          updateTransform(img);
+          // Apply transform immediately without transition
+          img.style.transition = 'none';
+          img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
         }
       }, { passive: false });
       
       parentContainer.addEventListener('touchend', function(e) {
-        // When fingers are lifted, maintain the current scale
+        // When fingers are lifted, LOCK IN the current scale permanently
         if (e.touches.length === 0) {
+          // All fingers lifted - LOCK the zoom level
           isDragging = false;
-          const wasPinching = lastTouchDistance > 0;
+          isPinching = false;
           lastTouchDistance = 0;
           
-          // Explicitly keep the transform without transition
-          if (wasPinching) {
-            img.style.transition = 'none';
-            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-            
-            // Re-enable transitions after a brief delay
-            setTimeout(() => {
-              img.style.transition = '';
-            }, 50);
-          }
+          // Force the current transform to stick
+          img.style.transition = 'none';
+          img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+          
+          // Force a reflow to ensure the style is applied
+          img.offsetHeight;
+          
+          console.log('Zoom locked at scale:', scale); // Debug log
+          
+          // Re-enable smooth transitions only for double-tap after a delay
+          setTimeout(() => {
+            if (!isPinching && !isDragging) {
+              img.style.transition = 'transform 0.3s ease-out';
+            }
+          }, 100);
         } else if (e.touches.length === 1) {
-          // One finger left, reset pinch distance and prepare for dragging
+          // One finger left - stop pinching, prepare for dragging
+          isPinching = false;
           lastTouchDistance = 0;
+          
           if (scale > 1) {
             isDragging = true;
             lastTouchX = e.touches[0].clientX;
@@ -679,10 +696,9 @@
       }
       
       function updateTransform(element) {
+        // Force update with no transition during active gestures
+        element.style.transition = 'none';
         element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        // Only use transition when double-tapping, not during pinch/pan
-        const isPinching = lastTouchDistance > 0;
-        element.style.transition = (isDragging || isPinching) ? 'none' : 'transform 0.3s ease-out';
       }
       
       function getDistance(touch1, touch2) {
