@@ -2356,8 +2356,8 @@ document.addEventListener('DOMContentLoaded', function() {
       if (data.products && data.products.length > 0) {
         carouselTrack.innerHTML = '';
         
-        // Define the priority order for first 4 products
-        const priorityOrder = ['pedernales', 'serenity', 'whiskey', 'york-creek'];
+        // Define the priority order for first 5 products
+        const priorityOrder = ['apex', 'pedernales', 'serenity', 'whiskey', 'york-creek'];
         
         // Separate priority products and remaining products
         const priorityProducts = [];
@@ -2375,7 +2375,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Combine: priority products first (in order), then others
-        const orderedProducts = priorityProducts.filter(p => p).concat(otherProducts).slice(0, 5);
+        const orderedProducts = priorityProducts.filter(p => p).concat(otherProducts).slice(0, 6);
         
         orderedProducts.forEach(product => {
           const card = document.createElement('a');
