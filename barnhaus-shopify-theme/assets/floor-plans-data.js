@@ -37,7 +37,7 @@ const FLOOR_PLANS_DATA = {
   "medina-shores-2-bed-2-bath-mid-century-modern-steel-house-plan": { beds: 2, baths: 2, area: 1560 },
   "cove-branch-barndominium-plan-modern-farmhouse-3-bed-pdf-download": { beds: 3, baths: 2.5, area: 2323 },
   "cloud-gate-barndominium-plan-modern-farmhouse-2275-sf-pdf-download": { beds: 3, baths: 2.5, area: 2275 },
-  "the-apex-barndominium-plan-modern-farmhouse-4-bed-3-5-bath-design-blueprints": { beds: 4, baths: 3.5, area: 3800 },
+  "the-apex-modern-industrial-barndominium-plan-with-shop": { beds: 4, baths: 3.5, area: 3800 },
   
   // ========================================
   // OLD PLANS BELOW (can be deleted if not needed)
