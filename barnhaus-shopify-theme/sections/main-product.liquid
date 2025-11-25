@@ -633,13 +633,30 @@
       }, { passive: false });
       
       parentContainer.addEventListener('touchend', function(e) {
+        // When fingers are lifted, maintain the current scale
         if (e.touches.length === 0) {
           isDragging = false;
+          const wasPinching = lastTouchDistance > 0;
           lastTouchDistance = 0;
+          
+          // Explicitly keep the transform without transition
+          if (wasPinching) {
+            img.style.transition = 'none';
+            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+            
+            // Re-enable transitions after a brief delay
+            setTimeout(() => {
+              img.style.transition = '';
+            }, 50);
+          }
         } else if (e.touches.length === 1) {
-          // One finger left, might switch to dragging
-          lastTouchX = e.touches[0].clientX;
-          lastTouchY = e.touches[0].clientY;
+          // One finger left, reset pinch distance and prepare for dragging
+          lastTouchDistance = 0;
+          if (scale > 1) {
+            isDragging = true;
+            lastTouchX = e.touches[0].clientX;
+            lastTouchY = e.touches[0].clientY;
+          }
         }
       }, { passive: true });
       
@@ -663,7 +680,9 @@
       
       function updateTransform(element) {
         element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        element.style.transition = isDragging ? 'none' : 'transform 0.3s ease-out';
+        // Only use transition when double-tapping, not during pinch/pan
+        const isPinching = lastTouchDistance > 0;
+        element.style.transition = (isDragging || isPinching) ? 'none' : 'transform 0.3s ease-out';
       }
       
       function getDistance(touch1, touch2) {
