@@ -1716,15 +1716,34 @@ body .product-page {
     overflow-x: hidden;
   }
   
-  /* Always show navigation arrows on mobile */
+  /* Mobile navigation arrows - smaller and less intrusive */
   .image-nav-btn {
-    opacity: 1;
+    opacity: 0.5;
+    width: 36px;
+    height: 36px;
+    background: rgba(42, 42, 42, 0.4);
+    backdrop-filter: blur(8px);
   }
   
-  /* Larger touch targets on mobile */
-  .image-nav-btn {
-    width: 44px;
-    height: 44px;
+  /* Show arrows more when tapped */
+  .image-nav-btn:active {
+    opacity: 1;
+    background: rgba(42, 42, 42, 0.8);
+  }
+  
+  /* Position arrows at the very edge */
+  .image-nav-btn.prev {
+    left: 0.5rem;
+  }
+  
+  .image-nav-btn.next {
+    right: 0.5rem;
+  }
+  
+  /* Make arrow icons smaller */
+  .image-nav-btn svg {
+    width: 18px;
+    height: 18px;
   }
   
   .indicator {
@@ -1750,6 +1769,12 @@ body .product-page {
     height: auto;
     min-height: 350px;
     max-height: 500px;
+    touch-action: pan-x pinch-zoom; /* Better touch interaction */
+  }
+  
+  /* Show arrows on image touch/tap */
+  .product-image-main:active .image-nav-btn {
+    opacity: 0.9;
   }
   
   .product-image-main img {
