@@ -724,17 +724,31 @@ img {
   will-change: transform;
   /* FORCE transforms to stick - override any other rules */
   transition: none !important;
+  /* CRITICAL: Don't let image capture touch events on mobile */
+  pointer-events: none;
 }
 
 .lightbox-image img:active {
   cursor: grabbing;
 }
 
-/* Mobile specific - LOCK transforms */
+/* Re-enable pointer events on desktop where image needs to be clickable */
+@media (min-width: 769px) {
+  .lightbox-image img {
+    pointer-events: auto;
+  }
+}
+
+/* Mobile specific - LOCK transforms and prevent image touch capture */
 @media (max-width: 768px) {
   .lightbox-image img {
     transition: none !important;
     -webkit-transition: none !important;
+    pointer-events: none !important; /* Image doesn't capture touches on mobile */
+  }
+  
+  .lightbox-image {
+    pointer-events: auto !important; /* Container DOES capture touches */
   }
 }
 
