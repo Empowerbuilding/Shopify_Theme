@@ -706,7 +706,7 @@ img {
 
 .lightbox-image.active {
   opacity: 1;
-  pointer-events: auto;
+  pointer-events: auto !important; /* CRITICAL: Must capture touches when active */
 }
 
 .lightbox-image img {
@@ -747,8 +747,9 @@ img {
     pointer-events: none !important; /* Image doesn't capture touches on mobile */
   }
   
-  .lightbox-image {
-    pointer-events: auto !important; /* Container DOES capture touches */
+  .lightbox-image.active {
+    pointer-events: auto !important; /* Container MUST capture touches when active */
+    touch-action: none !important; /* Allow custom pinch/zoom handling */
   }
 }
 
