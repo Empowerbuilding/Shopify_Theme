@@ -1051,37 +1051,33 @@ img {
   object-position: center;
 }
 
-/* Image Navigation Arrows - Minimal White Design */
+/* Image Navigation Arrows - Pure White Arrow Only */
 .image-nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
+  background: transparent;
   border: none;
-  border-radius: 4px;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1C1C1C;
+  color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
   transition: all 0.2s ease;
   opacity: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 0;
 }
 
 .product-image-main:hover .image-nav-btn {
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .image-nav-btn:hover {
-  background: rgba(255, 255, 255, 1);
-  opacity: 1;
-  transform: translateY(-50%) scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.15);
 }
 
 .image-nav-btn.prev {
@@ -1093,9 +1089,10 @@ img {
 }
 
 .image-nav-btn svg {
-  width: 20px;
-  height: 20px;
-  stroke-width: 2.5;
+  width: 28px;
+  height: 28px;
+  stroke-width: 3;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 /* Image Indicators (Dots) */
@@ -1787,22 +1784,21 @@ body .product-page {
     overflow-x: hidden;
   }
   
-  /* Mobile navigation arrows - minimal white design */
+  /* Mobile navigation arrows - pure white arrow only */
   .image-nav-btn {
-    opacity: 0.6;
-    width: 36px;
-    height: 36px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(4px);
-    color: #1C1C1C;
+    opacity: 0.7;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.95);
     border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
   
   /* Show arrows more when tapped */
   .image-nav-btn:active {
     opacity: 1;
-    background: rgba(255, 255, 255, 1);
+    color: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
   }
   
   /* Position arrows at the very edge */
@@ -1814,11 +1810,12 @@ body .product-page {
     right: 0.5rem;
   }
   
-  /* Make arrow icons smaller */
+  /* Arrow icons with shadow for visibility */
   .image-nav-btn svg {
-    width: 18px;
-    height: 18px;
-    stroke-width: 2.5;
+    width: 24px;
+    height: 24px;
+    stroke-width: 3;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
   }
   
   .indicator {
