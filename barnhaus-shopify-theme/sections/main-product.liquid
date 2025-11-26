@@ -644,26 +644,48 @@
       parentContainer.addEventListener('touchend', function(e) {
         // When fingers are lifted, LOCK IN the current scale permanently
         if (e.touches.length === 0) {
-          // All fingers lifted - LOCK the zoom level
+          // All fingers lifted - ABSOLUTELY LOCK the zoom level
           isDragging = false;
           isPinching = false;
           lastTouchDistance = 0;
           
-          // Force the current transform to stick
-          img.style.transition = 'none';
-          img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+          // Store the final transform values
+          const finalTransform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
           
-          // Force a reflow to ensure the style is applied
+          // Apply with extreme prejudice
+          img.style.transition = 'none !important';
+          img.style.webkitTransition = 'none !important';
+          img.style.transform = finalTransform;
+          img.style.webkitTransform = finalTransform;
+          
+          // Force multiple reflows
           img.offsetHeight;
+          void img.offsetWidth;
           
-          console.log('Zoom locked at scale:', scale); // Debug log
+          console.log('🔒 ZOOM LOCKED at scale:', scale, 'Transform:', finalTransform);
           
-          // Re-enable smooth transitions only for double-tap after a delay
+          // Set attribute as backup
+          img.setAttribute('data-locked-transform', finalTransform);
+          img.setAttribute('data-locked-scale', scale);
+          
+          // Keep re-applying the transform for 500ms to fight any CSS
+          let lockCount = 0;
+          const lockInterval = setInterval(() => {
+            img.style.transition = 'none !important';
+            img.style.transform = finalTransform;
+            lockCount++;
+            if (lockCount >= 10) {
+              clearInterval(lockInterval);
+              console.log('✅ Zoom lock complete after', lockCount, 'applications');
+            }
+          }, 50);
+          
+          // After 1 second, allow smooth transitions only for double-tap
           setTimeout(() => {
             if (!isPinching && !isDragging) {
               img.style.transition = 'transform 0.3s ease-out';
             }
-          }, 100);
+          }, 1000);
         } else if (e.touches.length === 1) {
           // One finger left - stop pinching, prepare for dragging
           isPinching = false;
@@ -706,6 +728,32 @@
         const dy = touch1.clientY - touch2.clientY;
         return Math.sqrt(dx * dx + dy * dy);
       }
+      
+      // FAILSAFE: Monitor for unwanted transform resets
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+            // If we have a locked transform and we're not actively pinching/dragging
+            const lockedTransform = img.getAttribute('data-locked-transform');
+            const lockedScale = parseFloat(img.getAttribute('data-locked-scale'));
+            
+            if (lockedTransform && lockedScale > 1 && !isPinching && !isDragging) {
+              const currentTransform = img.style.transform;
+              
+              // If transform got reset to something else, force it back
+              if (currentTransform !== lockedTransform && currentTransform.includes('scale(1)')) {
+                console.warn('⚠️ Transform was reset! Re-applying locked transform');
+                img.style.transition = 'none !important';
+                img.style.transform = lockedTransform;
+                scale = lockedScale;
+              }
+            }
+          }
+        });
+      });
+      
+      // Start observing
+      observer.observe(img, { attributes: true, attributeFilter: ['style'] });
     });
   });
   

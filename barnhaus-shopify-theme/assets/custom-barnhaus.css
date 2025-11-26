@@ -722,10 +722,20 @@ img {
   cursor: grab;
   transform-origin: center center;
   will-change: transform;
+  /* FORCE transforms to stick - override any other rules */
+  transition: none !important;
 }
 
 .lightbox-image img:active {
   cursor: grabbing;
+}
+
+/* Mobile specific - LOCK transforms */
+@media (max-width: 768px) {
+  .lightbox-image img {
+    transition: none !important;
+    -webkit-transition: none !important;
+  }
 }
 
 .lightbox-close {
