@@ -168,12 +168,10 @@
         {% endif %}
         
         <div class="product-price">
-          {% if product.compare_at_price > product.price %}
-            <span style="text-decoration: line-through; opacity: 0.6; font-size: 1.25rem; margin-right: 0.5rem;">
-              {{ product.compare_at_price | money }}
-            </span>
-          {% endif %}
-          <span id="product-price">{{ product.price | money }}</span>
+          <span id="product-compare-price" style="text-decoration: line-through; opacity: 0.6; font-size: 1.25rem; margin-right: 0.5rem; {% unless product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}display: none;{% endunless %}">
+            {{ product.selected_or_first_available_variant.compare_at_price | money }}
+          </span>
+          <span id="product-price">{{ product.selected_or_first_available_variant.price | money }}</span>
         </div>
         
         <!-- Product Form -->
@@ -785,7 +783,18 @@
       if (priceElement) {
         priceElement.textContent = formatMoney(variant.price);
       }
-      
+
+      // Update compare-at price (show only if variant has a compare_at_price)
+      const comparePriceElement = document.getElementById('product-compare-price');
+      if (comparePriceElement) {
+        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+          comparePriceElement.textContent = formatMoney(variant.compare_at_price);
+          comparePriceElement.style.display = 'inline';
+        } else {
+          comparePriceElement.style.display = 'none';
+        }
+      }
+
       // Update availability
       const button = document.getElementById('add-to-cart-button');
       if (variant.available) {
