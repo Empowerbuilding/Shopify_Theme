@@ -757,28 +757,33 @@
     });
   });
   
+  // Format price in cents to currency string
+  function formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2);
+  }
+
   // Update variant based on selected options
   function updateVariant() {
     const selectedOptions = [];
     document.querySelectorAll('.form-select').forEach(function(select) {
       selectedOptions.push(select.value);
     });
-    
+
     // Find matching variant
     const variant = productVariants.find(function(v) {
       return v.options.every(function(option, index) {
         return option === selectedOptions[index];
       });
     });
-    
+
     if (variant) {
       // Update variant ID
       document.getElementById('product-variant-id').value = variant.id;
-      
+
       // Update price
       const priceElement = document.getElementById('product-price');
       if (priceElement) {
-        priceElement.textContent = Shopify.formatMoney(variant.price, theme.moneyFormat);
+        priceElement.textContent = formatMoney(variant.price);
       }
       
       // Update availability
