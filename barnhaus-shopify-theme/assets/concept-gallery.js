@@ -276,7 +276,6 @@ function createConceptCard(concept, index) {
 
       <div class="concept-content">
         <h3 class="concept-name">${concept.name || 'Untitled Concept'}</h3>
-        ${concept.style ? `<span class="concept-style-badge">${styleDisplay}</span>` : ''}
 
         <div class="concept-specs">
           ${concept.beds ? `
@@ -651,6 +650,7 @@ function setupEventListeners() {
   // Keyboard support
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
+      closeConceptImageZoom();
       closeEmailModal();
       closeDetailModal();
     }
@@ -666,6 +666,202 @@ function setupEventListeners() {
 }
 
 // ============================================
+// Image Zoom Functionality
+// ============================================
+
+let currentZoomImageUrl = '';
+let currentZoomImageTitle = '';
+
+/**
+ * Open image zoom modal for current concept
+ */
+function openConceptImageZoom() {
+  const detailImage = document.getElementById('detail-image');
+  const detailTitle = document.getElementById('detail-title');
+
+  if (!detailImage || !detailImage.src) return;
+
+  currentZoomImageUrl = detailImage.src;
+  currentZoomImageTitle = detailTitle ? detailTitle.textContent : 'Floor Plan';
+
+  const modal = document.getElementById('concept-zoom-modal');
+  const zoomImage = document.getElementById('concept-zoom-image');
+
+  if (modal && zoomImage) {
+    zoomImage.src = currentZoomImageUrl;
+    zoomImage.alt = currentZoomImageTitle;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Initialize zoom functionality
+    initializeConceptImageZoom(zoomImage);
+  }
+}
+
+/**
+ * Close image zoom modal
+ */
+function closeConceptImageZoom() {
+  const modal = document.getElementById('concept-zoom-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+
+    // Reset image transform
+    const zoomImage = document.getElementById('concept-zoom-image');
+    if (zoomImage) {
+      zoomImage.style.transform = '';
+    }
+  }
+}
+
+/**
+ * Initialize image zoom and pan functionality
+ */
+function initializeConceptImageZoom(img) {
+  let scale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let initialDistance = 0;
+  let lastScale = 1;
+
+  // Reset on init
+  scale = 1;
+  translateX = 0;
+  translateY = 0;
+  img.style.transform = '';
+  img.style.cursor = 'grab';
+
+  // Remove old listeners by cloning
+  const newImg = img.cloneNode(true);
+  img.parentNode.replaceChild(newImg, img);
+  img = newImg;
+
+  // Touch events for mobile pinch and pan
+  img.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      initialDistance = getDistance(e.touches[0], e.touches[1]);
+      lastScale = scale;
+    } else if (e.touches.length === 1) {
+      isDragging = true;
+      startX = e.touches[0].clientX - translateX;
+      startY = e.touches[0].clientY - translateY;
+    }
+  }, { passive: false });
+
+  img.addEventListener('touchmove', function(e) {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const distance = getDistance(e.touches[0], e.touches[1]);
+      const scaleChange = distance / initialDistance;
+      scale = Math.max(1, Math.min(5, lastScale * scaleChange));
+      updateTransform();
+    } else if (e.touches.length === 1 && isDragging && scale > 1) {
+      e.preventDefault();
+      translateX = e.touches[0].clientX - startX;
+      translateY = e.touches[0].clientY - startY;
+      updateTransform();
+    }
+  }, { passive: false });
+
+  img.addEventListener('touchend', function(e) {
+    if (e.touches.length < 2) {
+      initialDistance = 0;
+    }
+    if (e.touches.length === 0) {
+      isDragging = false;
+    }
+  });
+
+  // Mouse events for desktop
+  img.addEventListener('mousedown', function(e) {
+    if (scale > 1) {
+      isDragging = true;
+      startX = e.clientX - translateX;
+      startY = e.clientY - translateY;
+      img.style.cursor = 'grabbing';
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    translateX = e.clientX - startX;
+    translateY = e.clientY - startY;
+    updateTransform();
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (isDragging) {
+      isDragging = false;
+      img.style.cursor = scale > 1 ? 'grab' : 'default';
+    }
+  });
+
+  // Mouse wheel zoom
+  img.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    const oldScale = scale;
+    scale = Math.max(1, Math.min(5, scale * delta));
+
+    if (scale !== oldScale) {
+      const rect = img.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left - rect.width / 2;
+      const offsetY = e.clientY - rect.top - rect.height / 2;
+
+      translateX -= offsetX * (scale / oldScale - 1);
+      translateY -= offsetY * (scale / oldScale - 1);
+    }
+
+    if (scale === 1) {
+      translateX = 0;
+      translateY = 0;
+      img.style.cursor = 'grab';
+    } else {
+      img.style.cursor = 'grab';
+    }
+
+    updateTransform();
+  }, { passive: false });
+
+  // Double tap/click to zoom
+  let lastTap = 0;
+  img.addEventListener('click', function(e) {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    if (tapLength < 300 && tapLength > 0) {
+      // Double tap - toggle zoom
+      if (scale > 1) {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+      } else {
+        scale = 2.5;
+      }
+      updateTransform();
+      e.preventDefault();
+    }
+    lastTap = currentTime;
+  });
+
+  function updateTransform() {
+    img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    img.style.transition = isDragging ? 'none' : 'transform 0.1s ease-out';
+  }
+
+  function getDistance(touch1, touch2) {
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+}
+
+// ============================================
 // Make functions globally accessible
 // ============================================
 window.toggleVote = toggleVote;
@@ -675,3 +871,5 @@ window.closeEmailModal = closeEmailModal;
 window.submitEmail = submitEmail;
 window.skipEmail = skipEmail;
 window.toggleDetailVote = toggleDetailVote;
+window.openConceptImageZoom = openConceptImageZoom;
+window.closeConceptImageZoom = closeConceptImageZoom;
