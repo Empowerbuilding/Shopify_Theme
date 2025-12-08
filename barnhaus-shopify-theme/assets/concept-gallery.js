@@ -97,8 +97,45 @@ function getStoredEmail() {
 // Data Loading
 // ============================================
 
+// Plans currently listed for sale in Shopify (exclude from concepts)
+const SHOPIFY_LISTED_PLANS = [
+  'york creek',
+  'timber trails',
+  'whiskey',
+  'vatican',
+  'spring creek',
+  'pedernales',
+  'the orlando',
+  'the nueces',
+  'evergreen',
+  'the bungalow',
+  'texas peach',
+  'serenity',
+  'rhone river',
+  'mountain breeze',
+  'the manhattan',
+  'medina shores',
+  'cove branch',
+  'cloud gate',
+  'the apex'
+];
+
 /**
- * Load concepts from Supabase
+ * Check if a floor plan is already listed in Shopify
+ */
+function isListedInShopify(planTitle) {
+  if (!planTitle) return false;
+  const normalizedTitle = planTitle.toLowerCase().trim();
+
+  return SHOPIFY_LISTED_PLANS.some(listedPlan => {
+    return normalizedTitle === listedPlan ||
+           normalizedTitle === 'the ' + listedPlan ||
+           normalizedTitle.replace('the ', '') === listedPlan.replace('the ', '');
+  });
+}
+
+/**
+ * Load concepts from Supabase (website_floor_plans minus Shopify products)
  */
 async function loadConcepts() {
   const grid = document.getElementById('concepts-grid');
@@ -109,20 +146,40 @@ async function loadConcepts() {
   }
 
   try {
-    // Fetch concepts
-    const { data: conceptsData, error: conceptsError } = await supabaseClient
-      .from('concept_voting')
+    // Fetch all floor plans from website_floor_plans
+    const { data: plansData, error: plansError } = await supabaseClient
+      .from('website_floor_plans')
       .select('*')
-      .in('status', ['active', 'coming_soon'])
-      .order('vote_count', { ascending: false });
+      .order('display_order', { ascending: true });
 
-    if (conceptsError) {
-      console.error('Error fetching concepts:', conceptsError);
+    if (plansError) {
+      console.error('Error fetching floor plans:', plansError);
       grid.innerHTML = '<div class="concepts-empty">Unable to load concepts. Please try again later.</div>';
       return;
     }
 
-    concepts = conceptsData || [];
+    // Filter out plans that are already in Shopify
+    const filteredPlans = (plansData || []).filter(plan => {
+      return !isListedInShopify(plan.title);
+    });
+
+    // Map website_floor_plans fields to concept format
+    concepts = filteredPlans.map(plan => ({
+      id: plan.id,
+      name: plan.title || plan.name,
+      description: plan.description || 'A custom steel building floor plan designed for modern living with strength and style. Vote to help us prioritize developing this concept!',
+      image_url: plan.image_url,
+      beds: plan.beds,
+      baths: plan.baths,
+      sqft: plan.area || plan.sqft,
+      style: plan.style || 'barndominium',
+      status: 'active',
+      vote_count: plan.vote_count || 0,
+      created_at: plan.created_at,
+      features: plan.features || []
+    }));
+
+    console.log('Concepts loaded:', concepts.length, '(excluded', (plansData || []).length - concepts.length, 'Shopify products)');
 
     // Fetch user's votes
     const visitorId = getVisitorId();
