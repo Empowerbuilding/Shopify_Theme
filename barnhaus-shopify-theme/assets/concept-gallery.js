@@ -261,7 +261,7 @@ function createConceptCard(concept, index) {
         <span>${voteCount}</span>
       </button>
 
-      <div class="concept-image-wrapper">
+      <div class="concept-image-wrapper" onclick="openDetailModal('${concept.id}')">
         <img
           src="${concept.image_url || 'https://via.placeholder.com/600x450?text=Concept+Image'}"
           alt="${concept.name || 'Floor Plan Concept'}"
@@ -270,7 +270,7 @@ function createConceptCard(concept, index) {
           onerror="this.src='https://via.placeholder.com/600x450?text=Concept+Image'"
         >
         <div class="concept-overlay">
-          <button class="view-details-btn" onclick="openDetailModal('${concept.id}')">View Details</button>
+          <button class="view-details-btn">View Details</button>
         </div>
       </div>
 
