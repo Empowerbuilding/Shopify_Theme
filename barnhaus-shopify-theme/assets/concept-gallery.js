@@ -274,36 +274,23 @@ function createConceptCard(concept, index) {
         </div>
       </div>
 
+      <div class="concept-stats">
+        <div class="concept-stat-item">
+          <span class="concept-stat-value">${concept.beds || '-'}</span>
+          <span class="concept-stat-label">Beds</span>
+        </div>
+        <div class="concept-stat-item">
+          <span class="concept-stat-value">${concept.baths || '-'}</span>
+          <span class="concept-stat-label">Baths</span>
+        </div>
+        <div class="concept-stat-item">
+          <span class="concept-stat-value">${concept.sqft ? concept.sqft.toLocaleString() : '-'}</span>
+          <span class="concept-stat-label">Sq Ft</span>
+        </div>
+      </div>
+
       <div class="concept-content">
         <h3 class="concept-name">${concept.name || 'Untitled Concept'}</h3>
-
-        <div class="concept-specs">
-          ${concept.beds ? `
-            <div class="spec-item">
-              <span class="spec-icon">&#x1F6CF;</span>
-              <span class="spec-value">${concept.beds}</span>
-              <span class="spec-label">Beds</span>
-            </div>
-          ` : ''}
-          ${concept.baths ? `
-            <div class="spec-item">
-              <span class="spec-icon">&#x1F6BF;</span>
-              <span class="spec-value">${concept.baths}</span>
-              <span class="spec-label">Baths</span>
-            </div>
-          ` : ''}
-          ${concept.sqft ? `
-            <div class="spec-item">
-              <span class="spec-icon">&#x1F4D0;</span>
-              <span class="spec-value">${concept.sqft.toLocaleString()}</span>
-              <span class="spec-label">SF</span>
-            </div>
-          ` : ''}
-          <div class="spec-item vote-count-spec">
-            <span class="spec-value">${voteCount}</span>
-            <span class="spec-label">Votes</span>
-          </div>
-        </div>
       </div>
     </div>
   `;
