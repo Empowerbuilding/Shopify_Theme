@@ -13,11 +13,13 @@
     bottom: 0;
     z-index: 9999;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease;
   }
-  
+
   .plan-detail-modal.active {
     opacity: 1;
+    pointer-events: auto;
   }
   
   .plan-modal-overlay {
@@ -281,11 +283,13 @@
     bottom: 0;
     z-index: 10000;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease;
   }
-  
+
   .image-zoom-modal.active {
     opacity: 1;
+    pointer-events: auto;
   }
   
   .zoom-modal-overlay {
