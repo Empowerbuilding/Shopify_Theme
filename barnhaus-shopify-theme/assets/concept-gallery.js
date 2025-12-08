@@ -464,7 +464,6 @@ function updateVoteUI(conceptId, isVoted) {
   // Update detail modal if open and showing this concept
   if (currentConceptId === conceptId) {
     const detailVoteBtn = document.getElementById('detail-vote-btn');
-    const detailVoteCount = document.getElementById('detail-vote-count');
     const detailTotalVotes = document.getElementById('detail-total-votes');
     const concept = concepts.find(c => c.id === conceptId);
 
@@ -472,11 +471,8 @@ function updateVoteUI(conceptId, isVoted) {
       detailVoteBtn.classList.toggle('voted', isVoted);
       const voteText = detailVoteBtn.querySelector('.vote-text');
       if (voteText) {
-        voteText.textContent = isVoted ? 'Voted' : 'Vote';
+        voteText.textContent = isVoted ? 'Voted!' : 'Vote for this concept';
       }
-    }
-    if (detailVoteCount && concept) {
-      detailVoteCount.textContent = concept.vote_count || 0;
     }
     if (detailTotalVotes && concept) {
       detailTotalVotes.textContent = concept.vote_count || 0;
@@ -570,12 +566,10 @@ function openDetailModal(conceptId) {
   document.getElementById('detail-image').src = concept.image_url || 'https://via.placeholder.com/800x500?text=Concept+Image';
   document.getElementById('detail-image').alt = concept.name || 'Floor Plan Concept';
   document.getElementById('detail-title').textContent = concept.name || 'Untitled Concept';
-  document.getElementById('detail-style').textContent = formatStyleName(concept.style);
   document.getElementById('detail-description').textContent = concept.description || 'This is an upcoming floor plan concept. Vote to help us decide if we should develop it into a full plan!';
   document.getElementById('detail-beds').textContent = concept.beds || '-';
   document.getElementById('detail-baths').textContent = concept.baths || '-';
   document.getElementById('detail-sqft').textContent = concept.sqft ? concept.sqft.toLocaleString() : '-';
-  document.getElementById('detail-vote-count').textContent = concept.vote_count || 0;
   document.getElementById('detail-total-votes').textContent = concept.vote_count || 0;
 
   // Update vote button state
@@ -584,7 +578,7 @@ function openDetailModal(conceptId) {
     voteBtn.classList.toggle('voted', isVoted);
     const voteText = voteBtn.querySelector('.vote-text');
     if (voteText) {
-      voteText.textContent = isVoted ? 'Voted' : 'Vote';
+      voteText.textContent = isVoted ? 'Voted!' : 'Vote for this concept';
     }
   }
 
