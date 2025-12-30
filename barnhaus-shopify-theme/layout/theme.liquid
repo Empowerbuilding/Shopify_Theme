@@ -332,6 +332,23 @@
       return '$' + (cents / 100).toFixed(2);
     }
   </script>
+
+  <!-- CRM Tracking -->
+  <script src="https://crm.empowerbuilding.ai/tracking.js" data-site="barnhaus-store"></script>
+
+  <!-- Store Visitor ID in Cart -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var visitorId = window.CRMTracking?.getVisitorId();
+      if (visitorId) {
+        fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ attributes: { anonymous_id: visitorId } })
+        });
+      }
+    });
+  </script>
 </body>
 </html>
 
