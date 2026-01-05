@@ -92,6 +92,31 @@
         </form>
 
         <script>
+          // Save fbclid to localStorage if present in URL
+          (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fbclid = urlParams.get('fbclid');
+            if (fbclid) {
+              localStorage.setItem('fbclid', fbclid);
+            }
+          })();
+
+          // Helper functions for Facebook tracking
+          const getFbclid = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fbclid = urlParams.get('fbclid');
+            if (fbclid) {
+              localStorage.setItem('fbclid', fbclid);
+              return fbclid;
+            }
+            return localStorage.getItem('fbclid') || null;
+          };
+
+          const getFbp = () => {
+            const match = document.cookie.match(/_fbp=([^;]+)/);
+            return match ? match[1] : null;
+          };
+
           document.getElementById('crm-contact-form').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -114,7 +139,10 @@
               phone: form.querySelector('[name="phone"]').value,
               subject: form.querySelector('[name="subject"]').value,
               message: form.querySelector('[name="message"]').value,
-              anonymous_id: window.CRMTracking?.getVisitorId() || null
+              anonymous_id: window.CRMTracking?.getVisitorId() || null,
+              fbclid: getFbclid(),
+              fbp: getFbp(),
+              client_user_agent: navigator.userAgent
             };
 
             try {
