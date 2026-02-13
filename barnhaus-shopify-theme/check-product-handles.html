@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Handle Checker - Barnhaus Steel Builders</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1C1C1C;
+      color: #D1D5DB;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .description {
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.125rem;
+    }
+    
+    .products-table {
+      width: 100%;
+      background: #2A2A2A;
+      border: 1px solid #3A3A3A;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 2rem;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #3A3A3A;
+    }
+    
+    th {
+      background: #252525;
+      color: #FFD700;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    
+    tr:hover {
+      background: rgba(184, 134, 11, 0.1);
+    }
+    
+    .handle-cell {
+      font-family: 'Courier New', monospace;
+      color: #B8860B;
+      font-weight: 600;
+    }
+    
+    .copy-btn {
+      background: #B8860B;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+    
+    .copy-btn:hover {
+      background: #FFD700;
+      transform: translateY(-2px);
+    }
+    
+    .status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .status-found {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22C55E;
+    }
+    
+    .status-missing {
+      background: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+    }
+    
+    .highlight {
+      background: rgba(255, 215, 0, 0.15);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { background: rgba(255, 215, 0, 0.15); }
+      50% { background: rgba(255, 215, 0, 0.3); }
+    }
+    
+    .error {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #EF4444;
+      color: #EF4444;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+    
+    .search-box {
+      margin: 1.5rem 0;
+      padding: 0.75rem;
+      width: 100%;
+      background: #2A2A2A;
+      border: 1px solid #3A3A3A;
+      border-radius: 4px;
+      color: #D1D5DB;
+      font-size: 1rem;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: #B8860B;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Product Handle Checker</h1>
+  
+  <div class="description">
+    <p>This tool shows all your Shopify products and their handles. Use it to find the exact handle for "The Apex" or any other product.</p>
+    <p><strong>Instructions:</strong> Look for "apex" in the list below and copy its handle to add to floor-plans-data.js</p>
+  </div>
+  
+  <input type="text" class="search-box" id="searchBox" placeholder="Search for a product name (e.g., 'apex')...">
+  
+  <div class="products-table" id="resultsContainer">
+    <div class="loading">Loading products from Shopify...</div>
+  </div>
+
+  <script src="floor-plans-data.js"></script>
+  <script>
+    const searchBox = document.getElementById('searchBox');
+    const resultsContainer = document.getElementById('resultsContainer');
+    
+    let allProducts = [];
+    
+    async function loadAllProducts() {
+      try {
+        const response = await fetch('/collections/floor-plans/products.json');
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        allProducts = data.products || [];
+        
+        if (allProducts.length === 0) {
+          resultsContainer.innerHTML = '<div class="error">No products found in the "floor-plans" collection.</div>';
+          return;
+        }
+        
+        displayProducts(allProducts);
+        
+      } catch (error) {
+        console.error('Error loading products:', error);
+        resultsContainer.innerHTML = `<div class="error">Error loading products: ${error.message}</div>`;
+      }
+    }
+    
+    function displayProducts(products) {
+      const searchTerm = searchBox.value.toLowerCase().trim();
+      
+      let filteredProducts = products;
+      if (searchTerm) {
+        filteredProducts = products.filter(p => 
+          p.title.toLowerCase().includes(searchTerm) || 
+          p.handle.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      if (filteredProducts.length === 0) {
+        resultsContainer.innerHTML = '<div class="loading">No products match your search.</div>';
+        return;
+      }
+      
+      const tableHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Product Title</th>
+              <th>Product Handle</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredProducts.map(product => {
+              const specs = window.FloorPlansData ? window.FloorPlansData.getSpecs(product.handle) : null;
+              const hasSpecs = specs !== null;
+              const isApex = product.title.toLowerCase().includes('apex');
+              
+              return `
+                <tr ${isApex ? 'class="highlight"' : ''}>
+                  <td>${product.title}</td>
+                  <td class="handle-cell">${product.handle}</td>
+                  <td>
+                    <span class="status ${hasSpecs ? 'status-found' : 'status-missing'}">
+                      ${hasSpecs ? '✓ In Data File' : '✗ Missing'}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="copy-btn" onclick="copyHandle('${product.handle}')">
+                      Copy Handle
+                    </button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+      
+      resultsContainer.innerHTML = tableHTML;
+    }
+    
+    function copyHandle(handle) {
+      navigator.clipboard.writeText(handle).then(() => {
+        alert(`Copied to clipboard: ${handle}\n\nNow add this to floor-plans-data.js with the correct specs!`);
+      }).catch(err => {
+        prompt('Copy this handle:', handle);
+      });
+    }
+    
+    // Search functionality
+    searchBox.addEventListener('input', () => {
+      displayProducts(allProducts);
+    });
+    
+    // Load products on page load
+    loadAllProducts();
+  </script>
+</body>
+</html>
+
