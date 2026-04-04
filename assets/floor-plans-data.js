@@ -84,7 +84,7 @@ const FLOOR_PLANS_DATA = {
   "the-revelry": { beds: 3, baths: 4, area: 4195 },
   "sky-tower": { beds: 3, baths: 2.5, area: 1750 },
   "generation": { beds: 6, baths: 5.5, area: 4600 },
-  "the-generation-modern-steel-barndominium-plan": { beds: 4, baths: 4, area: 4117 },
+  "the-generation-modern-steel-barndominium-plan": { beds: 5, baths: 5, area: 4117 },
   "spring-mountain": { beds: 4, baths: 4.5, area: 4500 },
   "industry": { beds: 4, baths: 3, area: 2300 },
   "cedar": { beds: 2, baths: 1.5, area: 1500 },
