@@ -1,0 +1,72 @@
+{% comment %}
+  Legal Disclaimer Snippet
+  Displays engineering review requirement for building plans
+  Usage: {% render 'legal-disclaimer' %}
+{% endcomment %}
+
+<div class="legal-disclaimer">
+  <div class="disclaimer-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+  </div>
+  <p class="disclaimer-text">
+    <strong>Important:</strong> All building plans must be reviewed and approved by a licensed local engineer to ensure compliance with your area's building codes and regulations before construction begins.
+  </p>
+</div>
+
+<style>
+/* Legal Disclaimer Styling */
+.legal-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(184, 134, 11, 0.1);
+  border: 1px solid rgba(184, 134, 11, 0.3);
+  border-radius: 6px;
+  margin: 1.5rem 0;
+}
+
+.disclaimer-icon {
+  flex-shrink: 0;
+  color: #B8860B;
+  margin-top: 0.125rem;
+}
+
+.disclaimer-icon svg {
+  display: block;
+}
+
+.disclaimer-text {
+  color: #D1D5DB;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.disclaimer-text strong {
+  color: #FFD700;
+  font-weight: 600;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .legal-disclaimer {
+    padding: 0.875rem 1rem;
+    margin: 1rem 0;
+  }
+  
+  .disclaimer-text {
+    font-size: 0.75rem;
+  }
+  
+  .disclaimer-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+</style>
+

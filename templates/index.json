@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "homepage": {
+      "type": "store-homepage",
+      "settings": {}
+    }
+  },
+  "order": ["homepage"]
+}

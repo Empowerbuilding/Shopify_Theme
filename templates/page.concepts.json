@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "concept-gallery",
+      "settings": {
+        "badge_label": "VOTE NOW",
+        "title": "Shape Our Next Designs",
+        "subtitle": "Vote for the floor plan concepts you'd love to see become reality. Your voice helps us decide what to build next!"
+      }
+    }
+  },
+  "order": ["main"]
+}

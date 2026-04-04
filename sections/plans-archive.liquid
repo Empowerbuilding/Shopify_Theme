@@ -1,0 +1,510 @@
+{% comment %}
+  Plans Archive Section - Unified Card Styling
+  Matches the featured-collection card design exactly
+  Fetches products from Shopify collections
+{% endcomment %}
+
+<style>
+/* Clean Product Grid Styles - Matches Home Page */
+
+.plans-archive-section {
+  padding: 4rem 0;
+  background: #1C1C1C;
+}
+
+.plans-archive-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.plans-archive-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.plans-archive-subtitle {
+  color: #D1D5DB;
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* IMPROVED PRODUCT GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+  align-items: stretch;
+}
+
+/* CONSISTENT PRODUCT CARDS - MATCHES HOME PAGE CAROUSEL */
+.product-card {
+  background: #2A2A2A;
+  border: 1px solid #3A3A3A;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+}
+
+.product-card:hover {
+  border-color: #B8860B;
+  box-shadow: 0 8px 25px rgba(184, 134, 11, 0.3);
+  transform: translateY(-5px);
+}
+
+/* PRODUCT IMAGE WRAPPER */
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* FIXED IMAGE SIZING - MATCHES HOME PAGE */
+.product-image {
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  background: #1C1C1C;
+  display: block;
+}
+
+/* PRODUCT STATS BELOW IMAGE */
+.product-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #252525;
+  padding: 1rem 0.5rem;
+  gap: 0;
+  border-top: 2px solid rgba(184, 134, 11, 0.3);
+  border-bottom: 1px solid #333333;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  color: #FFFFFF;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0 0.25rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item:last-child {
+  border-right: none;
+}
+
+.stat-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #FFD700;
+  letter-spacing: 0.5px;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* CONTENT AREA WITH FLEX - MATCHES HOME PAGE */
+.product-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* TITLE - MATCHES HOME PAGE */
+.product-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #B8860B 0%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6rem;
+  max-height: 2.6rem;
+}
+
+/* HIDE SPECS AND DESCRIPTION (LIKE HOME PAGE) */
+.product-specs {
+  display: none;
+}
+
+.product-description {
+  display: none;
+}
+
+/* PRICE - MATCHES HOME PAGE */
+.product-price {
+  color: #B8860B;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* HIDE BUTTON (WHOLE CARD IS CLICKABLE) */
+.product-buttons {
+  display: none;
+}
+
+/* LOADING STATE */
+.loading-message {
+  text-align: center;
+  color: #D1D5DB;
+  padding: 4rem 2rem;
+  grid-column: 1 / -1;
+  font-size: 1.125rem;
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+.product-card:nth-child(1) { animation-delay: 0.05s; }
+.product-card:nth-child(2) { animation-delay: 0.1s; }
+.product-card:nth-child(3) { animation-delay: 0.15s; }
+.product-card:nth-child(4) { animation-delay: 0.2s; }
+.product-card:nth-child(5) { animation-delay: 0.25s; }
+.product-card:nth-child(6) { animation-delay: 0.3s; }
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* MOBILE OPTIMIZED LAYOUT - MATCHES HOME PAGE */
+@media (max-width: 768px) {
+  .plans-archive-section {
+    padding: 2rem 0 1.5rem 0;
+    margin-top: 0;
+  }
+  
+  .plans-archive-header {
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  
+  .plans-archive-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .plans-archive-subtitle {
+    font-size: 0.95rem;
+  }
+  
+  /* 2-COLUMN MOBILE GRID */
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+    margin: 0;
+  }
+  
+  /* MOBILE CARD - COMPACT STYLE */
+  .product-card {
+    min-height: auto;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 8px;
+  }
+  
+  /* MOBILE IMAGE - COMPACT */
+  .product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  /* MOBILE STATS */
+  .product-stats {
+    padding: 0.75rem 0.25rem;
+    gap: 0;
+  }
+  
+  .stat-item {
+    font-size: 0.625rem;
+    gap: 0.25rem;
+    padding: 0 0.125rem;
+  }
+  
+  .stat-value {
+    font-size: 0.9375rem;
+  }
+  
+  .stat-label {
+    font-size: 0.625rem;
+  }
+  
+  /* CONTENT AREA - COMPACT PADDING */
+  .product-content {
+    padding: 0.875rem;
+  }
+  
+  /* MOBILE TITLE - BIGGER */
+  .product-title {
+    font-size: 0.95rem !important;
+    min-height: 2.6rem;
+    max-height: 2.6rem;
+    -webkit-line-clamp: 2;
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  
+  /* MOBILE SPECS - HIDE OR COMPACT */
+  .product-specs {
+    font-size: 0.75rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* MOBILE DESCRIPTION - HIDE */
+  .product-description {
+    display: none;
+  }
+  
+  /* MOBILE PRICE & BUTTON GROUP */
+  .product-price {
+    font-size: 0.75rem !important;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+  }
+  
+  /* MOBILE BUTTON */
+  .product-buttons {
+    margin-top: auto;
+  }
+  
+  .product-buttons .btn {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+}
+
+/* EXTRA SMALL MOBILE */
+@media (max-width: 480px) {
+  .plans-archive-section {
+    padding-top: 1.5rem;
+  }
+  
+  .product-grid {
+    gap: 0.375rem;
+    padding: 0 0.375rem;
+  }
+  
+  .product-image {
+    height: 180px;
+  }
+  
+  .product-title {
+    font-size: 0.85rem !important;
+    line-height: 1.3;
+    margin-bottom: 0.625rem;
+    min-height: 2.2rem;
+    max-height: 2.2rem;
+  }
+  
+  .product-price {
+    font-size: 0.65rem !important;
+    margin-bottom: 0.375rem;
+  }
+  
+  .product-buttons .btn {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+  }
+}
+</style>
+
+<section class="plans-archive-section">
+  <div class="container">
+    <div class="plans-archive-header">
+      <h1 class="plans-archive-title">{{ section.settings.title }}</h1>
+      {% if section.settings.subtitle %}
+        <p class="plans-archive-subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+    </div>
+
+    <div class="product-grid" id="plans-grid">
+      <div class="loading-message">Loading floor plans...</div>
+    </div>
+  </div>
+</section>
+
+<!-- Load authoritative floor plans data -->
+<script src="{{ 'floor-plans-data.js' | asset_url }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const grid = document.getElementById('plans-grid');
+  const collectionHandle = '{{ section.settings.collection_handle }}' || 'floor-plans';
+
+  async function loadPlans() {
+    try {
+      // Fetch products from Shopify collection
+      const response = await fetch(`/collections/${collectionHandle}/products.json`);
+      
+      if (!response.ok) throw new Error('Failed to fetch products');
+      
+      const data = await response.json();
+      const products = data.products;
+      
+      if (!products || products.length === 0) {
+        grid.innerHTML = '<div class="loading-message">No products available in this collection.</div>';
+        return;
+      }
+      
+      grid.innerHTML = '';
+      
+      products.forEach((product, index) => {
+        const card = document.createElement('div');
+        card.className = 'product-card fade-in';
+        card.style.animationDelay = `${index * 0.05}s`;
+        card.style.cursor = 'pointer';
+        
+        // Click handler for entire card
+        card.addEventListener('click', function(e) {
+          if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
+            window.location.href = `/products/${product.handle}`;
+          }
+        });
+        
+        // Get product details
+        const imageUrl = product.images && product.images.length > 0 
+          ? product.images[0].src 
+          : 'https://via.placeholder.com/400x280?text=No+Image';
+        
+        const title = product.title || 'Untitled Product';
+        
+        // Get accurate specs from authoritative data using product handle
+        const specs = window.FloorPlansData ? window.FloorPlansData.getSpecs(product.handle) : null;
+        
+        let beds = '—';
+        let baths = '—';
+        let sqft = '—';
+        
+        if (specs) {
+          beds = specs.beds || '—';
+          baths = specs.baths || '—';
+          sqft = specs.area ? window.FloorPlansData.formatArea(specs.area) : '—';
+        }
+        
+        // Build stats HTML - ALWAYS show 3 stats
+        const statsHTML = `
+          <div class="product-stats">
+            <div class="stat-item">
+              <span class="stat-value">${beds}</span>
+              <span class="stat-label">Beds</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${baths}</span>
+              <span class="stat-label">Baths</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${sqft}</span>
+              <span class="stat-label">Sq Ft</span>
+            </div>
+          </div>
+        `;
+        
+        // Get price from first variant
+        const variant = product.variants[0];
+        const price = variant && variant.price 
+          ? parseFloat(variant.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          : '0.00';
+        
+        card.innerHTML = `
+          <div class="product-image-wrapper">
+            <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy">
+          </div>
+          ${statsHTML}
+          <div class="product-content">
+            <h3 class="product-title">${title}</h3>
+            <div class="product-price">$${price}</div>
+          </div>
+        `;
+        
+        grid.appendChild(card);
+      });
+    } catch (error) {
+      console.error('Error loading products:', error);
+      grid.innerHTML = '<div class="loading-message" style="color: #DC2626;">Unable to load floor plans. Please try again later.</div>';
+    }
+  }
+
+  loadPlans();
+});
+</script>
+
+{% schema %}
+{
+  "name": "Plans Archive",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Browse Our Floor Plans"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Section Subtitle",
+      "default": "Explore our complete collection of customizable steel building floor plans"
+    },
+    {
+      "type": "text",
+      "id": "collection_handle",
+      "label": "Collection Handle",
+      "default": "floor-plans",
+      "info": "Enter the handle of the Shopify collection to display (e.g., 'floor-plans', 'all')"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Plans Archive",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
