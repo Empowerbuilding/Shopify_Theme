@@ -904,6 +904,9 @@
     }
   }
   
+  // Sync price with selected variant on page load
+  document.addEventListener('DOMContentLoaded', function() { updateVariant(); });
+
   // Auto-play first video on page load
   document.addEventListener('DOMContentLoaded', function() {
     const firstSlide = document.querySelector('.carousel-image.active');
