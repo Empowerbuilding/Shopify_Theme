@@ -757,6 +757,9 @@
   
   // Format price in cents to currency string
   function formatMoney(cents) {
+    if (window.Shopify && Shopify.formatMoney) {
+      return Shopify.formatMoney(cents, '{{ shop.money_format }}');
+    }
     return '$' + (cents / 100).toFixed(2);
   }
 
