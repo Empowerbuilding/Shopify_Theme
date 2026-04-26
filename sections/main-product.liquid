@@ -220,9 +220,7 @@
         
         {% render 'legal-disclaimer' %}
 
-        {% comment %} Design Consultation CTA — shown on Full Blueprints (price > $500) {% endcomment %}
-        {% assign product_price_dollars = product.price | divided_by: 100 %}
-        {% if product_price_dollars > 500 or product.collections contains 'full-blueprints' %}
+        {% comment %} Design Consultation CTA {% endcomment %}
         <div style="padding: 15px 0;">
           <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #333;">
             Have questions about this plan?
@@ -255,7 +253,6 @@
             Our team can walk you through engineering requirements and customization options.
           </p>
         </div>
-        {% endif %}
 
         {% if product.description != blank %}
           <div class="product-description">
