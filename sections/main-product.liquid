@@ -219,7 +219,44 @@
         </form>
         
         {% render 'legal-disclaimer' %}
-        
+
+        {% comment %} Design Consultation CTA — shown on Full Blueprints (price > $500) {% endcomment %}
+        {% assign product_price_dollars = product.price | divided_by: 100 %}
+        {% if product_price_dollars > 500 or product.collections contains 'full-blueprints' %}
+        <div style="padding: 15px 0;">
+          <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #333;">
+            Have questions about this plan?
+          </p>
+          <a
+            href="https://crm.empowerbuilding.ai/book/30-minute-consultation?fbp=fb.1.1753229478202.141479004560920050"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display: block;
+              width: 100%;
+              padding: 14px 20px;
+              border: 2px solid #B8860B;
+              background: transparent;
+              color: #222;
+              font-size: 15px;
+              font-weight: 600;
+              text-align: center;
+              text-decoration: none;
+              border-radius: 4px;
+              box-sizing: border-box;
+              cursor: pointer;
+            "
+            onmouseover="this.style.background='rgba(184,134,11,0.08)'"
+            onmouseout="this.style.background='transparent'"
+          >
+            Schedule a Free Design Consultation
+          </a>
+          <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
+            Our team can walk you through engineering requirements and customization options.
+          </p>
+        </div>
+        {% endif %}
+
         {% if product.description != blank %}
           <div class="product-description">
             <div class="product-description-content">
