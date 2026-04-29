@@ -372,6 +372,43 @@
               <div id="calc-preview-gc" style="display:none;"></div>
               <div id="calc-preview-savings" style="display:none;"></div>
 
+              {%- comment -%} Sustainability Score {%- endcomment -%}
+              <div style="margin-bottom:18px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">
+                  Sustainability Score: <span id="calc-sustain-val" style="color:#B8860B;">5</span>/10
+                </label>
+                <input id="calc-sustain" type="range" min="1" max="10" value="5"
+                  oninput="document.getElementById('calc-sustain-val').textContent=this.value; calcUpdate();"
+                  style="width:100%;accent-color:#B8860B;cursor:pointer;">
+                <div style="display:flex;justify-content:space-between;color:#666;font-size:11px;margin-top:4px;">
+                  <span>Basic (1)</span><span>Maximum (10)</span>
+                </div>
+                <p style="color:#666;font-size:11px;margin-top:4px;">+2% cost per point above 5. Solar prep, advanced insulation, energy-efficient systems.</p>
+              </div>
+
+              {%- comment -%} Property Grade {%- endcomment -%}
+              <div style="margin-bottom:24px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Property Grade (Slope)</label>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#252525;padding:10px 12px;border-radius:6px;border:1px solid #444;">
+                    <input type="radio" name="calc-grade" value="1.0" checked style="accent-color:#B8860B;" onchange="calcUpdate()">
+                    <span style="color:#ccc;font-size:13px;"><strong style="color:#fff;">Flat</strong> — Level lot, no grading needed</span>
+                  </label>
+                  <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#252525;padding:10px 12px;border-radius:6px;border:1px solid #444;">
+                    <input type="radio" name="calc-grade" value="1.05" style="accent-color:#B8860B;" onchange="calcUpdate()">
+                    <span style="color:#ccc;font-size:13px;"><strong style="color:#fff;">Slight Grade</strong> — Minor slope, minimal grading (+5%)</span>
+                  </label>
+                  <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#252525;padding:10px 12px;border-radius:6px;border:1px solid #444;">
+                    <input type="radio" name="calc-grade" value="1.12" style="accent-color:#B8860B;" onchange="calcUpdate()">
+                    <span style="color:#ccc;font-size:13px;"><strong style="color:#fff;">Moderate Grade</strong> — Noticeable slope, retaining walls likely (+12%)</span>
+                  </label>
+                  <label style="display:flex;align-items:center;gap:10px;cursor:pointer;background:#252525;padding:10px 12px;border-radius:6px;border:1px solid #444;">
+                    <input type="radio" name="calc-grade" value="1.22" style="accent-color:#B8860B;" onchange="calcUpdate()">
+                    <span style="color:#ccc;font-size:13px;"><strong style="color:#fff;">Steep Grade</strong> — Heavy grading, significant site work (+22%)</span>
+                  </label>
+                </div>
+              </div>
+
               <button onclick="calcNextStep()"
                 style="width:100%;padding:14px;background:linear-gradient(135deg,#B8860B,#DAA520);border:none;border-radius:6px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;">
                 Get My Full Estimate →
@@ -590,12 +627,19 @@
           var baths   = parseFloat(document.getElementById('calc-baths').value)   || 0;
           var fndKey  = document.getElementById('calc-foundation').value;
           var locId   = document.getElementById('calc-location').value;
+          var sustain = parseFloat(document.getElementById('calc-sustain').value) || 5;
+          var gradeEl = document.querySelector('input[name="calc-grade"]:checked');
+          var grade   = gradeEl ? parseFloat(gradeEl.value) : 1.0;
           var f = CALC_FACTORS[calcTier];
           var base = (beds*f.bedroom) + (baths*f.bathroom) + (living*f.living) + (garage*f.garage) + (patio*f.patio);
           base *= CALC_FOUNDATION[fndKey] || 1.0;
+          base *= grade;
+          var sustainBonus = Math.max(0, (sustain - 5) * 0.02);
+          base *= (1 + sustainBonus);
           var city = CALC_CITIES.find(function(c){return c.id===locId;});
           base *= city ? city.m : 1.0;
-          return {owner: base, gc: base*(1+CALC_MARKUP), living:living, patio:patio, garage:garage, beds:beds, baths:baths, f:f, city:city};
+          var gradeLabel = gradeEl ? gradeEl.closest('label').querySelector('strong').textContent : 'Flat';
+          return {owner: base, gc: base*(1+CALC_MARKUP), living:living, patio:patio, garage:garage, beds:beds, baths:baths, f:f, city:city, sustain:sustain, grade:grade, gradeLabel:gradeLabel};
         }
 
         function calcUpdate(){
@@ -678,7 +722,10 @@
             savings_percent: Math.round((1 - r.owner/r.gc)*100),
             plan_handle: {{ product.handle | json }},
             plan_title: {{ product.title | json }},
-            form_type: 'Shopify Cost Calculator',
+            sustainability_score: parseFloat(document.getElementById('calc-sustain').value) || 5,
+            property_grade: (document.querySelector('input[name="calc-grade"]:checked') || {}).value || '1.0',
+            property_grade_label: r.gradeLabel,
+            form_type: 'shopify_cost_calc',
             page_url: window.location.href,
             timestamp: new Date().toISOString()
           };
