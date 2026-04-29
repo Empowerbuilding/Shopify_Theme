@@ -367,21 +367,10 @@
                 </select>
               </div>
 
-              {%- comment -%} Live estimate preview {%- endcomment -%}
-              <div style="background:#252525;border-radius:8px;padding:16px;margin-bottom:24px;border:1px solid #333;">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                  <span style="color:#aaa;font-size:13px;">Owner-Builder Estimate</span>
-                  <span id="calc-preview-owner" style="color:#DAA520;font-size:1.4rem;font-weight:700;">—</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                  <span style="color:#aaa;font-size:13px;">General Contractor</span>
-                  <span id="calc-preview-gc" style="color:#fff;font-size:1.1rem;font-weight:600;">—</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                  <span style="color:#aaa;font-size:13px;">Your Potential Savings</span>
-                  <span id="calc-preview-savings" style="color:#4ade80;font-size:1.1rem;font-weight:600;">—</span>
-                </div>
-              </div>
+              {%- comment -%} Preview hidden — costs revealed after contact form submit {%- endcomment -%}
+              <div id="calc-preview-owner" style="display:none;"></div>
+              <div id="calc-preview-gc" style="display:none;"></div>
+              <div id="calc-preview-savings" style="display:none;"></div>
 
               <button onclick="calcNextStep()"
                 style="width:100%;padding:14px;background:linear-gradient(135deg,#B8860B,#DAA520);border:none;border-radius:6px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;">
