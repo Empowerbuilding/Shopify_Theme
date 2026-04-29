@@ -711,28 +711,72 @@
           var r = calcCompute();
           var city = CALC_CITIES.find(function(c){return c.id===document.getElementById('calc-location').value;});
 
+          // Compute all 3 tiers for full payload match (same as Barnhaus website)
+          var savedTier = calcTier;
+          calcTier = 'economy'; var re = calcCompute();
+          calcTier = 'standard'; var rs = calcCompute();
+          calcTier = 'luxury'; var rl = calcCompute();
+          calcTier = savedTier;
+
+          var fndVal = document.getElementById('calc-foundation').value;
+          var locVal = document.getElementById('calc-location').value;
+          var sustainVal = parseFloat(document.getElementById('calc-sustain').value) || 5;
+          var gradeEl = document.querySelector('input[name="calc-grade"]:checked');
+          var gradeLabel = gradeEl ? gradeEl.closest('label').querySelector('strong').textContent : 'Flat';
+          var totalSqft = r.living + r.patio + r.garage;
+
           var payload = {
+            // Identity
             name: name, email: email, phone: phone,
             message: msg, project_stage: stage,
-            living_space: r.living, patio_space: r.patio, garage_space: r.garage,
+            // Dimensions
             bedrooms: r.beds, bathrooms: r.baths,
-            location: document.getElementById('calc-location').value,
+            living_space: r.living, patio_space: r.patio, garage_space: r.garage,
+            total_square_footage: totalSqft,
+            // Location
+            location: locVal,
             location_name: city ? city.name : '',
             location_multiplier: city ? city.m : 1.0,
-            foundation_type: document.getElementById('calc-foundation').value,
+            // Build options
+            foundation_type: fndVal,
+            roof_pitch: 'standard',
+            interior_finish: calcTier,
             selected_tier: calcTier,
-            owner_cost: Math.round(r.owner),
-            gc_cost: Math.round(r.gc),
-            savings: Math.round(r.gc - r.owner),
-            savings_percent: Math.round((1 - r.owner/r.gc)*100),
+            sustainability_score: sustainVal,
+            property_grade: gradeEl ? gradeEl.value : '1.0',
+            property_grade_label: gradeLabel,
+            // Economy costs
+            economy_owner_cost: Math.round(re.owner),
+            economy_contractor_cost: Math.round(re.gc),
+            economy_savings: Math.round(re.gc - re.owner),
+            economy_savings_percent: Math.round((1 - re.owner/re.gc)*100),
+            // Standard costs
+            standard_owner_cost: Math.round(rs.owner),
+            standard_contractor_cost: Math.round(rs.gc),
+            standard_savings: Math.round(rs.gc - rs.owner),
+            standard_savings_percent: Math.round((1 - rs.owner/rs.gc)*100),
+            // Luxury costs
+            luxury_owner_cost: Math.round(rl.owner),
+            luxury_contractor_cost: Math.round(rl.gc),
+            luxury_savings: Math.round(rl.gc - rl.owner),
+            luxury_savings_percent: Math.round((1 - rl.owner/rl.gc)*100),
+            // Cost per sqft
+            cost_per_sqft_economy: totalSqft > 0 ? Math.round(re.owner/totalSqft) : 0,
+            cost_per_sqft_standard: totalSqft > 0 ? Math.round(rs.owner/totalSqft) : 0,
+            cost_per_sqft_luxury: totalSqft > 0 ? Math.round(rl.owner/totalSqft) : 0,
+            // Summary
+            project_summary: r.beds+'BR/'+r.baths+'BA • '+totalSqft+' sq ft • '+(city ? city.name : ''),
+            // Shopify-specific
             plan_handle: {{ product.handle | json }},
             plan_title: {{ product.title | json }},
-            sustainability_score: parseFloat(document.getElementById('calc-sustain').value) || 5,
-            property_grade: (document.querySelector('input[name="calc-grade"]:checked') || {}).value || '1.0',
-            property_grade_label: r.gradeLabel,
-            form_type: 'shopify_cost_calc',
+            // Meta / tracking
+            form_type: 'Cost Calculator - Complete Data',
+            source: 'shopify_cost_calc',
             page_url: window.location.href,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            anonymous_id: '', fbclid: '', fbp: '', fbc: '',
+            client_user_agent: navigator.userAgent,
+            client_ip_address: ''
           };
 
           fetch('https://n8n.empowerbuilding.ai/webhook/cost-calculator-webhook', {
