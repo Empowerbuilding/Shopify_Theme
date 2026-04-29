@@ -78,7 +78,7 @@ const FLOOR_PLANS_DATA = {
     { beds: 5, baths: 5,   area: 4147, patio: 300,  garage: 1200, garageType: "3-Car Garage" },
 
   "the-vatican-modern-italian-farmhouse-7-bedrooms-4-5-bathrooms-multigenerational-house-plan":
-    { beds: 7, baths: 4.5, area: 4420, patio: null,  garage: null,  garageType: null },
+    { beds: 7, baths: 4.5, area: 4420, patio: 400,  garage: null,  garageType: null },
 
 };
 
