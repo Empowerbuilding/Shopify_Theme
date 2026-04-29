@@ -88,6 +88,9 @@ window.FloorPlansData = {
   get: function(handle) {
     return FLOOR_PLANS_DATA[handle] || null;
   },
+  getSpecs: function(handle) {
+    return FLOOR_PLANS_DATA[handle] || null;
+  },
   formatArea: function(sqft) {
     return sqft ? sqft.toLocaleString() + ' SF' : null;
   }
