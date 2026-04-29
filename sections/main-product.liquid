@@ -254,6 +254,472 @@
           </p>
         </div>
 
+        {% comment %} Cost Calculator CTA {% endcomment %}
+        <div style="padding: 10px 0 15px;">
+          <button
+            id="open-calc-btn"
+            onclick="openCalcModal()"
+            style="
+              display: block;
+              width: 100%;
+              padding: 14px 20px;
+              background: linear-gradient(135deg, #B8860B, #DAA520);
+              border: none;
+              color: #fff;
+              font-size: 15px;
+              font-weight: 700;
+              text-align: center;
+              border-radius: 4px;
+              box-sizing: border-box;
+              cursor: pointer;
+              letter-spacing: 0.3px;
+            "
+            onmouseover="this.style.opacity='0.9'"
+            onmouseout="this.style.opacity='1'"
+          >
+            💰 Estimate My Build Cost
+          </button>
+        </div>
+
+        {% comment %} ── Cost Calculator Modal ─────────────────────────────── {% endcomment %}
+        <div id="calc-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:20px 10px;">
+          <div style="max-width:780px; margin:0 auto; background:#1C1C1C; border-radius:12px; border:1px solid #333; padding:28px 24px; position:relative;">
+            
+            {%- comment -%} Close button {%- endcomment -%}
+            <button onclick="closeCalcModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#aaa;font-size:22px;cursor:pointer;line-height:1;">&times;</button>
+
+            <h2 style="color:#fff;font-size:1.5rem;font-weight:700;margin:0 0 4px;">Estimate My Build Cost</h2>
+            <p id="calc-plan-name" style="color:#B8860B;font-size:0.9rem;margin:0 0 24px;"></p>
+
+            {%- comment -%} ── STEP 1: INPUTS ────────────────────────────── {%- endcomment -%}
+            <div id="calc-step-inputs">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px;">
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Living SF</label>
+                  <input id="calc-living" type="number" min="0" step="50"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;"
+                    oninput="calcUpdate()" onfocus="this.select()">
+                </div>
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Patio SF</label>
+                  <input id="calc-patio" type="number" min="0" step="50"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;"
+                    oninput="calcUpdate()" onfocus="this.select()">
+                </div>
+                <div>
+                  <label id="calc-garage-label" style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Garage SF</label>
+                  <input id="calc-garage" type="number" min="0" step="50"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;"
+                    oninput="calcUpdate()" onfocus="this.select()">
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Bedrooms</label>
+                  <input id="calc-beds" type="number" min="1" max="10"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;"
+                    oninput="calcUpdate()" onfocus="this.select()">
+                </div>
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Bathrooms</label>
+                  <input id="calc-baths" type="number" min="1" max="10" step="0.5"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;"
+                    oninput="calcUpdate()" onfocus="this.select()">
+                </div>
+              </div>
+
+              {%- comment -%} Finish level {%- endcomment -%}
+              <div style="margin-bottom:18px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Finish Level</label>
+                <div style="display:flex;gap:8px;">
+                  {% for tier in "economy,standard,luxury" | split: "," %}
+                    <button onclick="calcSetTier('{{ tier }}')" id="calc-tier-{{ tier }}"
+                      style="flex:1;padding:10px;border-radius:6px;border:2px solid #444;background:#252525;color:#ccc;font-size:13px;font-weight:600;cursor:pointer;text-transform:capitalize;transition:all 0.15s;">
+                      {{ tier }}
+                    </button>
+                  {% endfor %}
+                </div>
+              </div>
+
+              {%- comment -%} Foundation {%- endcomment -%}
+              <div style="margin-bottom:18px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Foundation</label>
+                <select id="calc-foundation" onchange="calcUpdate()"
+                  style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;">
+                  <option value="slab">Concrete Slab</option>
+                  <option value="crawl">Crawl Space (+8%)</option>
+                  <option value="basement">Full Basement (+20%)</option>
+                </select>
+              </div>
+
+              {%- comment -%} Location {%- endcomment -%}
+              <div style="margin-bottom:24px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Nearest City</label>
+                <select id="calc-location" onchange="calcUpdate()"
+                  style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;">
+                </select>
+              </div>
+
+              {%- comment -%} Live estimate preview {%- endcomment -%}
+              <div style="background:#252525;border-radius:8px;padding:16px;margin-bottom:24px;border:1px solid #333;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                  <span style="color:#aaa;font-size:13px;">Owner-Builder Estimate</span>
+                  <span id="calc-preview-owner" style="color:#DAA520;font-size:1.4rem;font-weight:700;">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                  <span style="color:#aaa;font-size:13px;">General Contractor</span>
+                  <span id="calc-preview-gc" style="color:#fff;font-size:1.1rem;font-weight:600;">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span style="color:#aaa;font-size:13px;">Your Potential Savings</span>
+                  <span id="calc-preview-savings" style="color:#4ade80;font-size:1.1rem;font-weight:600;">—</span>
+                </div>
+              </div>
+
+              <button onclick="calcNextStep()"
+                style="width:100%;padding:14px;background:linear-gradient(135deg,#B8860B,#DAA520);border:none;border-radius:6px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;">
+                Get My Full Estimate →
+              </button>
+            </div>
+
+            {%- comment -%} ── STEP 2: LEAD FORM ─────────────────────────── {%- endcomment -%}
+            <div id="calc-step-form" style="display:none;">
+              <div style="background:#B8860B1a;border:1px solid #B8860B55;border-radius:8px;padding:14px;margin-bottom:20px;">
+                <p style="color:#DAA520;font-size:13px;font-weight:600;margin:0;">📊 Your estimate is ready! Fill in your info to see the full breakdown.</p>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Full Name *</label>
+                  <input id="calc-name" type="text" placeholder="Your full name"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;">
+                </div>
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Email Address *</label>
+                  <input id="calc-email" type="email" placeholder="your@email.com"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;">
+                </div>
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Phone Number *</label>
+                  <input id="calc-phone" type="tel" placeholder="(555) 123-4567"
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;">
+                  <label style="display:flex;align-items:flex-start;gap:8px;margin-top:8px;cursor:pointer;">
+                    <input type="checkbox" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;">
+                    <span style="color:#666;font-size:11px;line-height:1.4;">You are opting into marketing texts from Barnhaus Steel Builders. Msg frequency may vary. Standard msg & data rates may apply. Reply STOP to opt out.</span>
+                  </label>
+                </div>
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Where are you in your project?</label>
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+                      <input type="radio" name="calc-stage" value="gathering_ideas" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;">
+                      <span style="color:#ccc;font-size:13px;line-height:1.4;">I'm just starting to gather ideas.</span>
+                    </label>
+                    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+                      <input type="radio" name="calc-stage" value="concept_budget" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;">
+                      <span style="color:#ccc;font-size:13px;line-height:1.4;">I have a rough idea and need a 3D Concept & Budget Study.</span>
+                    </label>
+                    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+                      <input type="radio" name="calc-stage" value="ready_for_bid" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;">
+                      <span style="color:#ccc;font-size:13px;line-height:1.4;">I have full plans and am ready for a construction bid.</span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">Project Details (Optional)</label>
+                  <textarea id="calc-message" rows="3" placeholder="Timeline, questions, special requirements..."
+                    style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;resize:vertical;"></textarea>
+                </div>
+              </div>
+
+              <div id="calc-form-error" style="display:none;background:#7f1d1d33;border:1px solid #ef444455;border-radius:6px;padding:10px 14px;margin-top:14px;">
+                <p style="color:#f87171;font-size:13px;margin:0;" id="calc-form-error-msg"></p>
+              </div>
+
+              <div style="display:flex;gap:10px;margin-top:20px;">
+                <button onclick="calcBackStep()"
+                  style="padding:12px 20px;background:none;border:1px solid #444;border-radius:6px;color:#aaa;font-size:14px;cursor:pointer;">
+                  ← Back
+                </button>
+                <button onclick="calcSubmit()" id="calc-submit-btn"
+                  style="flex:1;padding:14px;background:linear-gradient(135deg,#B8860B,#DAA520);border:none;border-radius:6px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;">
+                  Get Instant Estimate
+                </button>
+              </div>
+            </div>
+
+            {%- comment -%} ── STEP 3: RESULTS ──────────────────────────── {%- endcomment -%}
+            <div id="calc-step-results" style="display:none;">
+              <div style="background:#14532d33;border:1px solid #22c55e55;border-radius:8px;padding:14px;margin-bottom:20px;">
+                <p id="calc-results-thanks" style="color:#4ade80;font-size:13px;font-weight:600;margin:0;">✅ Your estimate is ready!</p>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+                <div style="background:linear-gradient(135deg,#B8860B22,#DAA52022);border:1px solid #B8860B44;border-radius:8px;padding:16px;">
+                  <div style="color:#aaa;font-size:12px;margin-bottom:4px;">Owner-Builder Cost</div>
+                  <div id="res-owner" style="color:#DAA520;font-size:1.8rem;font-weight:700;"></div>
+                  <div style="color:#999;font-size:12px;margin-top:4px;">With our Blueprint & Roadmap system</div>
+                </div>
+                <div style="background:#25252588;border:1px solid #333;border-radius:8px;padding:16px;">
+                  <div style="color:#aaa;font-size:12px;margin-bottom:4px;">General Contractor Cost</div>
+                  <div id="res-gc" style="color:#fff;font-size:1.4rem;font-weight:600;"></div>
+                  <div style="color:#999;font-size:12px;margin-top:4px;">Includes 18% contractor markup</div>
+                </div>
+                <div style="background:#14532d22;border:1px solid #22c55e44;border-radius:8px;padding:16px;">
+                  <div style="color:#aaa;font-size:12px;margin-bottom:4px;">Your Potential Savings</div>
+                  <div id="res-savings" style="color:#4ade80;font-size:1.4rem;font-weight:600;"></div>
+                  <div id="res-savings-pct" style="color:#86efac;font-size:12px;margin-top:4px;"></div>
+                </div>
+              </div>
+
+              {%- comment -%} Breakdown {%- endcomment -%}
+              <div style="border-top:1px solid #333;padding-top:16px;margin-bottom:20px;">
+                <h4 style="color:#fff;font-size:14px;font-weight:600;margin:0 0 12px;">Project Breakdown</h4>
+                <div id="res-breakdown" style="display:flex;flex-direction:column;gap:8px;font-size:13px;"></div>
+              </div>
+
+              <a href="https://crm.empowerbuilding.ai/book/30-minute-consultation"
+                target="_blank"
+                style="display:block;width:100%;padding:14px;background:linear-gradient(135deg,#B8860B,#DAA520);border-radius:6px;color:#fff;font-size:15px;font-weight:700;text-align:center;text-decoration:none;box-sizing:border-box;">
+                Schedule Free Consultation →
+              </a>
+              <p style="color:#666;font-size:12px;text-align:center;margin:10px 0 0;">Free consultation • No obligation • Fast response</p>
+            </div>
+
+          </div>
+        </div>
+
+        <script>
+        // ── Data ──────────────────────────────────────────────────────────────
+        var CALC_CITIES = [
+          {id:"san-antonio",name:"San Antonio, TX",m:1.0},
+          {id:"houston",name:"Houston, TX",m:1.15},
+          {id:"dallas",name:"Dallas, TX",m:1.12},
+          {id:"austin",name:"Austin, TX",m:1.18},
+          {id:"oklahoma-city",name:"Oklahoma City, OK",m:0.95},
+          {id:"tulsa",name:"Tulsa, OK",m:0.92},
+          {id:"little-rock",name:"Little Rock, AR",m:0.90},
+          {id:"new-york",name:"New York City, NY",m:2.4},
+          {id:"boston",name:"Boston, MA",m:2.1},
+          {id:"philadelphia",name:"Philadelphia, PA",m:1.8},
+          {id:"pittsburgh",name:"Pittsburgh, PA",m:1.4},
+          {id:"miami",name:"Miami, FL",m:1.5},
+          {id:"atlanta",name:"Atlanta, GA",m:1.25},
+          {id:"nashville",name:"Nashville, TN",m:1.2},
+          {id:"charlotte",name:"Charlotte, NC",m:1.18},
+          {id:"orlando",name:"Orlando, FL",m:1.3},
+          {id:"tampa",name:"Tampa, FL",m:1.28},
+          {id:"los-angeles",name:"Los Angeles, CA",m:2.2},
+          {id:"san-francisco",name:"San Francisco, CA",m:2.5},
+          {id:"san-diego",name:"San Diego, CA",m:2.0},
+          {id:"seattle",name:"Seattle, WA",m:2.0},
+          {id:"portland",name:"Portland, OR",m:1.8},
+          {id:"boise",name:"Boise, ID",m:1.3},
+          {id:"chicago",name:"Chicago, IL",m:1.7},
+          {id:"minneapolis",name:"Minneapolis, MN",m:1.5},
+          {id:"detroit",name:"Detroit, MI",m:1.2},
+          {id:"indianapolis",name:"Indianapolis, IN",m:1.1},
+          {id:"columbus",name:"Columbus, OH",m:1.12},
+          {id:"kansas-city",name:"Kansas City, MO",m:1.05},
+          {id:"phoenix",name:"Phoenix, AZ",m:1.3},
+          {id:"las-vegas",name:"Las Vegas, NV",m:1.35},
+          {id:"albuquerque",name:"Albuquerque, NM",m:1.1},
+          {id:"el-paso",name:"El Paso, TX",m:0.95},
+          {id:"denver",name:"Denver, CO",m:1.6},
+          {id:"salt-lake-city",name:"Salt Lake City, UT",m:1.4},
+          {id:"reno",name:"Reno, NV",m:1.45}
+        ];
+
+        var CALC_FACTORS = {
+          economy:  {bedroom:8000,  bathroom:6000,  garage:45, living:85,  patio:25},
+          standard: {bedroom:12000, bathroom:9000,  garage:60, living:110, patio:35},
+          luxury:   {bedroom:18000, bathroom:15000, garage:85, living:150, patio:50}
+        };
+        var CALC_FOUNDATION = {slab:1.0, crawl:1.08, basement:1.2};
+        var CALC_MARKUP = 0.18;
+
+        var calcTier = 'standard';
+        var calcPlanData = null;
+
+        // ── Init ──────────────────────────────────────────────────────────────
+        (function(){
+          // Populate city dropdown
+          var sel = document.getElementById('calc-location');
+          CALC_CITIES.forEach(function(c){
+            var o = document.createElement('option');
+            o.value = c.id; o.text = c.name;
+            sel.appendChild(o);
+          });
+
+          // Inject plan data from FloorPlansData
+          var handle = {{ product.handle | json }};
+          var planTitle = {{ product.title | json }};
+          document.getElementById('calc-plan-name').textContent = planTitle;
+
+          if(window.FloorPlansData){
+            calcPlanData = window.FloorPlansData.get(handle);
+          }
+          if(calcPlanData){
+            document.getElementById('calc-living').value  = calcPlanData.area   || 0;
+            document.getElementById('calc-patio').value   = calcPlanData.patio  || 0;
+            document.getElementById('calc-garage').value  = calcPlanData.garage || 0;
+            document.getElementById('calc-beds').value    = calcPlanData.beds   || 3;
+            document.getElementById('calc-baths').value   = calcPlanData.baths  || 2;
+            if(calcPlanData.garageType){
+              document.getElementById('calc-garage-label').textContent = calcPlanData.garageType + ' SF';
+            }
+          } else {
+            document.getElementById('calc-living').value = 2000;
+            document.getElementById('calc-patio').value  = 200;
+            document.getElementById('calc-garage').value = 800;
+            document.getElementById('calc-beds').value   = 3;
+            document.getElementById('calc-baths').value  = 2;
+          }
+
+          calcSetTier('standard');
+          calcUpdate();
+        })();
+
+        // ── Helpers ───────────────────────────────────────────────────────────
+        function calcFmt(n){
+          return '$' + Math.round(n).toLocaleString('en-US');
+        }
+
+        function calcCompute(){
+          var living  = parseFloat(document.getElementById('calc-living').value)  || 0;
+          var patio   = parseFloat(document.getElementById('calc-patio').value)   || 0;
+          var garage  = parseFloat(document.getElementById('calc-garage').value)  || 0;
+          var beds    = parseFloat(document.getElementById('calc-beds').value)    || 0;
+          var baths   = parseFloat(document.getElementById('calc-baths').value)   || 0;
+          var fndKey  = document.getElementById('calc-foundation').value;
+          var locId   = document.getElementById('calc-location').value;
+          var f = CALC_FACTORS[calcTier];
+          var base = (beds*f.bedroom) + (baths*f.bathroom) + (living*f.living) + (garage*f.garage) + (patio*f.patio);
+          base *= CALC_FOUNDATION[fndKey] || 1.0;
+          var city = CALC_CITIES.find(function(c){return c.id===locId;});
+          base *= city ? city.m : 1.0;
+          return {owner: base, gc: base*(1+CALC_MARKUP), living:living, patio:patio, garage:garage, beds:beds, baths:baths, f:f, city:city};
+        }
+
+        function calcUpdate(){
+          var r = calcCompute();
+          document.getElementById('calc-preview-owner').textContent   = calcFmt(r.owner);
+          document.getElementById('calc-preview-gc').textContent      = calcFmt(r.gc);
+          document.getElementById('calc-preview-savings').textContent = calcFmt(r.gc - r.owner);
+        }
+
+        function calcSetTier(t){
+          calcTier = t;
+          ['economy','standard','luxury'].forEach(function(x){
+            var btn = document.getElementById('calc-tier-'+x);
+            if(x===t){
+              btn.style.background='#B8860B'; btn.style.borderColor='#B8860B'; btn.style.color='#fff';
+            } else {
+              btn.style.background='#252525'; btn.style.borderColor='#444'; btn.style.color='#ccc';
+            }
+          });
+          calcUpdate();
+        }
+
+        function openCalcModal(){
+          document.getElementById('calc-modal').style.display = 'block';
+          document.body.style.overflow = 'hidden';
+          calcUpdate();
+        }
+        function closeCalcModal(){
+          document.getElementById('calc-modal').style.display = 'none';
+          document.body.style.overflow = '';
+        }
+
+        function calcNextStep(){
+          document.getElementById('calc-step-inputs').style.display = 'none';
+          document.getElementById('calc-step-form').style.display   = 'block';
+        }
+        function calcBackStep(){
+          document.getElementById('calc-step-form').style.display   = 'none';
+          document.getElementById('calc-step-inputs').style.display = 'block';
+        }
+
+        function calcSubmit(){
+          var name  = document.getElementById('calc-name').value.trim();
+          var email = document.getElementById('calc-email').value.trim();
+          var phone = document.getElementById('calc-phone').value.trim();
+          var stage = (document.querySelector('input[name="calc-stage"]:checked')||{}).value || '';
+          var msg   = document.getElementById('calc-message').value.trim();
+          var errEl = document.getElementById('calc-form-error');
+          var errMsg= document.getElementById('calc-form-error-msg');
+
+          if(!name||!email||!phone){
+            errMsg.textContent = 'Please fill in your name, email, and phone number.';
+            errEl.style.display='block'; return;
+          }
+          if(!/\S+@\S+\.\S+/.test(email)){
+            errMsg.textContent = 'Please enter a valid email address.';
+            errEl.style.display='block'; return;
+          }
+          errEl.style.display='none';
+
+          var btn = document.getElementById('calc-submit-btn');
+          btn.textContent = 'Sending...'; btn.disabled = true;
+
+          var r = calcCompute();
+          var city = CALC_CITIES.find(function(c){return c.id===document.getElementById('calc-location').value;});
+
+          var payload = {
+            name: name, email: email, phone: phone,
+            message: msg, project_stage: stage,
+            living_space: r.living, patio_space: r.patio, garage_space: r.garage,
+            bedrooms: r.beds, bathrooms: r.baths,
+            location: document.getElementById('calc-location').value,
+            location_name: city ? city.name : '',
+            location_multiplier: city ? city.m : 1.0,
+            foundation_type: document.getElementById('calc-foundation').value,
+            selected_tier: calcTier,
+            owner_cost: Math.round(r.owner),
+            gc_cost: Math.round(r.gc),
+            savings: Math.round(r.gc - r.owner),
+            savings_percent: Math.round((1 - r.owner/r.gc)*100),
+            plan_handle: {{ product.handle | json }},
+            plan_title: {{ product.title | json }},
+            form_type: 'Shopify Cost Calculator',
+            page_url: window.location.href,
+            timestamp: new Date().toISOString()
+          };
+
+          fetch('https://n8n.empowerbuilding.ai/webhook/cost-calculator-webhook', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(payload)
+          }).catch(function(){}).finally(function(){
+            // Show results regardless
+            document.getElementById('calc-step-form').style.display   = 'none';
+            document.getElementById('calc-step-results').style.display = 'block';
+            document.getElementById('calc-results-thanks').textContent = '✅ Thank you, '+name+'! Here are your estimates:';
+            document.getElementById('res-owner').textContent    = calcFmt(r.owner);
+            document.getElementById('res-gc').textContent       = calcFmt(r.gc);
+            document.getElementById('res-savings').textContent  = calcFmt(r.gc - r.owner);
+            document.getElementById('res-savings-pct').textContent = Math.round((1-r.owner/r.gc)*100)+'% savings with owner-builder approach';
+
+            var bd = document.getElementById('res-breakdown');
+            bd.innerHTML = '';
+            var rows = [
+              ['Living Space ('+r.living+' SF)', calcFmt(r.living * r.f.living)],
+              ['Bedrooms ('+r.beds+')', calcFmt(r.beds * r.f.bedroom)],
+              ['Bathrooms ('+r.baths+')', calcFmt(r.baths * r.f.bathroom)]
+            ];
+            if(r.garage>0) rows.push(['Garage/Shop ('+r.garage+' SF)', calcFmt(r.garage * r.f.garage)]);
+            if(r.patio>0)  rows.push(['Patio ('+r.patio+' SF)', calcFmt(r.patio * r.f.patio)]);
+            if(city && city.m!==1.0) rows.push(['Location ('+city.name+')', ((city.m-1)*100).toFixed(0)+'%']);
+            rows.forEach(function(row){
+              bd.innerHTML += '<div style="display:flex;justify-content:space-between;color:#ccc;padding:4px 0;border-bottom:1px solid #2a2a2a;">'
+                +'<span>'+row[0]+'</span><span style="color:#fff;font-weight:600;">'+row[1]+'</span></div>';
+            });
+          });
+        }
+        </script>
+
+
         {% if product.description != blank %}
           <div class="product-description">
             <div class="product-description-content">
