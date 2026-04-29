@@ -376,7 +376,12 @@
               <div style="margin-bottom:18px;">
                 <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:6px;">
                   Sustainability Score: <span id="calc-sustain-val" style="color:#B8860B;">5</span>/10
+                  <span id="sustain-info-btn" onclick="document.getElementById('sustain-tooltip').style.display=document.getElementById('sustain-tooltip').style.display==='none'?'block':'none'"
+                    style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid #666;color:#999;font-size:11px;font-weight:700;cursor:pointer;margin-left:6px;vertical-align:middle;">i</span>
                 </label>
+                <div id="sustain-tooltip" style="display:none;background:#1a1a1a;border:1px solid #444;border-radius:6px;padding:10px 12px;margin-bottom:8px;color:#aaa;font-size:12px;line-height:1.5;">
+                  Reflects how green and energy-efficient your build is. Higher scores add features like solar prep, spray foam insulation, high-efficiency HVAC, rainwater harvesting, and energy-star appliances. Each point above 5 adds ~2% to your build cost.
+                </div>
                 <input id="calc-sustain" type="range" min="1" max="10" value="5"
                   oninput="document.getElementById('calc-sustain-val').textContent=this.value; calcUpdate();"
                   style="width:100%;accent-color:#B8860B;cursor:pointer;">
