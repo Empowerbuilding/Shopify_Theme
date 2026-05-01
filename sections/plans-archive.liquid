@@ -156,6 +156,13 @@
 }
 
 /* PRICE - MATCHES HOME PAGE */
+.product-study-price {
+  font-size: 12px;
+  color: #B8860B;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
 .product-price {
   color: #B8860B;
   font-size: 0.95rem;
@@ -447,12 +454,17 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         `;
         
-        // Get price from first variant
-        const variant = product.variants[0];
-        const price = variant && variant.price 
-          ? parseFloat(variant.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-          : '0.00';
-        
+        // Find construction set price (highest variant) and study set price (lowest variant)
+        const variants = product.variants || [];
+        const prices = variants.map(v => parseFloat(v.price)).filter(p => !isNaN(p));
+        const fullPrice = prices.length ? Math.max(...prices) : 0;
+        const studyPrice = prices.length > 1 ? Math.min(...prices) : null;
+
+        const fullPriceStr = fullPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        const studyLine = (studyPrice && studyPrice < fullPrice)
+          ? `<div class="product-study-price">Study Set from $${studyPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>`
+          : '';
+
         card.innerHTML = `
           <div class="product-image-wrapper">
             <img src="${imageUrl}" alt="${title}" class="product-image" loading="lazy">
@@ -460,7 +472,8 @@ document.addEventListener('DOMContentLoaded', function() {
           ${statsHTML}
           <div class="product-content">
             <h3 class="product-title">${title}</h3>
-            <div class="product-price">$${price}</div>
+            <div class="product-price">$${fullPriceStr}</div>
+            ${studyLine}
           </div>
         `;
         
