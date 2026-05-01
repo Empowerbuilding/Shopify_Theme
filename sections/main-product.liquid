@@ -54,39 +54,6 @@
                       </svg>
                     </button>
                   </div>
-                {% elsif media.media_type == 'model' %}
-                  <div class="carousel-image {% if forloop.first %}active{% endif %}" data-media-type="model">
-                    {% assign model_src = '' %}
-                    {% for source in media.sources %}
-                      {% if source.format == 'glb' %}
-                        {% assign model_src = source.url %}
-                        {% break %}
-                      {% endif %}
-                    {% endfor %}
-                    {% if model_src == '' %}
-                      {% assign model_src = media.sources[0].url %}
-                    {% endif %}
-                    <model-viewer 
-                      src="{{ model_src }}"
-                      {% if media.preview_image %}poster="{{ media.preview_image | img_url: '800x800' }}"{% endif %}
-                      alt="{{ media.alt | escape }}"
-                      auto-rotate
-                      auto-rotate-delay="0"
-                      camera-controls
-                      interaction-prompt="auto"
-                      touch-action="pan-y"
-                      camera-orbit="45deg 75deg 25m"
-                      min-camera-orbit="auto auto 10m"
-                      max-camera-orbit="auto auto 50m"
-                      field-of-view="40deg"
-                      camera-target="auto auto auto"
-                      ar
-                      ar-modes="webxr scene-viewer quick-look"
-                      shadow-intensity="1"
-                      class="product-model-viewer"
-                      data-media-id="{{ media.id }}">
-                    </model-viewer>
-                  </div>
                 {% endif %}
               {% endfor %}
             {% else %}
@@ -138,19 +105,7 @@
                       <img src="{{ media.preview_image | img_url: '100x100' }}" alt="{{ media.alt | escape }}" style="position: absolute; inset: 0; object-fit: cover; z-index: 0;">
                     {% endif %}
                   </div>
-                {% elsif media.media_type == 'model' %}
-                  <div class="model-thumbnail-icon">
-                    <!-- 3D Cube Icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2">
-                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                      <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                    </svg>
-                    {% if media.preview_image %}
-                      <img src="{{ media.preview_image | img_url: '100x100' }}" alt="{{ media.alt | escape }}" style="opacity: 0.3; position: absolute; inset: 0; object-fit: cover;">
-                    {% endif %}
-                  </div>
-                {% endif %}
+                  {% endif %}
               </div>
             {% endfor %}
           </div>
@@ -178,28 +133,42 @@
         <form method="post" action="/cart/add" id="product-form" class="product-form">
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
           
-          <!-- Variants -->
+          <!-- Variant Cards -->
           {% unless product.has_only_default_variant %}
-            <div class="product-options">
-              {% for option in product.options_with_values %}
-                <div class="form-group">
-                  <label class="form-label" for="option-{{ option.name | handleize }}">
-                    {{ option.name }}
-                  </label>
-                  <select class="form-select" 
-                          id="option-{{ option.name | handleize }}"
-                          name="options[{{ option.name | escape }}]"
-                          onchange="updateVariant()">
-                    {% for value in option.values %}
-                      <option value="{{ value | escape }}" 
-                              {% if option.selected_value == value %}selected{% endif %}>
-                        {{ value }}
-                      </option>
-                    {% endfor %}
-                  </select>
+            <div class="variant-cards" id="variant-cards">
+              {% for variant in product.variants %}
+                <div class="variant-card {% if forloop.first %}selected{% endif %}"
+                     data-variant-id="{{ variant.id }}"
+                     data-price="{{ variant.price }}"
+                     data-compare-price="{{ variant.compare_at_price }}"
+                     onclick="selectVariantCard(this, {{ variant.id }}, {{ variant.price }}, {{ variant.compare_at_price | default: 0 }})">
+                  <div class="variant-card-header">
+                    <span class="variant-card-title">{{ variant.title }}</span>
+                    <span class="variant-card-price">{{ variant.price | money }}</span>
+                  </div>
+                  {% if variant.title contains 'Study' or variant.title contains 'study' %}
+                    <ul class="variant-card-features">
+                      <li>Dimensioned floor plans &amp; room sizes</li>
+                      <li>4 exterior elevation views</li>
+                      <li>3D dollhouse visualization sheets</li>
+                      <li>Stamped "Not For Construction"</li>
+                    </ul>
+                    <div class="variant-card-badge">💡 $99 credit applies toward the full Construction Set</div>
+                  {% elsif variant.title contains 'Construction' or variant.title contains 'construction' %}
+                    <ul class="variant-card-features">
+                      <li>Full architectural license (1 build)</li>
+                      <li>Foundation, electrical &amp; plumbing plans</li>
+                      <li>Interior elevations &amp; 3D renders</li>
+                      <li>Ready to permit &amp; break ground</li>
+                    </ul>
+                    <div class="variant-card-badge">✅ Ready to Permit &amp; Build</div>
+                  {% endif %}
                 </div>
               {% endfor %}
             </div>
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
+          {% else %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
           {% endunless %}
           
           <!-- Hidden Quantity (always 1 for floor plans) -->
@@ -219,40 +188,6 @@
         </form>
         
         {% render 'legal-disclaimer' %}
-
-        {% comment %} Design Consultation CTA {% endcomment %}
-        <div style="padding: 15px 0;">
-          <p style="text-align: center; margin-bottom: 10px; font-size: 14px; color: #e5e7eb;">
-            Have questions about this plan?
-          </p>
-          <a
-            href="https://crm.empowerbuilding.ai/book/30-minute-consultation?fbp=fb.1.1753229478202.141479004560920050&source=shopify_store"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="
-              display: block;
-              width: 100%;
-              padding: 14px 20px;
-              border: 2px solid #B8860B;
-              background: transparent;
-              color: #e5e7eb;
-              font-size: 15px;
-              font-weight: 600;
-              text-align: center;
-              text-decoration: none;
-              border-radius: 4px;
-              box-sizing: border-box;
-              cursor: pointer;
-            "
-            onmouseover="this.style.background='rgba(184,134,11,0.15)'"
-            onmouseout="this.style.background='transparent'"
-          >
-            Schedule a Free Design Consultation
-          </a>
-          <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #9ca3af;">
-            Our team can walk you through engineering requirements and customization options.
-          </p>
-        </div>
 
         {% comment %} Cost Calculator CTA {% endcomment %}
         <div style="padding: 10px 0 15px;">
@@ -279,6 +214,37 @@
           >
             💰 Estimate My Build Cost
           </button>
+        </div>
+
+        {% comment %} Design Consultation CTA {% endcomment %}
+        <div style="padding: 0 0 15px;">
+          <a
+            href="https://crm.empowerbuilding.ai/book/30-minute-consultation?source=shopify_store"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              display: block;
+              width: 100%;
+              padding: 14px 20px;
+              border: 2px solid #B8860B;
+              background: transparent;
+              color: #e5e7eb;
+              font-size: 15px;
+              font-weight: 600;
+              text-align: center;
+              text-decoration: none;
+              border-radius: 4px;
+              box-sizing: border-box;
+              cursor: pointer;
+            "
+            onmouseover="this.style.background='rgba(184,134,11,0.15)'"
+            onmouseout="this.style.background='transparent'"
+          >
+            Schedule a Free Design Consultation
+          </a>
+          <p style="text-align: center; margin-top: 8px; font-size: 12px; color: #9ca3af;">
+            Have questions? Our team can walk you through engineering requirements and customization options.
+          </p>
         </div>
 
         {% comment %} ── Cost Calculator Modal ─────────────────────────────── {% endcomment %}
@@ -856,39 +822,6 @@
                   Your browser does not support the video tag.
                 </video>
               </div>
-            {% elsif media.media_type == 'model' %}
-              <div class="lightbox-image {% if forloop.first %}active{% endif %}" data-media-type="model">
-                {% assign model_src = '' %}
-                {% for source in media.sources %}
-                  {% if source.format == 'glb' %}
-                    {% assign model_src = source.url %}
-                    {% break %}
-                  {% endif %}
-                {% endfor %}
-                {% if model_src == '' %}
-                  {% assign model_src = media.sources[0].url %}
-                {% endif %}
-                <model-viewer 
-                  src="{{ model_src }}"
-                  {% if media.preview_image %}poster="{{ media.preview_image | img_url: '1200x1200' }}"{% endif %}
-                  alt="{{ media.alt | escape }}"
-                  auto-rotate
-                  auto-rotate-delay="0"
-                  camera-controls
-                  interaction-prompt="auto"
-                  touch-action="pan-y"
-                  camera-orbit="45deg 75deg 30m"
-                  min-camera-orbit="auto auto 15m"
-                  max-camera-orbit="auto auto 60m"
-                  field-of-view="40deg"
-                  camera-target="auto auto auto"
-                  ar
-                  ar-modes="webxr scene-viewer quick-look"
-                  shadow-intensity="1"
-                  class="lightbox-model-viewer"
-                  data-media-id="{{ media.id }}">
-                </model-viewer>
-              </div>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -912,18 +845,7 @@
   </div>
 </section>
 
-<!-- Model Viewer Library - Only load if product has 3D models -->
-{% assign has_3d_model = false %}
-{% for media in product.media %}
-  {% if media.media_type == 'model' %}
-    {% assign has_3d_model = true %}
-    {% break %}
-  {% endif %}
-{% endfor %}
 
-{% if has_3d_model %}
-<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
-{% endif %}
 
 <script>
   // Product variants data
@@ -1496,8 +1418,43 @@
     }
   }
   
+  // Variant card selection
+  function selectVariantCard(card, variantId, price, comparePrice) {
+    // Remove selected from all cards
+    document.querySelectorAll('.variant-card').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    // Select clicked card
+    card.classList.add('selected');
+    // Update hidden input
+    document.getElementById('product-variant-id').value = variantId;
+    // Update displayed price
+    const priceEl = document.getElementById('product-price');
+    if (priceEl) priceEl.textContent = formatMoney(price);
+    const compareEl = document.getElementById('product-compare-price');
+    if (compareEl) {
+      if (comparePrice && comparePrice > price) {
+        compareEl.textContent = formatMoney(comparePrice);
+        compareEl.style.display = 'inline';
+      } else {
+        compareEl.style.display = 'none';
+      }
+    }
+  }
+
   // Sync price with selected variant on page load
-  document.addEventListener('DOMContentLoaded', function() { updateVariant(); });
+  document.addEventListener('DOMContentLoaded', function() {
+    // Select first variant card by default
+    const firstCard = document.querySelector('.variant-card');
+    if (firstCard) {
+      const vid = parseInt(firstCard.getAttribute('data-variant-id'));
+      const price = parseInt(firstCard.getAttribute('data-price'));
+      const compare = parseInt(firstCard.getAttribute('data-compare-price')) || 0;
+      selectVariantCard(firstCard, vid, price, compare);
+    } else {
+      updateVariant();
+    }
+  });
 
   // Auto-play first video on page load
   document.addEventListener('DOMContentLoaded', function() {
@@ -1542,268 +1499,13 @@
     });
   });
   
-  // 3D Model Viewer Interaction Handling - Only run if models exist
-  document.addEventListener('DOMContentLoaded', function() {
-    // Check if there are any 3D models on this page
-    const carouselModels = document.querySelectorAll('.carousel-image[data-media-type="model"]');
-    
-    // Exit early if no 3D models found - improves performance
-    if (carouselModels.length === 0) {
-      return;
-    }
-    
-    carouselModels.forEach((modelContainer, index) => {
-      const modelViewer = modelContainer.querySelector('model-viewer');
-      
-      if (modelViewer) {
-        // Prevent lightbox from opening when interacting with model
-        modelViewer.addEventListener('mousedown', function(e) {
-          e.stopPropagation();
-        });
-        
-        modelViewer.addEventListener('touchstart', function(e) {
-          e.stopPropagation();
-        });
-        
-        // Override the container's onclick for model containers
-        modelContainer.onclick = function(e) {
-          // Only open lightbox if clicking outside the model-viewer element
-          if (e.target.tagName !== 'MODEL-VIEWER' && !e.target.closest('model-viewer')) {
-            const mediaIndex = Array.from(document.querySelectorAll('.carousel-image')).indexOf(modelContainer);
-            openLightbox(mediaIndex);
-          }
-        };
-      }
-    });
-    
-    // Handle lightbox model viewers
-    const lightboxModels = document.querySelectorAll('.lightbox-image[data-media-type="model"] model-viewer');
-    
-    lightboxModels.forEach((modelViewer) => {
-      // Prevent lightbox from closing when interacting with model
-      modelViewer.addEventListener('click', function(e) {
-        e.stopPropagation();
-      });
-      
-      modelViewer.addEventListener('mousedown', function(e) {
-        e.stopPropagation();
-      });
-      
-      modelViewer.addEventListener('touchstart', function(e) {
-        e.stopPropagation();
-      });
-    });
-    
-    // Pause auto-rotate when user interacts, resume when idle
-    document.querySelectorAll('model-viewer').forEach((modelViewer) => {
-      let interacting = false;
-      
-      modelViewer.addEventListener('camera-change', function() {
-        if (!interacting) {
-          interacting = true;
-          modelViewer.autoRotate = false;
-        }
-        
-        // Resume auto-rotate after 3 seconds of no interaction
-        clearTimeout(modelViewer.rotateTimeout);
-        modelViewer.rotateTimeout = setTimeout(() => {
-          modelViewer.autoRotate = true;
-          interacting = false;
-        }, 3000);
-      });
-    });
-  });
+
   
-  // Debug 3D Model URLs and Loading
-  document.addEventListener('DOMContentLoaded', function() {
-    const modelViewers = document.querySelectorAll('model-viewer');
-    
-    console.log('=== 3D Model Viewer Debug Info ===');
-    console.log('Total model-viewer elements found:', modelViewers.length);
-    
-    modelViewers.forEach((mv, i) => {
-      const src = mv.getAttribute('src');
-      const mediaId = mv.getAttribute('data-media-id');
-      
-      console.log('\nModel ' + i + ':');
-      console.log('  Media ID:', mediaId);
-      console.log('  Source URL:', src);
-      console.log('  Poster:', mv.getAttribute('poster'));
-      
-      // Test if URL is accessible
-      if (src) {
-        fetch(src, { method: 'HEAD' })
-          .then(response => {
-            console.log('  Response Status:', response.status);
-            console.log('  Content-Type:', response.headers.get('content-type'));
-            console.log('  Content-Length:', response.headers.get('content-length'));
-            
-            if (response.status !== 200) {
-              console.error('  ❌ Model file returned non-200 status!');
-            } else {
-              console.log('  ✓ Model file is accessible');
-            }
-          })
-          .catch(error => {
-            console.error('  ❌ Fetch error:', error);
-          });
-      } else {
-        console.error('  ❌ No source URL found!');
-      }
-      
-      // Listen for model-viewer errors
-      mv.addEventListener('error', function(event) {
-        console.error('Model ' + i + ' error event:', event);
-      });
-      
-      // Listen for model load success
-      mv.addEventListener('load', function() {
-        console.log('✓ Model ' + i + ' loaded successfully!');
-      });
-    });
-    
-    console.log('=== End Debug Info ===\n');
-  });
+
 </script>
 
 <style>
-/* 3D Model Viewer Styles */
-model-viewer {
-  width: 100%;
-  height: 100%;
-  background-color: #1C1C1C;
-  --poster-color: #1C1C1C;
-  position: relative;
-  z-index: 2;
-  pointer-events: auto !important;
-  touch-action: pan-y;
-  cursor: grab;
-  display: block;
-}
 
-model-viewer:active {
-  cursor: grabbing;
-}
-
-/* Ensure interaction prompt is visible */
-model-viewer::part(interaction-prompt) {
-  color: #B8860B;
-  font-weight: 600;
-}
-
-.product-model-viewer {
-  width: 100%;
-  min-height: 500px;
-  border-radius: 8px;
-}
-
-.lightbox-model-viewer {
-  width: 100%;
-  height: 80vh;
-  max-height: 800px;
-}
-
-/* Model Viewer AR Button Styling */
-model-viewer::part(default-ar-button) {
-  background-color: #B8860B;
-  color: #1C1C1C;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  font-weight: 700;
-  transition: all 0.3s ease;
-}
-
-model-viewer::part(default-ar-button):hover {
-  background-color: #FFD700;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.5);
-}
-
-/* Model Thumbnail Icon Styling */
-.model-thumbnail-icon {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1C1C1C;
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.model-thumbnail-icon svg {
-  position: relative;
-  z-index: 2;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-}
-
-.product-thumbnail[data-media-type="model"] {
-  border: 2px solid #B8860B;
-}
-
-.product-thumbnail[data-media-type="model"]:hover {
-  border-color: #FFD700;
-  box-shadow: 0 4px 12px rgba(184, 134, 11, 0.4);
-}
-
-/* Model Viewer Loading State */
-model-viewer::part(default-progress-bar) {
-  background-color: #B8860B;
-}
-
-model-viewer::part(default-progress-bar-container) {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Ensure model viewers are visible and interactive when active */
-.carousel-image[data-media-type="model"],
-.lightbox-image[data-media-type="model"] {
-  cursor: default;
-  position: relative;
-  z-index: 1;
-}
-
-.carousel-image[data-media-type="model"].active model-viewer,
-.lightbox-image[data-media-type="model"].active model-viewer {
-  display: block;
-  pointer-events: auto !important;
-  position: relative;
-  z-index: 2;
-}
-
-.carousel-image[data-media-type="model"]:not(.active) model-viewer,
-.lightbox-image[data-media-type="model"]:not(.active) model-viewer {
-  display: none;
-  pointer-events: none;
-}
-
-/* Mobile Responsive Adjustments for Model Viewer */
-@media (max-width: 768px) {
-  .product-model-viewer {
-    min-height: 400px;
-  }
-  
-  .lightbox-model-viewer {
-    height: 70vh;
-  }
-  
-  model-viewer::part(default-ar-button) {
-    padding: 0.625rem 1.25rem;
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .product-model-viewer {
-    min-height: 300px;
-  }
-  
-  .lightbox-model-viewer {
-    height: 60vh;
-  }
-}
 
 /* Product Video Styles */
 .product-video {
@@ -1918,6 +1620,94 @@ model-viewer::part(default-progress-bar-container) {
     max-height: 60vh;
   }
 }
+
+/* Variant Cards */
+.variant-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.variant-card {
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  background: #1C1C1C;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.variant-card:hover {
+  border-color: #B8860B;
+  background: #222;
+}
+
+.variant-card.selected {
+  border-color: #B8860B;
+  background: rgba(184,134,11,0.08);
+}
+
+.variant-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.variant-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.variant-card-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #B8860B;
+}
+
+.variant-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+.variant-card-features li {
+  font-size: 13px;
+  color: #ccc;
+  padding: 3px 0;
+  padding-left: 18px;
+  position: relative;
+}
+
+.variant-card-features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #B8860B;
+  font-weight: 700;
+}
+
+.variant-card-badge {
+  font-size: 12px;
+  color: #DAA520;
+  font-weight: 600;
+  background: rgba(184,134,11,0.1);
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-top: 8px;
+}
+
+@media (min-width: 640px) {
+  .variant-cards {
+    flex-direction: row;
+  }
+  .variant-card {
+    flex: 1;
+  }
+}
+
 </style>
 
 {% schema %}
