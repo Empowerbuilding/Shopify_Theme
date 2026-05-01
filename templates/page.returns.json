@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "returns-content": {
+      "type": "page-returns",
+      "settings": {}
+    }
+  },
+  "order": [
+    "returns-content"
+  ]
+}
