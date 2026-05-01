@@ -1624,12 +1624,14 @@
 /* Variant Cards */
 .variant-cards {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 12px;
   margin-bottom: 20px;
 }
 
 .variant-card {
+  flex: 1;
+  min-width: 0;
   border: 2px solid #333;
   border-radius: 8px;
   padding: 16px;
@@ -1699,14 +1701,7 @@
   margin-top: 8px;
 }
 
-@media (min-width: 640px) {
-  .variant-cards {
-    flex-direction: row;
-  }
-  .variant-card {
-    flex: 1;
-  }
-}
+
 
 </style>
 
