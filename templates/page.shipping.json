@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "shipping-content": {
+      "type": "page-shipping",
+      "settings": {}
+    }
+  },
+  "order": [
+    "shipping-content"
+  ]
+}
