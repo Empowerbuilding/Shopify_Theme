@@ -14,6 +14,9 @@
 
 const FLOOR_PLANS_DATA = {
 
+  "the-titan-luxury-modern-steel-barndominium-plan-with-shop":
+    { beds: 5, baths: 3.5, area: 6060, patio: 3776, garage: 2838, garageType: "Attached Shop" },
+
   "the-generation-modern-steel-barndominium-plan":
     { beds: 5, baths: 4,   area: 4901, patio: 872,  garage: 1560, garageType: "4-Car Garage" },
 
