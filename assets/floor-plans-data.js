@@ -29,6 +29,9 @@ const FLOOR_PLANS_DATA = {
   "serenity-a-mid-century-modern-luxury-house-plan-3-bedroom-3-bath-design-blueprints":
     { beds: 3, baths: 3,   area: 3136, patio: 450,  garage: 800,  garageType: "2-Car Garage" },
 
+  "the-industry-modern-industrial-barndominium-plan-with-shop":
+    { beds: 4, baths: 3,   area: 2208, patio: 1200, garage: 1755, garageType: "Shop/Garage" },
+
   "the-pedernales-barndominium-4-bedrooms-3-baths-2-973-sf-living-riverfront-home-design-blueprints":
     { beds: 4, baths: 3.5, area: 2973, patio: 500,  garage: 1200, garageType: "3-Car Garage" },
 
