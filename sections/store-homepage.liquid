@@ -829,9 +829,16 @@
 }
 
 .carousel-card-price {
-  color: #B8860B;
+  color: #ffffff;
   font-size: 0.95rem;
   font-weight: 700;
+}
+
+.carousel-card-study-price {
+  color: #B8860B;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 .carousel-loading {
@@ -2413,10 +2420,14 @@ document.addEventListener('DOMContentLoaded', function() {
           `;
           
           // Format price the same way as catalog page
-          const variant = product.variants[0];
-          const price = variant && variant.price 
-            ? parseFloat(variant.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-            : '0.00';
+          const variants = product.variants || [];
+          const prices = variants.map(v => parseFloat(v.price)).filter(p => !isNaN(p));
+          const fullPrice = prices.length ? Math.max(...prices) : 0;
+          const studyPrice = prices.length > 1 ? Math.min(...prices) : null;
+          const fullPriceStr = fullPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+          const studyLine = (studyPrice && studyPrice < fullPrice)
+            ? `<div class="carousel-card-study-price">Study Set from $${studyPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>`
+            : '';
           
           card.innerHTML = `
             <div class="carousel-card-image-wrapper">
@@ -2427,7 +2438,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ${statsHTML}
             <div class="carousel-card-content">
               <h3 class="carousel-card-title">${product.title}</h3>
-              <div class="carousel-card-price">$${price}</div>
+              <div class="carousel-card-price">$${fullPriceStr}</div>
+              ${studyLine}
             </div>
           `;
           
