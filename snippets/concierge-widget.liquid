@@ -23,6 +23,10 @@
 <style>
   /* Floating button */
   #barnhaus-fab {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
     position: fixed;
     bottom: 28px;
     right: 28px;
@@ -139,12 +143,6 @@
     var handle = {{ product.handle | json }};
     var loaded = false;
     var fab = document.getElementById('barnhaus-fab');
-
-    // Hide FAB initially
-    fab.style.opacity = '0';
-    fab.style.pointerEvents = 'none';
-    fab.style.transform = 'translateY(16px)';
-    fab.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
 
     // Show FAB when description scrolls into view
     var trigger = document.querySelector('.product-description');
