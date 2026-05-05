@@ -166,17 +166,12 @@
     window.barnhausOpen = barnhausOpen;
     window.barnhausClose = barnhausClose;
 
-    // Hide bar when custom Barnhaus lightbox (#image-lightbox) is active
+    // Hide bar when #image-lightbox.active — poll since element may not exist at script run time
     const barnhausBar = document.getElementById('barnhaus-bar');
-    function updateBarVisibility() {
+    setInterval(function() {
       if (!barnhausBar) return;
       const lb = document.getElementById('image-lightbox');
       barnhausBar.style.display = (lb && lb.classList.contains('active')) ? 'none' : '';
-    }
-    const lbEl = document.getElementById('image-lightbox');
-    if (lbEl) {
-      const lbObserver = new MutationObserver(updateBarVisibility);
-      lbObserver.observe(lbEl, { attributes: true, attributeFilter: ['class'] });
-    }
+    }, 150);
   })();
 </script>
