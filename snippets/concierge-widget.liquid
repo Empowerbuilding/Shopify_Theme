@@ -24,9 +24,11 @@
   /* Floating button */
   #barnhaus-fab {
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
     transform: translateY(16px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
+    animation-play-state: paused;
     position: fixed;
     bottom: 28px;
     right: 28px;
@@ -151,8 +153,11 @@
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
             fab.style.opacity = '1';
+            fab.style.visibility = 'visible';
             fab.style.pointerEvents = 'auto';
             fab.style.transform = 'translateY(0)';
+            fab.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            fab.style.animationPlayState = 'running';
             observer.disconnect();
           }
         });
@@ -161,8 +166,10 @@
     } else {
       // Fallback: always show
       fab.style.opacity = '1';
+      fab.style.visibility = 'visible';
       fab.style.pointerEvents = 'auto';
       fab.style.transform = 'translateY(0)';
+      fab.style.animationPlayState = 'running';
     }
 
     function barnhausOpen() {
