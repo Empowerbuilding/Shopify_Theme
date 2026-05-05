@@ -125,6 +125,7 @@ function createProductCard(product) {
   
   const priceSection = document.createElement('div');
   priceSection.className = 'product-price';
+  priceSection.style.color = '#B8860B';
   
   const variant = product.variants[0];
   if (variant && variant.price) {
