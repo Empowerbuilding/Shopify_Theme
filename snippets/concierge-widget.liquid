@@ -48,6 +48,9 @@
   #barnhaus-bar:hover {
     background: linear-gradient(90deg, #222 0%, #2a2a2a 100%);
   }
+  @media (max-width: 768px) {
+    #barnhaus-bar { bottom: 72px; }
+  }
   #barnhaus-bar-icon {
     font-size: 16px;
   }
@@ -165,13 +168,5 @@
 
     window.barnhausOpen = barnhausOpen;
     window.barnhausClose = barnhausClose;
-
-    // Hide bar when Shopify lightbox/media viewer is open
-    const bar = document.getElementById('barnhaus-bar');
-    const observer = new MutationObserver(() => {
-      const lightboxOpen = document.querySelector('[data-media-gallery-modal][open], .product__media-modal[open], .modal[open], body.overflow-hidden') !== null;
-      if (bar) bar.style.display = lightboxOpen ? 'none' : '';
-    });
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'], subtree: true, childList: true });
   })();
 </script>
