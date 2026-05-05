@@ -146,21 +146,25 @@
     var loaded = false;
     var fab = document.getElementById('barnhaus-fab');
 
-    // Show FAB after user scrolls 50% of the page
-    var fabShown = false;
+    // Show FAB when >= 40% scrolled, hide when < 40%
     function checkScroll() {
-      if (fabShown) return;
       var scrolled = window.scrollY || document.documentElement.scrollTop;
       var total = document.documentElement.scrollHeight - window.innerHeight;
-      if (total > 0 && (scrolled / total) >= 0.5) {
-        fabShown = true;
+      var pct = total > 0 ? scrolled / total : 0;
+      if (pct >= 0.4) {
         fab.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
         fab.style.opacity = '1';
         fab.style.visibility = 'visible';
         fab.style.pointerEvents = 'auto';
         fab.style.transform = 'translateY(0)';
         fab.style.animationPlayState = 'running';
-        window.removeEventListener('scroll', checkScroll);
+      } else {
+        fab.style.transition = 'opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s';
+        fab.style.opacity = '0';
+        fab.style.visibility = 'hidden';
+        fab.style.pointerEvents = 'none';
+        fab.style.transform = 'translateY(16px)';
+        fab.style.animationPlayState = 'paused';
       }
     }
     window.addEventListener('scroll', checkScroll, { passive: true });
