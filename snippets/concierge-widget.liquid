@@ -166,13 +166,26 @@
     window.barnhausOpen = barnhausOpen;
     window.barnhausClose = barnhausClose;
 
-    // Hide bar only when Shopify media lightbox is open (watches for dialog[open])
+    // Hide bar when product media/lightbox is opened, restore on close
     const barnhausBar = document.getElementById('barnhaus-bar');
-    function checkLightbox() {
-      const open = document.querySelector('dialog[open], modal-dialog[open], [open]');
-      if (barnhausBar) barnhausBar.style.display = open ? 'none' : '';
-    }
-    const lbObserver = new MutationObserver(checkLightbox);
-    lbObserver.observe(document.documentElement, { subtree: true, attributeFilter: ['open'] });
+    function hideConciergeBar() { if (barnhausBar) barnhausBar.style.display = 'none'; }
+    function showConciergeBar() { if (barnhausBar) barnhausBar.style.display = ''; }
+
+    // Hide on click of any product media image/thumbnail
+    document.addEventListener('click', function(e) {
+      const mediaClick = e.target.closest('.product__media-item, .product__media, .product-media-container, [data-media-id], .thumbnail-list__item, .product__thumbnail');
+      if (mediaClick) hideConciergeBar();
+    }, true);
+
+    // Show on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') setTimeout(showConciergeBar, 100);
+    });
+
+    // Show when any close button in modal area is clicked
+    document.addEventListener('click', function(e) {
+      const closeBtn = e.target.closest('.product__media-close, [data-close-modal], .modal__close-button, .media-modal__close');
+      if (closeBtn) setTimeout(showConciergeBar, 100);
+    });
   })();
 </script>
