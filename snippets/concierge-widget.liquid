@@ -166,13 +166,17 @@
     window.barnhausOpen = barnhausOpen;
     window.barnhausClose = barnhausClose;
 
-    // Hide bar when Shopify modal is open (Dawn adds overflow-hidden to body)
+    // Hide bar when custom Barnhaus lightbox (#image-lightbox) is active
     const barnhausBar = document.getElementById('barnhaus-bar');
     function updateBarVisibility() {
       if (!barnhausBar) return;
-      barnhausBar.style.display = document.body.classList.contains('overflow-hidden') ? 'none' : '';
+      const lb = document.getElementById('image-lightbox');
+      barnhausBar.style.display = (lb && lb.classList.contains('active')) ? 'none' : '';
     }
-    const lbObserver = new MutationObserver(updateBarVisibility);
-    lbObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    const lbEl = document.getElementById('image-lightbox');
+    if (lbEl) {
+      const lbObserver = new MutationObserver(updateBarVisibility);
+      lbObserver.observe(lbEl, { attributes: true, attributeFilter: ['class'] });
+    }
   })();
 </script>
