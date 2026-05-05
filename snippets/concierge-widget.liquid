@@ -1,10 +1,4 @@
-{% comment %}Barnhaus Design Concierge — drop into product page template{% endcomment %}
-
-<div id="barnhaus-widget-wrap">
-  <button id="barnhaus-open-btn" onclick="barnhausOpen()">
-    💬 Talk to a Design Concierge
-  </button>
-</div>
+{% comment %}Barnhaus Design Concierge — floating pulsing widget{% endcomment %}
 
 <div id="barnhaus-overlay" aria-modal="true" role="dialog" aria-label="Design Concierge">
   <div id="barnhaus-panel">
@@ -18,22 +12,73 @@
   </div>
 </div>
 
+<div id="barnhaus-fab" onclick="barnhausOpen()">
+  <div id="barnhaus-fab-ring"></div>
+  <div id="barnhaus-fab-inner">
+    <span id="barnhaus-fab-icon">✏️</span>
+    <span id="barnhaus-fab-label">Want to make changes?</span>
+  </div>
+</div>
+
 <style>
-  #barnhaus-open-btn {
+  /* Floating button */
+  #barnhaus-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 99998;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     background: linear-gradient(135deg, #B8860B, #DAA520);
     color: #1a1a1a;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+    border-radius: 50px;
+    padding: 13px 20px 13px 16px;
     font-family: 'Inter', sans-serif;
-    margin-top: 16px;
-    transition: opacity 0.15s;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 4px 20px rgba(184,134,11,0.5);
+    animation: barnhausPulse 2.2s ease-in-out infinite;
+    user-select: none;
+    border: none;
+    outline: none;
   }
-  #barnhaus-open-btn:hover { opacity: 0.9; }
+  #barnhaus-fab:hover {
+    animation: none;
+    transform: scale(1.05);
+    box-shadow: 0 6px 28px rgba(184,134,11,0.7);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  #barnhaus-fab-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+  #barnhaus-fab-label {
+    white-space: nowrap;
+  }
 
+  /* Pulse ring */
+  #barnhaus-fab-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50px;
+    border: 2px solid rgba(218,165,32,0.6);
+    animation: barnhausRing 2.2s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes barnhausPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(184,134,11,0.5); }
+    50% { box-shadow: 0 4px 32px rgba(184,134,11,0.85); }
+  }
+  @keyframes barnhausRing {
+    0% { opacity: 0.8; transform: scale(1); }
+    70% { opacity: 0; transform: scale(1.18); }
+    100% { opacity: 0; transform: scale(1.18); }
+  }
+
+  /* Overlay */
   #barnhaus-overlay {
     display: none;
     position: fixed;
@@ -61,7 +106,7 @@
     position: absolute;
     top: 14px;
     right: 18px;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0,0,0,0.45);
     border: 1px solid #444;
     color: #aaa;
     width: 32px;
@@ -69,7 +114,6 @@
     border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
-    line-height: 1;
     z-index: 1;
     display: flex;
     align-items: center;
@@ -96,13 +140,12 @@
     var loaded = false;
 
     function barnhausOpen() {
-      var overlay = document.getElementById('barnhaus-overlay');
       if (!loaded) {
         document.getElementById('barnhaus-iframe').src =
           CONCIERGE_BASE + '?mode=widget&handle=' + encodeURIComponent(handle);
         loaded = true;
       }
-      overlay.classList.add('active');
+      document.getElementById('barnhaus-overlay').classList.add('active');
       document.body.style.overflow = 'hidden';
     }
 
