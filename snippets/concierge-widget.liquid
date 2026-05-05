@@ -1,4 +1,4 @@
-{% comment %}Barnhaus Design Concierge — floating pulsing widget{% endcomment %}
+{% comment %}Barnhaus Design Concierge — sticky bottom bar{% endcomment %}
 
 <div id="barnhaus-overlay" aria-modal="true" role="dialog" aria-label="Design Concierge">
   <div id="barnhaus-panel">
@@ -12,76 +12,63 @@
   </div>
 </div>
 
-<div id="barnhaus-fab" onclick="barnhausOpen()">
-  <div id="barnhaus-fab-ring"></div>
-  <div id="barnhaus-fab-inner">
-    <span id="barnhaus-fab-icon">✏️</span>
-    <span id="barnhaus-fab-label">Want to make changes?</span>
-  </div>
+<div id="barnhaus-bar" onclick="barnhausOpen()">
+  <span id="barnhaus-bar-icon">✏️</span>
+  <span id="barnhaus-bar-text">Want to customize this plan?</span>
+  <span id="barnhaus-bar-cta">Chat with a Concierge →</span>
 </div>
 
 <style>
-  /* Floating button */
-  #barnhaus-fab {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translateY(16px);
-    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
-    animation-play-state: paused;
+  #barnhaus-bar {
     position: fixed;
-    bottom: 28px;
-    right: 28px;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 99998;
-    cursor: pointer;
+    background: linear-gradient(90deg, #1a1a1a 0%, #222 100%);
+    border-top: 1px solid #B8860B;
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: linear-gradient(135deg, #B8860B, #DAA520);
-    color: #1a1a1a;
-    border-radius: 50px;
-    padding: 13px 20px 13px 16px;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100%);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s linear 0.4s;
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
+  }
+  #barnhaus-bar.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  #barnhaus-bar:hover {
+    background: linear-gradient(90deg, #222 0%, #2a2a2a 100%);
+  }
+  #barnhaus-bar-icon {
+    font-size: 16px;
+  }
+  #barnhaus-bar-text {
+    color: #ccc;
+    font-size: 13px;
+  }
+  #barnhaus-bar-cta {
+    color: #DAA520;
+    font-size: 13px;
     font-weight: 700;
-    box-shadow: 0 4px 20px rgba(184,134,11,0.5);
-    animation: barnhausPulse 2.2s ease-in-out infinite;
-    user-select: none;
-    border: none;
-    outline: none;
-  }
-  #barnhaus-fab:hover {
-    animation: none;
-    transform: scale(1.05);
-    box-shadow: 0 6px 28px rgba(184,134,11,0.7);
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  #barnhaus-fab-icon {
-    font-size: 18px;
-    line-height: 1;
-  }
-  #barnhaus-fab-label {
     white-space: nowrap;
   }
 
-  /* Pulse ring */
-  #barnhaus-fab-ring {
-    position: absolute;
-    inset: -6px;
-    border-radius: 50px;
-    border: 2px solid rgba(218,165,32,0.6);
-    animation: barnhausRing 2.2s ease-in-out infinite;
-    pointer-events: none;
+  /* Subtle pulse on the gold border */
+  @keyframes barnhausBorderPulse {
+    0%, 100% { border-top-color: #B8860B; }
+    50% { border-top-color: #DAA520; }
   }
-
-  @keyframes barnhausPulse {
-    0%, 100% { box-shadow: 0 4px 20px rgba(184,134,11,0.5); }
-    50% { box-shadow: 0 4px 32px rgba(184,134,11,0.85); }
-  }
-  @keyframes barnhausRing {
-    0% { opacity: 0.8; transform: scale(1); }
-    70% { opacity: 0; transform: scale(1.18); }
-    100% { opacity: 0; transform: scale(1.18); }
+  #barnhaus-bar.visible {
+    animation: barnhausBorderPulse 2.5s ease-in-out infinite;
   }
 
   /* Overlay */
@@ -89,7 +76,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.72);
+    background: rgba(0,0,0,0.72);
     z-index: 99999;
     align-items: flex-end;
     justify-content: center;
@@ -136,6 +123,8 @@
   @media (min-width: 768px) {
     #barnhaus-overlay { align-items: center; padding: 24px; }
     #barnhaus-panel { height: 88vh; border-radius: 20px; }
+    #barnhaus-bar-text { font-size: 14px; }
+    #barnhaus-bar-cta { font-size: 14px; }
   }
 </style>
 
@@ -144,30 +133,12 @@
     var CONCIERGE_BASE = 'https://modify.barnhaussteelbuilders.com';
     var handle = {{ product.handle | json }};
     var loaded = false;
-    var fab = document.getElementById('barnhaus-fab');
+    var bar = document.getElementById('barnhaus-bar');
 
-    // Show FAB when >= 40% scrolled, hide when < 40%
-    function checkScroll() {
-      var scrolled = window.scrollY || document.documentElement.scrollTop;
-      var total = document.documentElement.scrollHeight - window.innerHeight;
-      var pct = total > 0 ? scrolled / total : 0;
-      if (pct >= 0.4) {
-        fab.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-        fab.style.opacity = '1';
-        fab.style.visibility = 'visible';
-        fab.style.pointerEvents = 'auto';
-        fab.style.transform = 'translateY(0)';
-        fab.style.animationPlayState = 'running';
-      } else {
-        fab.style.transition = 'opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s';
-        fab.style.opacity = '0';
-        fab.style.visibility = 'hidden';
-        fab.style.pointerEvents = 'none';
-        fab.style.transform = 'translateY(16px)';
-        fab.style.animationPlayState = 'paused';
-      }
-    }
-    window.addEventListener('scroll', checkScroll, { passive: true });
+    // Show after 10 seconds
+    setTimeout(function() {
+      bar.classList.add('visible');
+    }, 10000);
 
     function barnhausOpen() {
       if (!loaded) {
@@ -184,11 +155,11 @@
       document.body.style.overflow = '';
     }
 
-    document.getElementById('barnhaus-overlay').addEventListener('click', function (e) {
+    document.getElementById('barnhaus-overlay').addEventListener('click', function(e) {
       if (e.target === this) barnhausClose();
     });
 
-    document.addEventListener('keydown', function (e) {
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') barnhausClose();
     });
 
