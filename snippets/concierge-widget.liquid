@@ -169,7 +169,7 @@
     // Hide bar only when Shopify media lightbox is open (watches for dialog[open])
     const barnhausBar = document.getElementById('barnhaus-bar');
     function checkLightbox() {
-      const open = document.querySelector('dialog[open], .product__media-modal[open]');
+      const open = document.querySelector('dialog[open], modal-dialog[open], [open]');
       if (barnhausBar) barnhausBar.style.display = open ? 'none' : '';
     }
     const lbObserver = new MutationObserver(checkLightbox);
