@@ -146,31 +146,24 @@
     var loaded = false;
     var fab = document.getElementById('barnhaus-fab');
 
-    // Show FAB when description scrolls into view
-    var trigger = document.querySelector('.product-description');
-    if (trigger && 'IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            fab.style.opacity = '1';
-            fab.style.visibility = 'visible';
-            fab.style.pointerEvents = 'auto';
-            fab.style.transform = 'translateY(0)';
-            fab.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-            fab.style.animationPlayState = 'running';
-            observer.disconnect();
-          }
-        });
-      }, { threshold: 0.1 });
-      observer.observe(trigger);
-    } else {
-      // Fallback: always show
-      fab.style.opacity = '1';
-      fab.style.visibility = 'visible';
-      fab.style.pointerEvents = 'auto';
-      fab.style.transform = 'translateY(0)';
-      fab.style.animationPlayState = 'running';
+    // Show FAB after user scrolls 50% of the page
+    var fabShown = false;
+    function checkScroll() {
+      if (fabShown) return;
+      var scrolled = window.scrollY || document.documentElement.scrollTop;
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total > 0 && (scrolled / total) >= 0.5) {
+        fabShown = true;
+        fab.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        fab.style.opacity = '1';
+        fab.style.visibility = 'visible';
+        fab.style.pointerEvents = 'auto';
+        fab.style.transform = 'translateY(0)';
+        fab.style.animationPlayState = 'running';
+        window.removeEventListener('scroll', checkScroll);
+      }
     }
+    window.addEventListener('scroll', checkScroll, { passive: true });
 
     function barnhausOpen() {
       if (!loaded) {
