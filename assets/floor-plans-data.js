@@ -14,6 +14,9 @@
 
 const FLOOR_PLANS_DATA = {
 
+  "spring-mountain":
+    { beds: 4, baths: 4.5, area: 4649, patio: 1507, garage: 1004, garageType: "4-Car Garage" },
+
   "the-titan-luxury-modern-steel-barndominium-plan-with-shop":
     { beds: 5, baths: 3.5, area: 6060, patio: 3776, garage: 2838, garageType: "Attached Shop" },
 
