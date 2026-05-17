@@ -89,6 +89,9 @@ const FLOOR_PLANS_DATA = {
   "the-vatican-modern-italian-farmhouse-7-bedrooms-4-5-bathrooms-multigenerational-house-plan":
     { beds: 7, baths: 4.5, area: 4420, patio: 400,  garage: null,  garageType: null },
 
+  "the-shoal-modern-industrial-barndominium-plan-with-shop":
+    { beds: 2, baths: 3,   area: 1816, patio: 501,  garage: 1690, garageType: "Attached Shop" },
+
 };
 
 // ─── Helper Functions ──────────────────────────────────────────────────────────
