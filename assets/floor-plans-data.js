@@ -92,6 +92,9 @@ const FLOOR_PLANS_DATA = {
   "the-shoal-modern-industrial-barndominium-plan-with-shop":
     { beds: 2, baths: 3,   area: 1816, patio: 501,  garage: 1690, garageType: "Attached Shop" },
 
+  "the-ranch-view":
+    { beds: 3, baths: 2,   area: 2306, patio: 1107, garage: 726,  garageType: "2-Car Garage" },
+
 };
 
 // ─── Helper Functions ──────────────────────────────────────────────────────────
