@@ -166,9 +166,6 @@
                 </div>
               {% endfor %}
             </div>
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
-          {% else %}
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
           {% endunless %}
           
           <!-- Hidden Quantity (always 1 for floor plans) -->
