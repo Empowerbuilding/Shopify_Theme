@@ -118,7 +118,14 @@ const SHOPIFY_LISTED_PLANS = [
   'cove branch',
   'cloud gate',
   'the apex',
-  'ranch view'
+  'ranch view',
+  'titan',
+  'industry',
+  'generation',
+  'spring mountain',
+  'shoaa',
+  'the villa',
+  'pure pastures'
 ];
 
 /**
