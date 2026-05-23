@@ -125,7 +125,8 @@ const SHOPIFY_LISTED_PLANS = [
   'spring mountain',
   'shoaa',
   'the villa',
-  'pure pastures'
+  'pure pastures',
+  'shoal'
 ];
 
 /**
