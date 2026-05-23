@@ -117,7 +117,8 @@ const SHOPIFY_LISTED_PLANS = [
   'medina shores',
   'cove branch',
   'cloud gate',
-  'the apex'
+  'the apex',
+  'ranch view'
 ];
 
 /**
