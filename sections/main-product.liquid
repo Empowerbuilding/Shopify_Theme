@@ -171,6 +171,23 @@
           <!-- Hidden Quantity (always 1 for floor plans) -->
           <input type="hidden" name="quantity" id="quantity" value="1">
           
+          <!-- Material Takeoff Add-On Checkbox -->
+          {% assign takeoff_variant = null %}
+          {% for variant in product.variants %}
+            {% if variant.title contains 'Takeoff' or variant.title contains 'takeoff' %}
+              {% assign takeoff_variant = variant %}
+            {% endif %}
+          {% endfor %}
+          {% if takeoff_variant %}
+          <label id="takeoff-checkbox-wrapper" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;cursor:pointer;background:#252525;border:1px solid #3a3a3a;border-radius:8px;padding:12px 14px;">
+            <input type="checkbox" id="takeoff-checkbox" style="margin-top:3px;accent-color:#B8860B;flex-shrink:0;width:16px;height:16px;" data-takeoff-variant-id="{{ takeoff_variant.id }}">
+            <div>
+              <span style="color:#fff;font-size:14px;font-weight:600;">Add Material Takeoff — <span style="color:#B8860B;">{{ takeoff_variant.price | money }}</span></span>
+              <p style="color:#999;font-size:12px;margin:3px 0 0;">Itemized material list for accurate builder quotes.</p>
+            </div>
+          </label>
+          {% endif %}
+
           <!-- Add to Cart Button -->
           <button type="submit" 
                   class="btn btn-large btn-full-width" 
@@ -1325,16 +1342,25 @@
   document.getElementById('product-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const formData = new FormData(this);
     const button = document.getElementById('add-to-cart-button');
     const originalText = button.textContent;
+    const selectedVariantId = parseInt(document.getElementById('product-variant-id').value);
+    const takeoffCheckbox = document.getElementById('takeoff-checkbox');
+    const takeoffChecked = takeoffCheckbox && takeoffCheckbox.checked;
+    const takeoffVariantId = takeoffCheckbox ? parseInt(takeoffCheckbox.dataset.takeoffVariantId) : null;
+
+    const items = [{ id: selectedVariantId, quantity: 1 }];
+    if (takeoffChecked && takeoffVariantId) {
+      items.push({ id: takeoffVariantId, quantity: 1 });
+    }
     
     button.disabled = true;
     button.textContent = 'Adding...';
     
     fetch('/cart/add.js', {
       method: 'POST',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items })
     })
     .then(response => response.json())
     .then(data => {
