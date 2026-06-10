@@ -131,7 +131,7 @@
         
         <!-- Product Form -->
         <form method="post" action="/cart/add" id="product-form" class="product-form">
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
+          <input type="hidden" name="id" value="" id="product-variant-id">
           
           <!-- Variant Cards -->
           {% unless product.has_only_default_variant %}
@@ -1346,16 +1346,24 @@
     
     const button = document.getElementById('add-to-cart-button');
     const originalText = button.textContent;
-    const selectedVariantId = parseInt(document.getElementById('product-variant-id').value);
+    const variantInputVal = document.getElementById('product-variant-id').value;
+    const selectedVariantId = variantInputVal ? parseInt(variantInputVal) : null;
     const takeoffCheckbox = document.getElementById('takeoff-checkbox');
     const takeoffChecked = takeoffCheckbox && takeoffCheckbox.checked;
     const takeoffVariantId = takeoffCheckbox ? parseInt(takeoffCheckbox.dataset.takeoffVariantId) : null;
 
-    const items = [{ id: selectedVariantId, quantity: 1 }];
+    // Validate — must have at least one item
+    if (!selectedVariantId && !takeoffChecked) {
+      alert('Please select a plan or add the Material Takeoff.');
+      return;
+    }
+
+    const items = [];
+    if (selectedVariantId) items.push({ id: selectedVariantId, quantity: 1 });
     if (takeoffChecked && takeoffVariantId) {
       items.push({ id: takeoffVariantId, quantity: 1, properties: { '_image': planFeaturedImageUrl } });
     }
-    
+
     button.disabled = true;
     button.textContent = 'Adding...';
     
@@ -1417,6 +1425,12 @@
   
   // Variant card selection
   function selectVariantCard(card, variantId, price, comparePrice) {
+    // Toggle off if already selected (allows deselecting for takeoff-only)
+    if (card.classList.contains('selected')) {
+      card.classList.remove('selected');
+      document.getElementById('product-variant-id').value = '';
+      return;
+    }
     // Remove selected from all cards
     document.querySelectorAll('.variant-card').forEach(function(c) {
       c.classList.remove('selected');
