@@ -127,9 +127,11 @@
     #barnhaus-bar-cta { font-size: 14px; }
   }
 
-  /* Lift bar above cart drawer footer */
+  /* Hide bar when cart drawer is open */
   #barnhaus-bar.cart-open {
-    bottom: 80px;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
   }
 </style>
 
@@ -179,7 +181,7 @@
       barnhausBar.style.display = (lb && lb.classList.contains('active')) ? 'none' : '';
     }, 150);
 
-    // Lift bar when cart drawer is open
+    // Hide bar when cart drawer is open
     const cartDrawer = document.getElementById('cart-drawer');
     if (cartDrawer) {
       new MutationObserver(function() {
