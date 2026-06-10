@@ -127,12 +127,7 @@
     #barnhaus-bar-cta { font-size: 14px; }
   }
 
-  /* Hide bar when cart drawer is open */
-  #barnhaus-bar.cart-open {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none;
-  }
+
 </style>
 
 <script>
@@ -173,20 +168,14 @@
     window.barnhausOpen = barnhausOpen;
     window.barnhausClose = barnhausClose;
 
-    // Hide bar when #image-lightbox.active — poll since element may not exist at script run time
+    // Hide bar when #image-lightbox or cart drawer is open — poll since elements may not exist at script run time
     const barnhausBar = document.getElementById('barnhaus-bar');
     setInterval(function() {
       if (!barnhausBar) return;
       const lb = document.getElementById('image-lightbox');
-      barnhausBar.style.display = (lb && lb.classList.contains('active')) ? 'none' : '';
+      const cart = document.getElementById('cart-drawer');
+      const shouldHide = (lb && lb.classList.contains('active')) || (cart && cart.classList.contains('active'));
+      barnhausBar.style.display = shouldHide ? 'none' : '';
     }, 150);
-
-    // Hide bar when cart drawer is open
-    const cartDrawer = document.getElementById('cart-drawer');
-    if (cartDrawer) {
-      new MutationObserver(function() {
-        barnhausBar.classList.toggle('cart-open', cartDrawer.classList.contains('active'));
-      }).observe(cartDrawer, { attributes: true, attributeFilter: ['class'] });
-    }
   })();
 </script>
