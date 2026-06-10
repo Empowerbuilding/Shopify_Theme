@@ -1424,16 +1424,33 @@
   }
   
   // Variant card selection
+  function applyVariantCard(card, variantId, price, comparePrice) {
+    // Internal: select a card without toggle logic (used on init)
+    document.querySelectorAll('.variant-card').forEach(function(c) {
+      c.classList.remove('selected');
+    });
+    card.classList.add('selected');
+    document.getElementById('product-variant-id').value = variantId;
+    const priceEl = document.getElementById('product-price');
+    if (priceEl) priceEl.textContent = formatMoney(price);
+    const compareEl = document.getElementById('product-compare-price');
+    if (compareEl) {
+      if (comparePrice && comparePrice > price) {
+        compareEl.textContent = formatMoney(comparePrice);
+        compareEl.style.display = 'inline';
+      } else {
+        compareEl.style.display = 'none';
+      }
+    }
+  }
+
   function selectVariantCard(card, variantId, price, comparePrice) {
-    // Toggle off if already selected (allows deselecting for takeoff-only)
-    // Only allow deselect if user explicitly clicks an already-selected card (not on initial load)
-    if (card.classList.contains('selected') && card.dataset.userSelected === 'true') {
+    // Toggle off if already selected (takeoff-only purchase)
+    if (card.classList.contains('selected')) {
       card.classList.remove('selected');
-      card.dataset.userSelected = '';
       document.getElementById('product-variant-id').value = '';
       return;
     }
-    card.dataset.userSelected = 'true';
     // Remove selected from all cards
     document.querySelectorAll('.variant-card').forEach(function(c) {
       c.classList.remove('selected');
@@ -1464,7 +1481,7 @@
       const vid = parseInt(firstCard.getAttribute('data-variant-id'));
       const price = parseInt(firstCard.getAttribute('data-price'));
       const compare = parseInt(firstCard.getAttribute('data-compare-price')) || 0;
-      selectVariantCard(firstCard, vid, price, compare);
+      applyVariantCard(firstCard, vid, price, compare);
     } else {
       updateVariant();
     }
