@@ -126,6 +126,11 @@
     #barnhaus-bar-text { font-size: 14px; }
     #barnhaus-bar-cta { font-size: 14px; }
   }
+
+  /* Lift bar above cart drawer footer */
+  #barnhaus-bar.cart-open {
+    bottom: 80px;
+  }
 </style>
 
 <script>
@@ -173,5 +178,13 @@
       const lb = document.getElementById('image-lightbox');
       barnhausBar.style.display = (lb && lb.classList.contains('active')) ? 'none' : '';
     }, 150);
+
+    // Lift bar when cart drawer is open
+    const cartDrawer = document.getElementById('cart-drawer');
+    if (cartDrawer) {
+      new MutationObserver(function() {
+        barnhausBar.classList.toggle('cart-open', cartDrawer.classList.contains('active'));
+      }).observe(cartDrawer, { attributes: true, attributeFilter: ['class'] });
+    }
   })();
 </script>
