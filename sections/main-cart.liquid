@@ -333,6 +333,9 @@
                 {% if item.image %}
                   <img src="{{ item.image | img_url: '160x160' }}" 
                        alt="{{ item.image.alt | escape }}">
+                {% elsif item.properties['_image'] != blank %}
+                  <img src="{{ item.properties['_image'] }}" 
+                       alt="{{ item.product.title | escape }}">
                 {% else %}
                   <img src="{{ 'product-placeholder.png' | asset_url }}" 
                        alt="Product placeholder">
