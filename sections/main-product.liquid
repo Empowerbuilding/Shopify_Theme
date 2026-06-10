@@ -828,6 +828,7 @@
 <script>
   // Product variants data
   const productVariants = {{ product.variants | json }};
+  const planFeaturedImageUrl = '{{ product.featured_image | img_url: "160x160" }}';
   const productOptions = {{ product.options_with_values | json }};
   
   // Image carousel management
@@ -1343,7 +1344,7 @@
 
     const items = [{ id: selectedVariantId, quantity: 1 }];
     if (takeoffChecked && takeoffVariantId) {
-      items.push({ id: takeoffVariantId, quantity: 1 });
+      items.push({ id: takeoffVariantId, quantity: 1, properties: { '_image': planFeaturedImageUrl } });
     }
     
     button.disabled = true;
