@@ -26,6 +26,9 @@ const FLOOR_PLANS_DATA = {
   "the-apex-modern-industrial-barndominium-plan-with-shop":
     { beds: 4, baths: 3.5, area: 3323, patio: 300,  garage: 1459, garageType: "Heated Shop" },
 
+  "farm-modern-barndominium-plan":
+    { beds: 4, baths: 3.5, area: 3379, patio: 1005, garage: 961,  garageType: "4-Car Garage" },
+
   "york-creek-barndominium-plan-modern-farmhouse-steel-framed-4-bed-3-5-baths-design-blueprints":
     { beds: 4, baths: 3.5, area: 3395, patio: 1495, garage: null,  garageType: null },
 
