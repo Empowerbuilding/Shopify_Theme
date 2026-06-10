@@ -131,7 +131,7 @@
         
         <!-- Product Form -->
         <form method="post" action="/cart/add" id="product-form" class="product-form">
-          <input type="hidden" name="id" value="" id="product-variant-id">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
           
           <!-- Variant Cards -->
           {% unless product.has_only_default_variant %}
@@ -1426,11 +1426,14 @@
   // Variant card selection
   function selectVariantCard(card, variantId, price, comparePrice) {
     // Toggle off if already selected (allows deselecting for takeoff-only)
-    if (card.classList.contains('selected')) {
+    // Only allow deselect if user explicitly clicks an already-selected card (not on initial load)
+    if (card.classList.contains('selected') && card.dataset.userSelected === 'true') {
       card.classList.remove('selected');
+      card.dataset.userSelected = '';
       document.getElementById('product-variant-id').value = '';
       return;
     }
+    card.dataset.userSelected = 'true';
     // Remove selected from all cards
     document.querySelectorAll('.variant-card').forEach(function(c) {
       c.classList.remove('selected');
