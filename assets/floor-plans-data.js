@@ -14,6 +14,9 @@
 
 const FLOOR_PLANS_DATA = {
 
+  "the-bloom-modern-barndominium-plan":
+    { beds: 4, baths: 3, area: 2741, patio: 1409, garage: 1210, garageType: "2-Car Garage" },
+
   "spring-mountain":
     { beds: 4, baths: 4.5, area: 4649, patio: 1507, garage: 1004, garageType: "4-Car Garage" },
 
