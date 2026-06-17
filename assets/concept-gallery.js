@@ -127,7 +127,8 @@ const SHOPIFY_LISTED_PLANS = [
   'the villa',
   'pure pastures',
   'shoal',
-  'farm modern'
+  'farm modern',
+  'bloom'
 ];
 
 /**
