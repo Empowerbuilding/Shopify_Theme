@@ -727,7 +727,10 @@
             source: 'shopify_cost_calc',
             page_url: window.location.href,
             timestamp: new Date().toISOString(),
-            anonymous_id: '', fbclid: '', fbp: '', fbc: '',
+            anonymous_id: window.CRMTracking?.getVisitorId() || '',
+            fbclid: window.CRMTracking?.getFbclid() || '',
+            fbp: (window.CRMTracking?.getFacebookCookies() || {}).fbp || '',
+            fbc: (window.CRMTracking?.getFacebookCookies() || {}).fbc || '',
             client_user_agent: navigator.userAgent,
             client_ip_address: ''
           };
@@ -1380,7 +1383,19 @@
         .then(cart => {
           updateCartCount(cart.item_count);
         });
-      
+
+      // Fire Meta AddToCart pixel event
+      if (typeof fbq !== 'undefined') {
+        var variantPrice = parseFloat(document.getElementById('product-price')?.textContent?.replace(/[^0-9.]/g, '') || '0');
+        fbq('track', 'AddToCart', {
+          content_ids: [{{ product.id | json }}],
+          content_name: {{ product.title | json }},
+          content_type: 'product',
+          value: variantPrice,
+          currency: 'USD'
+        });
+      }
+
       button.textContent = 'Added! ✓';
       
       // Automatically open cart drawer

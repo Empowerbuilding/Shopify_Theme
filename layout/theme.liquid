@@ -334,15 +334,21 @@
   <!-- CRM Tracking -->
   <script src="https://crm.empowerbuilding.ai/tracking.js" data-site="barnhaus-store"></script>
 
-  <!-- Store Visitor ID in Cart -->
+  <!-- Store Meta Attribution + Visitor ID in Cart Attributes -->
+  <!-- These flow into Shopify order note_attributes for CAPI server-side matching -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      var fbCookies = window.CRMTracking?.getFacebookCookies() || {};
       var visitorId = window.CRMTracking?.getVisitorId();
-      if (visitorId) {
+      var attrs = {};
+      if (visitorId) attrs.anonymous_id = visitorId;
+      if (fbCookies.fbp) attrs._fbp = fbCookies.fbp;
+      if (fbCookies.fbc) attrs._fbc = fbCookies.fbc;
+      if (Object.keys(attrs).length > 0) {
         fetch('/cart/update.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ attributes: { anonymous_id: visitorId } })
+          body: JSON.stringify({ attributes: attrs })
         });
       }
     });
