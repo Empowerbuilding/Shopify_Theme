@@ -468,9 +468,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const fullPrice = prices.length ? Math.max(...prices) : 0;
         const studyPrice = prices.length > 1 ? Math.min(...prices) : null;
 
+        // Compare-at prices for strikethrough display
+        const comparePrices = variants.map(v => parseFloat(v.compare_at_price)).filter(p => !isNaN(p) && p > 0);
+        const fullComparePrice = comparePrices.length ? Math.max(...comparePrices) : 0;
+        const studyComparePrice = comparePrices.length > 1 ? Math.min(...comparePrices) : 0;
+
         const fullPriceStr = fullPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        const fullComparePriceStr = fullComparePrice > fullPrice ? fullComparePrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : '';
+        const studyComparePriceStr = (studyComparePrice && studyComparePrice > studyPrice) ? studyComparePrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) : '';
+
         const studyLine = (studyPrice && studyPrice < fullPrice)
-          ? `<div class="product-study-price">Study Set from $${studyPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>`
+          ? `<div class="product-study-price">${studyComparePriceStr ? `<s style="opacity:0.55;margin-right:3px;">Study Set from $${studyComparePriceStr}</s> ` : ''}Study Set from $${studyPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>`
           : '';
 
         card.innerHTML = `
@@ -480,7 +488,7 @@ document.addEventListener('DOMContentLoaded', function() {
           ${statsHTML}
           <div class="product-content">
             <h3 class="product-title">${title}</h3>
-            <div class="product-price">$${fullPriceStr}</div>
+            <div class="product-price">${fullComparePriceStr ? `<s style="text-decoration:line-through;opacity:0.55;font-size:0.85em;margin-right:5px;">$${fullComparePriceStr}</s>` : ''}$${fullPriceStr}</div>
             ${studyLine}
           </div>
         `;
