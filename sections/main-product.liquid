@@ -145,7 +145,12 @@
                      onclick="selectVariantCard(this, {{ variant.id }}, {{ variant.price }}, {{ variant.compare_at_price | default: 0 }})">
                   <div class="variant-card-header">
                     <span class="variant-card-title">{{ variant.title }}</span>
-                    <span class="variant-card-price">{{ variant.price | money }}</span>
+                    <div class="variant-card-price-wrap">
+                      {% if variant.compare_at_price > variant.price %}
+                        <span style="text-decoration: line-through; opacity: 0.55; font-size: 0.85rem; margin-right: 0.3rem;">{{ variant.compare_at_price | money }}</span>
+                      {% endif %}
+                      <span class="variant-card-price">{{ variant.price | money }}</span>
+                    </div>
                   </div>
                   {% if variant.title contains 'Study' or variant.title contains 'study' %}
                     <ul class="variant-card-features">
