@@ -788,7 +788,34 @@
   <!-- Media Lightbox Modal (Images & 3D Models) -->
   <div id="image-lightbox" class="lightbox" onclick="closeLightbox(event)">
     <!-- Make It Yours button — centered above nav arrows -->
-    <button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()" style="display:none;position:fixed;bottom:110px;left:50%;transform:translateX(-50%);z-index:10000;background:rgba(184,134,11,0.95);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-size:0.88rem;font-weight:700;letter-spacing:0.03em;box-shadow:0 2px 16px rgba(0,0,0,0.5);cursor:pointer;white-space:nowrap;">✨ Make It Yours</button>
+    <style>
+  #lb-make-it-yours {
+    display:none;
+    position:fixed;
+    bottom:110px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:10000;
+    background:linear-gradient(135deg,#B8860B 0%,#DAA520 50%,#B8860B 100%);
+    background-size:200% 200%;
+    color:#fff;
+    border:none;
+    border-radius:30px;
+    padding:12px 26px;
+    font-size:0.9rem;
+    font-weight:700;
+    letter-spacing:0.05em;
+    box-shadow:0 0 18px rgba(218,165,32,0.6), 0 2px 12px rgba(0,0,0,0.4);
+    cursor:pointer;
+    white-space:nowrap;
+    animation:miyGlow 2.4s ease-in-out infinite;
+  }
+  @keyframes miyGlow {
+    0%,100% { box-shadow:0 0 18px rgba(218,165,32,0.5),0 2px 12px rgba(0,0,0,0.4); background-position:0% 50%; }
+    50%      { box-shadow:0 0 28px rgba(218,165,32,0.9),0 2px 16px rgba(0,0,0,0.4); background-position:100% 50%; }
+  }
+</style>
+<button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()">✨ Make It Yours</button>
 
     <!-- Before/After toggle -->
     <div id="lb-compare-bar" style="position:fixed;bottom:210px;left:50%;transform:translateX(-50%);z-index:10000;display:none;background:rgba(0,0,0,0.7);border-radius:20px;padding:4px;white-space:nowrap;">
@@ -804,8 +831,6 @@
     </button>
     
     <div class="lightbox-content">
-      <!-- Generated style overlay — shown on top of lightbox image, never changes original img.src -->
-      <img id="lb-generated-overlay" src="" alt="AI styled" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;z-index:5;pointer-events:none;" />
       <div class="lightbox-images" id="lightbox-images">
         {% if product.media.size > 0 %}
           {% for media in product.media %}
@@ -1297,12 +1322,6 @@
         // Force update with no transition during active gestures
         element.style.transition = 'none';
         element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        // Mirror transform to generated overlay so zoom works on AI result too
-        const genOverlay = document.getElementById('lb-generated-overlay');
-        if (genOverlay && genOverlay.style.display !== 'none') {
-          genOverlay.style.transition = 'none';
-          genOverlay.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        }
         // Hide UI when zoomed
         const miy = document.getElementById('lb-make-it-yours');
         const cbar = document.getElementById('lb-compare-bar');
@@ -1850,27 +1869,41 @@
   let pendingPreset = null;
   let pendingCustom = null;
   // Map: originalUrl → generatedUrl for before/after toggle
-  let aiResults = {};
+  let aiResults = {};      // originalUrl -> generatedUrl
   let currentOriginalUrl = null;
   let viewingGenerated = true;
+  let swappedImg = null;   // the <img> whose .src is currently set to a generated URL
+
+  // Restore a swapped img back to its original src
+  function restoreImg(img) {
+    if (img && img.dataset.originalSrc && img.src !== img.dataset.originalSrc) {
+      img.src = img.dataset.originalSrc;
+    }
+  }
 
   function syncCurrentImage() {
     const activeImg = document.querySelector('.lightbox-image.active img');
-    const overlay = document.getElementById('lb-generated-overlay');
-    if (activeImg) {
-      currentOriginalUrl = activeImg.dataset.originalSrc || activeImg.src;
-      updateCompareBar();
-      // Show generated overlay if this image has a result and we're viewing generated
-      if (overlay) {
-        if (aiResults[currentOriginalUrl] && viewingGenerated) {
-          overlay.src = aiResults[currentOriginalUrl];
-          overlay.style.display = 'block';
-        } else {
-          overlay.style.display = 'none';
-          overlay.src = '';
-        }
-      }
+    if (!activeImg) return;
+
+    // Restore any previously swapped img that is no longer active
+    if (swappedImg && swappedImg !== activeImg) {
+      restoreImg(swappedImg);
+      swappedImg = null;
     }
+
+    // Determine original URL for this image
+    currentOriginalUrl = activeImg.dataset.originalSrc || activeImg.src;
+
+    // Apply generated result if available
+    if (aiResults[currentOriginalUrl] && viewingGenerated) {
+      activeImg.src = aiResults[currentOriginalUrl];
+      swappedImg = activeImg;
+    } else if (activeImg.src !== currentOriginalUrl) {
+      // Ensure we're showing original (not a stale generated src)
+      activeImg.src = currentOriginalUrl;
+    }
+
+    updateCompareBar();
   }
 
   // Show/hide Make It Yours button when lightbox opens
@@ -1886,23 +1919,22 @@
     }
   };
 
-  // Sync image URL when navigating
+  // Sync on nav — use requestAnimationFrame so DOM class toggle has settled
   const origLightboxNext = window.lightboxNext;
   window.lightboxNext = function(e) {
     origLightboxNext(e);
-    setTimeout(syncCurrentImage, 50);
+    requestAnimationFrame(syncCurrentImage);
   };
   const origLightboxPrev = window.lightboxPrevious;
   window.lightboxPrevious = function(e) {
     origLightboxPrev(e);
-    setTimeout(syncCurrentImage, 50);
+    requestAnimationFrame(syncCurrentImage);
   };
 
   function updateCompareBar() {
     const bar = document.getElementById('lb-compare-bar');
     if (currentOriginalUrl && aiResults[currentOriginalUrl]) {
       bar.style.display = 'flex';
-      viewingGenerated = true;
       updateCompareButtons();
     } else {
       bar.style.display = 'none';
@@ -1917,14 +1949,14 @@
   window.lbShowView = function(which) {
     if (!currentOriginalUrl || !aiResults[currentOriginalUrl]) return;
     viewingGenerated = which === 'generated';
-    const overlay = document.getElementById('lb-generated-overlay');
-    if (overlay) {
-      if (viewingGenerated) {
-        overlay.src = aiResults[currentOriginalUrl];
-        overlay.style.display = 'block';
-      } else {
-        overlay.style.display = 'none';
-      }
+    const activeImg = document.querySelector('.lightbox-image.active img');
+    if (!activeImg) return;
+    if (viewingGenerated) {
+      activeImg.src = aiResults[currentOriginalUrl];
+      swappedImg = activeImg;
+    } else {
+      restoreImg(activeImg);
+      swappedImg = null;
     }
     updateCompareButtons();
   };
@@ -2029,21 +2061,21 @@
       const data = await res.json();
 
       if (data.success && data.resultUrl) {
-        aiResults[swapTargetUrl] = data.resultUrl; // key by the image that was swapped
+        aiResults[swapTargetUrl] = data.resultUrl;
         if (data.creditsRemaining !== null && data.creditsRemaining !== undefined) {
           creditsRemaining = data.creditsRemaining;
         }
-        // Only show overlay if user is still on the image that was swapped
-        // If they navigated away, result is saved in aiResults and will show when they return
+        // Only update visible image if user is still on the swapped image
         if (currentOriginalUrl === swapTargetUrl) {
-          const overlay = document.getElementById('lb-generated-overlay');
-          if (overlay) {
-            overlay.src = data.resultUrl;
-            overlay.style.display = 'block';
+          const activeImg = document.querySelector('.lightbox-image.active img');
+          if (activeImg) {
+            activeImg.src = data.resultUrl;
+            swappedImg = activeImg;
           }
           viewingGenerated = true;
           updateCompareBar();
         }
+        // If they navigated away — aiResults is saved, syncCurrentImage will apply it when they return
         // Save cart attributes
         fetch('/cart/update.js', { method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ attributes: { chosen_style: preset || 'Custom', style_image_url: data.resultUrl } }) }).catch(()=>{});
