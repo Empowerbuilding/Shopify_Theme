@@ -2010,10 +2010,11 @@
 
   async function doSwap(preset, customPrompt) {
     if (!currentOriginalUrl) return;
+    const swapTargetUrl = currentOriginalUrl; // snapshot before async — user may navigate while generating
     setDrawerState('generating');
 
     try {
-      const body = { email: userEmail || '', imageUrl: currentOriginalUrl, is_free_swap: swapCount <= 1, product_handle: '{{ product.handle }}', product_title: {{ product.title | json }} };
+      const body = { email: userEmail || '', imageUrl: swapTargetUrl, is_free_swap: swapCount <= 1, product_handle: '{{ product.handle }}', product_title: {{ product.title | json }} };
       if (customPrompt) body.customPrompt = customPrompt;
       else body.preset = preset;
 
@@ -2021,19 +2022,21 @@
       const data = await res.json();
 
       if (data.success && data.resultUrl) {
-        aiResults[currentOriginalUrl] = data.resultUrl;
+        aiResults[swapTargetUrl] = data.resultUrl; // key by the image that was swapped
         if (data.creditsRemaining !== null && data.creditsRemaining !== undefined) {
           creditsRemaining = data.creditsRemaining;
         }
-        // Update lightbox image to show result
-        // Show result via overlay — never mutate original img.src
-        const overlay = document.getElementById('lb-generated-overlay');
-        if (overlay) {
-          overlay.src = data.resultUrl;
-          overlay.style.display = 'block';
+        // Only show overlay if user is still on the image that was swapped
+        // If they navigated away, result is saved in aiResults and will show when they return
+        if (currentOriginalUrl === swapTargetUrl) {
+          const overlay = document.getElementById('lb-generated-overlay');
+          if (overlay) {
+            overlay.src = data.resultUrl;
+            overlay.style.display = 'block';
+          }
+          viewingGenerated = true;
+          updateCompareBar();
         }
-        viewingGenerated = true;
-        updateCompareBar();
         // Save cart attributes
         fetch('/cart/update.js', { method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ attributes: { chosen_style: preset || 'Custom', style_image_url: data.resultUrl } }) }).catch(()=>{});
