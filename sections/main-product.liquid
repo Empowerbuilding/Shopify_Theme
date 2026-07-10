@@ -782,8 +782,10 @@
   
   <!-- Media Lightbox Modal (Images & 3D Models) -->
   <div id="image-lightbox" class="lightbox" onclick="closeLightbox(event)">
-    <!-- Make It Yours button -->
-    <button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()" style="position:absolute;bottom:60px;right:16px;z-index:10;background:rgba(184,134,11,0.92);color:#fff;border:none;border-radius:24px;padding:10px 18px;font-size:0.85rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;box-shadow:0 2px 12px rgba(0,0,0,0.4);display:none;">✨ Make It Yours</button>
+    <!-- Make It Yours overlay bar on image -->
+    <div id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()" style="display:none;position:absolute;bottom:0;left:0;right:0;z-index:10;background:linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);padding:32px 20px 16px;cursor:pointer;text-align:center;pointer-events:auto;">
+      <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(184,134,11,0.92);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-size:0.9rem;font-weight:700;letter-spacing:0.02em;box-shadow:0 2px 16px rgba(0,0,0,0.5);">✨ Make It Yours</span>
+    </div>
 
     <!-- Before/After toggle -->
     <div id="lb-compare-bar" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:10;display:none;background:rgba(0,0,0,0.6);border-radius:20px;padding:4px;white-space:nowrap;">
