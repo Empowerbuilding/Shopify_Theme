@@ -845,9 +845,11 @@
   </div>
 
 <!-- Style Drawer -->
-<div id="style-drawer" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10001;background:#1C1C1C;border-radius:20px 20px 0 0;border-top:1px solid #333;padding:20px 16px 32px;max-height:80vh;overflow-y:auto;" onclick="event.stopPropagation()">
+<div id="style-drawer" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10001;background:#1C1C1C;border-radius:20px 20px 0 0;border-top:1px solid #333;padding:0 16px 32px;max-height:80vh;overflow-y:auto;" onclick="event.stopPropagation()">
+  <div id="sd-drag-handle" style="width:100%;padding:16px 0 4px;text-align:center;cursor:grab;touch-action:none;">
+    <div style="width:36px;height:4px;background:#444;border-radius:2px;margin:0 auto;"></div>
+  </div>
   <div style="text-align:center;margin-bottom:16px;">
-    <div style="width:36px;height:4px;background:#444;border-radius:2px;margin:0 auto 12px;"></div>
     <h4 style="color:#fff;margin:0 0 4px;font-size:1rem;font-weight:700;">Make It Yours</h4>
     <p style="color:#9ca3af;font-size:0.8rem;margin:0;">Pick a style to visualize this plan</p>
   </div>
@@ -1917,33 +1919,30 @@
     document.getElementById('sd-drawer-overlay').style.display = 'none';
   };
 
-  // Swipe down on the drag handle to dismiss
+  // Swipe down on drag handle to dismiss
   (function() {
     const drawer = document.getElementById('style-drawer');
-    const handle = drawer.querySelector('div[style*="width:36px"]');
+    const handle = document.getElementById('sd-drag-handle');
     if (!handle) return;
-    // Make handle a bigger tap target
-    handle.style.padding = '12px 40px';
-    handle.style.cursor = 'grab';
-    handle.style.margin = '0 auto';
-
     let startY = 0, currentY = 0, active = false;
 
     handle.addEventListener('touchstart', function(e) {
+      e.stopPropagation();
       startY = e.touches[0].clientY;
       currentY = startY;
       active = true;
       drawer.style.transition = 'none';
     }, { passive: true });
 
-    document.addEventListener('touchmove', function(e) {
+    handle.addEventListener('touchmove', function(e) {
       if (!active) return;
+      e.stopPropagation();
       currentY = e.touches[0].clientY;
       const delta = Math.max(0, currentY - startY);
       drawer.style.transform = 'translateY(' + delta + 'px)';
     }, { passive: true });
 
-    document.addEventListener('touchend', function() {
+    handle.addEventListener('touchend', function() {
       if (!active) return;
       active = false;
       const delta = currentY - startY;
