@@ -799,6 +799,8 @@
     </button>
     
     <div class="lightbox-content">
+      <!-- Generated style overlay — shown on top of lightbox image, never changes original img.src -->
+      <img id="lb-generated-overlay" src="" alt="AI styled" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;z-index:5;pointer-events:none;" />
       <div class="lightbox-images" id="lightbox-images">
         {% if product.media.size > 0 %}
           {% for media in product.media %}
@@ -1842,13 +1844,19 @@
 
   function syncCurrentImage() {
     const activeImg = document.querySelector('.lightbox-image.active img');
+    const overlay = document.getElementById('lb-generated-overlay');
     if (activeImg) {
-      // Always use the original URL, not whatever src is currently set (may be generated)
       currentOriginalUrl = activeImg.dataset.originalSrc || activeImg.src;
       updateCompareBar();
-      // If we have a generated result for this image, show it
-      if (aiResults[currentOriginalUrl] && viewingGenerated) {
-        activeImg.src = aiResults[currentOriginalUrl];
+      // Show generated overlay if this image has a result and we're viewing generated
+      if (overlay) {
+        if (aiResults[currentOriginalUrl] && viewingGenerated) {
+          overlay.src = aiResults[currentOriginalUrl];
+          overlay.style.display = 'block';
+        } else {
+          overlay.style.display = 'none';
+          overlay.src = '';
+        }
       }
     }
   }
@@ -1897,10 +1905,15 @@
   window.lbShowView = function(which) {
     if (!currentOriginalUrl || !aiResults[currentOriginalUrl]) return;
     viewingGenerated = which === 'generated';
-    const lbImages = document.querySelectorAll('.lightbox-image.active img');
-    lbImages.forEach(img => {
-      img.src = viewingGenerated ? aiResults[currentOriginalUrl] : currentOriginalUrl;
-    });
+    const overlay = document.getElementById('lb-generated-overlay');
+    if (overlay) {
+      if (viewingGenerated) {
+        overlay.src = aiResults[currentOriginalUrl];
+        overlay.style.display = 'block';
+      } else {
+        overlay.style.display = 'none';
+      }
+    }
     updateCompareButtons();
   };
 
@@ -2002,11 +2015,12 @@
           creditsRemaining = data.creditsRemaining;
         }
         // Update lightbox image to show result
-        const activeImgs = document.querySelectorAll('.lightbox-image.active img');
-        activeImgs.forEach(img => {
-          if (!img.dataset.originalSrc) img.dataset.originalSrc = img.src;
-          img.src = data.resultUrl;
-        });
+        // Show result via overlay — never mutate original img.src
+        const overlay = document.getElementById('lb-generated-overlay');
+        if (overlay) {
+          overlay.src = data.resultUrl;
+          overlay.style.display = 'block';
+        }
         viewingGenerated = true;
         updateCompareBar();
         // Save cart attributes
