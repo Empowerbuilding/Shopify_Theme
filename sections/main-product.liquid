@@ -1906,9 +1906,54 @@
   };
 
   window.closeStyleDrawer = function() {
-    document.getElementById('style-drawer').style.display = 'none';
+    const drawer = document.getElementById('style-drawer');
+    drawer.style.transition = 'transform 0.25s ease';
+    drawer.style.transform = 'translateY(100%)';
+    setTimeout(() => {
+      drawer.style.display = 'none';
+      drawer.style.transform = '';
+      drawer.style.transition = '';
+    }, 250);
     document.getElementById('sd-drawer-overlay').style.display = 'none';
   };
+
+  // Swipe down to dismiss drawer
+  (function() {
+    const drawer = document.getElementById('style-drawer');
+    let startY = 0;
+    let currentY = 0;
+    let dragging = false;
+
+    drawer.addEventListener('touchstart', function(e) {
+      // Only initiate drag from the handle area or if scrolled to top
+      if (drawer.scrollTop > 0) return;
+      startY = e.touches[0].clientY;
+      dragging = true;
+      drawer.style.transition = 'none';
+    }, { passive: true });
+
+    drawer.addEventListener('touchmove', function(e) {
+      if (!dragging) return;
+      currentY = e.touches[0].clientY;
+      const delta = currentY - startY;
+      if (delta > 0) {
+        drawer.style.transform = 'translateY(' + delta + 'px)';
+      }
+    }, { passive: true });
+
+    drawer.addEventListener('touchend', function() {
+      if (!dragging) return;
+      dragging = false;
+      const delta = currentY - startY;
+      if (delta > 80) {
+        closeStyleDrawer();
+      } else {
+        drawer.style.transition = 'transform 0.2s ease';
+        drawer.style.transform = '';
+        setTimeout(() => { drawer.style.transition = ''; }, 200);
+      }
+    });
+  })();
 
   function updateCreditBar() {
     const bar = document.getElementById('sd-credit-bar');
