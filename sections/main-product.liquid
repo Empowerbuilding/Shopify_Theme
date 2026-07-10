@@ -235,7 +235,10 @@
         {% comment %} Design Concierge Widget (floating) {% endcomment %}
         {% render 'concierge-widget' %}
 
+        {% endunless %}
+
         {% comment %} ── Cost Calculator Modal ─────────────────────────────── {% endcomment %}
+        {% unless product.tags contains 'style_credits_pack' %}
         <div id="calc-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:20px 10px;">
           <div style="max-width:780px; margin:0 auto; background:#1C1C1C; border-radius:12px; border:1px solid #333; padding:28px 24px; position:relative;">
             
@@ -480,6 +483,7 @@
 
           </div>
         </div>
+        {% endunless %}
 
         <script src="{{ 'floor-plans-data.js' | asset_url }}"></script>
         <script>
