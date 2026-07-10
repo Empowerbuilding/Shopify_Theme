@@ -2322,3 +2322,18 @@ textarea:focus {
   }
 }
 
+
+/* Style Customizer hint in product description */
+.style-customizer-hint {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: rgba(184, 134, 11, 0.08);
+  border-left: 3px solid #B8860B;
+  border-radius: 0 6px 6px 0;
+  color: #ccc;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.style-customizer-hint strong {
+  color: #DAA520;
+}
