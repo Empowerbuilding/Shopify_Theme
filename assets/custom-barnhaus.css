@@ -880,7 +880,7 @@ img {
   .lightbox::after {
     content: '👆 Double tap or pinch to zoom';
     position: absolute;
-    bottom: 5rem;
+    top: 4rem;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.85);
