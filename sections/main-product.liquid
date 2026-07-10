@@ -1900,8 +1900,7 @@
   window.openStyleDrawer = function() {
     document.getElementById('style-drawer').style.display = 'block';
     document.getElementById('sd-drawer-overlay').style.display = 'block';
-    document.getElementById('sd-generating').style.display = 'none';
-    document.getElementById('sd-upsell').style.display = 'none';
+    setDrawerState('presets');
     updateCreditBar();
   };
 
@@ -1919,11 +1918,34 @@
     }
   }
 
+  function setDrawerState(state) {
+    // state: 'presets' | 'generating' | 'upsell'
+    const els = {
+      header: document.querySelector('#style-drawer > div:first-child'),
+      presets: document.getElementById('sd-presets'),
+      customArea: document.querySelector('#style-drawer > div:nth-child(3)'),
+      generating: document.getElementById('sd-generating'),
+      upsell: document.getElementById('sd-upsell'),
+      creditBar: document.getElementById('sd-credit-bar'),
+    };
+    // Hide everything first
+    Object.values(els).forEach(el => { if (el) el.style.display = 'none'; });
+    if (state === 'presets') {
+      if (els.header) els.header.style.display = 'block';
+      if (els.presets) els.presets.style.display = 'flex';
+      if (els.customArea) els.customArea.style.display = 'block';
+      if (els.creditBar && creditsRemaining !== null) els.creditBar.style.display = 'block';
+    } else if (state === 'generating') {
+      if (els.generating) els.generating.style.display = 'block';
+    } else if (state === 'upsell') {
+      if (els.upsell) els.upsell.style.display = 'block';
+      if (els.creditBar && creditsRemaining !== null) els.creditBar.style.display = 'block';
+    }
+  }
+
   async function doSwap(preset, customPrompt) {
     if (!currentOriginalUrl) return;
-    document.getElementById('sd-presets').style.display = 'none';
-    document.getElementById('sd-generating').style.display = 'block';
-    document.getElementById('sd-upsell').style.display = 'none';
+    setDrawerState('generating');
 
     try {
       const body = { email: userEmail || '', imageUrl: currentOriginalUrl, is_free_swap: swapCount <= 1 };
@@ -1947,15 +1969,14 @@
         fetch('/cart/update.js', { method:'POST', headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ attributes: { chosen_style: preset || 'Custom', style_image_url: data.resultUrl } }) }).catch(()=>{});
         closeStyleDrawer();
+        setDrawerState('presets');
       } else {
-        document.getElementById('sd-generating').style.display = 'none';
-        document.getElementById('sd-upsell').style.display = 'block';
+        setDrawerState('upsell');
       }
     } catch(e) {
-      document.getElementById('sd-generating').style.display = 'none';
+      setDrawerState('presets');
       alert('Something went wrong. Please try again.');
     }
-    document.getElementById('sd-presets').style.display = 'flex';
   }
 
   window.runDrawerSwap = function(preset) {
