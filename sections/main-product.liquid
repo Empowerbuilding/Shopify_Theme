@@ -791,7 +791,7 @@
     <button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()" style="display:none;position:fixed;bottom:110px;left:50%;transform:translateX(-50%);z-index:10000;background:rgba(184,134,11,0.95);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-size:0.88rem;font-weight:700;letter-spacing:0.03em;box-shadow:0 2px 16px rgba(0,0,0,0.5);cursor:pointer;white-space:nowrap;">✨ Make It Yours</button>
 
     <!-- Before/After toggle -->
-    <div id="lb-compare-bar" style="position:fixed;bottom:162px;left:50%;transform:translateX(-50%);z-index:10000;display:none;background:rgba(0,0,0,0.7);border-radius:20px;padding:4px;white-space:nowrap;">
+    <div id="lb-compare-bar" style="position:fixed;bottom:210px;left:50%;transform:translateX(-50%);z-index:10000;display:none;background:rgba(0,0,0,0.7);border-radius:20px;padding:4px;white-space:nowrap;">
       <button id="lb-show-generated" onclick="event.stopPropagation(); lbShowView('generated')" style="padding:6px 14px;border-radius:16px;border:none;font-size:0.8rem;font-weight:600;cursor:pointer;background:#B8860B;color:#fff;">Generated</button>
       <button id="lb-show-original" onclick="event.stopPropagation(); lbShowView('original')" style="padding:6px 14px;border-radius:16px;border:none;font-size:0.8rem;font-weight:600;cursor:pointer;background:transparent;color:#fff;">Original</button>
     </div>
@@ -873,11 +873,12 @@
       <p style="color:#9ca3af;font-size:0.8rem;margin:0 0 8px;text-align:center;">or describe your own style</p>
       <textarea id="sd-custom-prompt" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.85rem;resize:none;box-sizing:border-box;" rows="2" placeholder="e.g. dark cedar siding with black metal roof…"></textarea>
       <div style="display:flex;gap:8px;margin-top:8px;">
-        <button onclick="enhanceDrawerPrompt()" style="flex:1;padding:9px;border-radius:8px;border:1px solid #B8860B;background:transparent;color:#B8860B;font-size:0.82rem;cursor:pointer;">✨ Enhance</button>
+        <button onclick="enhanceDrawerPrompt()" title="Rewrites your description to get better AI results" style="flex:1;padding:9px;border-radius:8px;border:1px solid #B8860B;background:transparent;color:#B8860B;font-size:0.82rem;cursor:pointer;">✨ Improve Prompt</button>
         <button onclick="runDrawerCustom()" style="flex:1;padding:9px;border-radius:8px;border:none;background:#B8860B;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;">Apply Style</button>
       </div>
     </div>
     <div id="sd-generating" style="display:none;text-align:center;padding:16px 0;">
+      <style>#sd-generating p{animation:swapPulse 1.6s ease-in-out infinite}@keyframes swapPulse{0%,100%{opacity:1}50%{opacity:0.3}}</style>
       <p style="color:#B8860B;font-size:0.9rem;margin:0;">✨ Generating your style…</p>
     </div>
     <div id="sd-upsell" style="display:none;text-align:center;padding:12px 0;">
@@ -1296,6 +1297,12 @@
         // Force update with no transition during active gestures
         element.style.transition = 'none';
         element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        // Mirror transform to generated overlay so zoom works on AI result too
+        const genOverlay = document.getElementById('lb-generated-overlay');
+        if (genOverlay && genOverlay.style.display !== 'none') {
+          genOverlay.style.transition = 'none';
+          genOverlay.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        }
         // Hide UI when zoomed
         const miy = document.getElementById('lb-make-it-yours');
         const cbar = document.getElementById('lb-compare-bar');
