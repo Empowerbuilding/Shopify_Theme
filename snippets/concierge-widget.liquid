@@ -137,13 +137,10 @@
     var loaded = false;
     var bar = document.getElementById('barnhaus-bar');
 
-    // Show bar immediately and auto-open the panel
+    // Show after 10 seconds
     setTimeout(function() {
       bar.classList.add('visible');
-    }, 400);
-    setTimeout(function() {
-      barnhausOpen();
-    }, 1200);
+    }, 8000);
 
     function barnhausOpen() {
       if (!loaded) {
