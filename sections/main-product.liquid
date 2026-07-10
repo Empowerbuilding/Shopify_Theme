@@ -1917,35 +1917,37 @@
     document.getElementById('sd-drawer-overlay').style.display = 'none';
   };
 
-  // Swipe down to dismiss drawer
+  // Swipe down on the drag handle to dismiss
   (function() {
     const drawer = document.getElementById('style-drawer');
-    let startY = 0;
-    let currentY = 0;
-    let dragging = false;
+    const handle = drawer.querySelector('div[style*="width:36px"]');
+    if (!handle) return;
+    // Make handle a bigger tap target
+    handle.style.padding = '12px 40px';
+    handle.style.cursor = 'grab';
+    handle.style.margin = '0 auto';
 
-    drawer.addEventListener('touchstart', function(e) {
-      // Only initiate drag from the handle area or if scrolled to top
-      if (drawer.scrollTop > 0) return;
+    let startY = 0, currentY = 0, active = false;
+
+    handle.addEventListener('touchstart', function(e) {
       startY = e.touches[0].clientY;
-      dragging = true;
+      currentY = startY;
+      active = true;
       drawer.style.transition = 'none';
     }, { passive: true });
 
-    drawer.addEventListener('touchmove', function(e) {
-      if (!dragging) return;
+    document.addEventListener('touchmove', function(e) {
+      if (!active) return;
       currentY = e.touches[0].clientY;
-      const delta = currentY - startY;
-      if (delta > 0) {
-        drawer.style.transform = 'translateY(' + delta + 'px)';
-      }
+      const delta = Math.max(0, currentY - startY);
+      drawer.style.transform = 'translateY(' + delta + 'px)';
     }, { passive: true });
 
-    drawer.addEventListener('touchend', function() {
-      if (!dragging) return;
-      dragging = false;
+    document.addEventListener('touchend', function() {
+      if (!active) return;
+      active = false;
       const delta = currentY - startY;
-      if (delta > 80) {
+      if (delta > 60) {
         closeStyleDrawer();
       } else {
         drawer.style.transition = 'transform 0.2s ease';
