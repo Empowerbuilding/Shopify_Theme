@@ -204,7 +204,8 @@
         
         {% render 'legal-disclaimer' %}
 
-        {% comment %} Cost Calculator CTA {% endcomment %}
+        {% comment %} Cost Calculator CTA — hidden for non-floor-plan products {% endcomment %}
+        {% unless product.tags contains 'style_credits_pack' %}
         <div style="padding: 10px 0 15px;">
           <button
             id="open-calc-btn"
