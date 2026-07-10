@@ -849,9 +849,10 @@
 <button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()">✨ Make It Yours</button>
 
     <!-- Before/After toggle -->
-    <div id="lb-compare-bar" style="position:fixed;bottom:210px;left:50%;transform:translateX(-50%);z-index:10000;display:none;background:rgba(0,0,0,0.7);border-radius:20px;padding:4px;white-space:nowrap;">
+    <div id="lb-compare-bar" style="position:fixed;bottom:210px;left:50%;transform:translateX(-50%);z-index:10000;display:none;background:rgba(0,0,0,0.7);border-radius:20px;padding:4px;white-space:nowrap;display:none;align-items:center;gap:4px;">
       <button id="lb-show-generated" onclick="event.stopPropagation(); lbShowView('generated')" style="padding:6px 14px;border-radius:16px;border:none;font-size:0.8rem;font-weight:600;cursor:pointer;background:#B8860B;color:#fff;">Generated</button>
       <button id="lb-show-original" onclick="event.stopPropagation(); lbShowView('original')" style="padding:6px 14px;border-radius:16px;border:none;font-size:0.8rem;font-weight:600;cursor:pointer;background:transparent;color:#fff;">Original</button>
+      <button id="lb-download-btn" onclick="event.stopPropagation(); lbDownload()" title="Download styled image" style="padding:6px 10px;border-radius:16px;border:none;font-size:0.85rem;cursor:pointer;background:transparent;color:#fff;line-height:1;">⬇️</button>
     </div>
 
     <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close lightbox">
@@ -1990,6 +1991,25 @@
       swappedImg = null;
     }
     updateCompareButtons();
+  };
+
+  window.lbDownload = async function() {
+    if (!currentOriginalUrl || !aiResults[currentOriginalUrl]) return;
+    const url = aiResults[currentOriginalUrl];
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'barnhaus-styled-exterior.jpg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    } catch(e) {
+      // Fallback: open in new tab if CORS blocks download
+      window.open(url, '_blank');
+    }
   };
 
   window.openStyleDrawer = function() {
