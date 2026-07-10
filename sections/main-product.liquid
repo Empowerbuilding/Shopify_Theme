@@ -1837,12 +1837,13 @@
   function syncCurrentImage() {
     const activeImg = document.querySelector('.lightbox-image.active img');
     if (activeImg) {
-      currentOriginalUrl = activeImg.src;
-      // Restore original src if we were showing generated
-      if (aiResults[currentOriginalUrl]) {
-        // already have a result for this image — compare bar will show
-      }
+      // Always use the original URL, not whatever src is currently set (may be generated)
+      currentOriginalUrl = activeImg.dataset.originalSrc || activeImg.src;
       updateCompareBar();
+      // If we have a generated result for this image, show it
+      if (aiResults[currentOriginalUrl] && viewingGenerated) {
+        activeImg.src = aiResults[currentOriginalUrl];
+      }
     }
   }
 
@@ -1853,7 +1854,7 @@
     const lbImages = document.querySelectorAll('.lightbox-image');
     const activeImg = lbImages[index]?.querySelector('img');
     if (activeImg) {
-      currentOriginalUrl = activeImg.src;
+      currentOriginalUrl = activeImg.dataset.originalSrc || activeImg.src;
       document.getElementById('lb-make-it-yours').style.display = 'block';
       updateCompareBar();
     }
@@ -1962,7 +1963,10 @@
         }
         // Update lightbox image to show result
         const activeImgs = document.querySelectorAll('.lightbox-image.active img');
-        activeImgs.forEach(img => { img.src = data.resultUrl; });
+        activeImgs.forEach(img => {
+          if (!img.dataset.originalSrc) img.dataset.originalSrc = img.src;
+          img.src = data.resultUrl;
+        });
         viewingGenerated = true;
         updateCompareBar();
         // Save cart attributes
@@ -2058,6 +2062,11 @@
     } catch(e) { errEl.textContent = 'Something went wrong.'; errEl.style.display = 'block'; }
     btn.textContent = 'Get My 3 Free Credits'; btn.disabled = false;
   };
+
+  // Cache original image URLs so navigating after generation doesn't break the compare bar
+  document.querySelectorAll('.lightbox-image img').forEach(img => {
+    img.dataset.originalSrc = img.src;
+  });
 
   // On load: check credits if email saved
   if (userEmail) {
