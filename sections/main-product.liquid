@@ -2104,7 +2104,7 @@
     setDrawerState('generating');
 
     try {
-      const body = { email: userEmail || '', imageUrl: swapTargetUrl, is_free_swap: swapCount <= 1, product_handle: '{{ product.handle }}', product_title: {{ product.title | json }} };
+      const body = { email: userEmail || '', imageUrl: swapTargetUrl, is_free_swap: swapCount <= 1, anonymous_id: ANON_ID, product_handle: '{{ product.handle }}', product_title: {{ product.title | json }} };
       if (customPrompt) body.customPrompt = customPrompt;
       else body.preset = preset;
 
