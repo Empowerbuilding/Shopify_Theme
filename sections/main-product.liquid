@@ -1936,30 +1936,36 @@
     document.getElementById('sd-drawer-overlay').style.display = 'none';
   };
 
-  // Swipe down on drag handle to dismiss
-  // Handle is outside the scroll container — gets all touches reliably
+  // Swipe down to dismiss: fires when touch starts in top 80px of drawer
   (function() {
     const drawer = document.getElementById('style-drawer');
-    const handle = document.getElementById('sd-drag-handle');
-    if (!handle || !drawer) return;
-    let startY = 0, lastY = 0, active = false;
+    if (!drawer) return;
+    let startY = 0, lastY = 0, startClientY = 0, active = false;
 
-    handle.addEventListener('touchstart', function(e) {
-      startY = e.touches[0].clientY;
-      lastY = startY;
-      active = true;
-      drawer.style.transition = 'none';
+    drawer.addEventListener('touchstart', function(e) {
+      const rect = drawer.getBoundingClientRect();
+      const touchY = e.touches[0].clientY;
+      // Only initiate drag if touch starts within 80px of top of drawer
+      if (touchY - rect.top <= 80) {
+        startY = touchY;
+        lastY = touchY;
+        startClientY = touchY;
+        active = true;
+        drawer.style.transition = 'none';
+      }
     }, { passive: false });
 
-    handle.addEventListener('touchmove', function(e) {
+    drawer.addEventListener('touchmove', function(e) {
       if (!active) return;
-      e.preventDefault(); // block scroll/pan takeover
-      lastY = e.touches[0].clientY;
-      const delta = Math.max(0, lastY - startY);
-      drawer.style.transform = 'translateY(' + delta + 'px)';
+      const delta = e.touches[0].clientY - startY;
+      if (delta > 0) {
+        e.preventDefault();
+        lastY = e.touches[0].clientY;
+        drawer.style.transform = 'translateY(' + delta + 'px)';
+      }
     }, { passive: false });
 
-    handle.addEventListener('touchend', function(e) {
+    drawer.addEventListener('touchend', function() {
       if (!active) return;
       active = false;
       const delta = lastY - startY;
