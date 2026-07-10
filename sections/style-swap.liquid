@@ -1,0 +1,570 @@
+{% comment %}
+  Barnhaus Style Swap Section
+  Deps: none (vanilla JS, calls n8n webhooks)
+  Add to product template via theme editor
+{% endcomment %}
+
+<div id="style-swap-section" class="style-swap" data-product-image="{{ product.featured_image | img_url: 'master' }}">
+
+  <div class="style-swap__header">
+    <h3 class="style-swap__title">Visualize Your Style</h3>
+    <p class="style-swap__subtitle">See this plan in any architectural style before you buy.</p>
+    <div id="style-swap-credit-bar" class="style-swap__credit-bar" style="display:none;">
+      <span id="style-swap-credit-count">✨ — credits remaining</span>
+    </div>
+  </div>
+
+  <div class="style-swap__presets" id="style-swap-presets">
+    {% assign presets = "Modern,Rustic,Hill Country,Traditional,Farmhouse,Contemporary,Modern Farmhouse,Coastal,Industrial,Mediterranean" | split: "," %}
+    {% for preset in presets %}
+      <button class="style-swap__preset-btn" data-preset="{{ preset }}" type="button">
+        {{ preset }}
+      </button>
+    {% endfor %}
+    <button class="style-swap__preset-btn style-swap__preset-btn--custom" id="style-swap-custom-toggle" type="button">
+      ✏️ Custom Style
+    </button>
+  </div>
+
+  <div id="style-swap-custom-area" class="style-swap__custom-area" style="display:none;">
+    <textarea id="style-swap-custom-prompt" class="style-swap__custom-input" 
+      placeholder="Describe your style… e.g. dark stained cedar siding with black metal roof and white trim windows"
+      rows="3"></textarea>
+    <button id="style-swap-custom-enhance" class="style-swap__enhance-btn" type="button">
+      ✨ Enhance Prompt
+    </button>
+    <button id="style-swap-custom-run" class="style-swap__run-btn" type="button">
+      Apply Custom Style
+    </button>
+  </div>
+
+  <div id="style-swap-result-area" class="style-swap__result-area" style="display:none;">
+    <div id="style-swap-shimmer" class="style-swap__shimmer" style="display:none;">
+      <div class="style-swap__shimmer-inner"></div>
+      <p class="style-swap__shimmer-label">Generating your style…</p>
+    </div>
+    <div id="style-swap-result-img-wrap" style="display:none;">
+      <img id="style-swap-result-img" class="style-swap__result-img" src="" alt="Style swap result" />
+      <div class="style-swap__result-actions">
+        <button id="style-swap-save-btn" class="style-swap__save-btn" type="button">
+          💾 Save This Style
+        </button>
+        <span id="style-swap-saved-label" class="style-swap__saved-label" style="display:none;">✅ Style saved!</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="style-swap-upsell" class="style-swap__upsell" style="display:none;">
+    <p>You've used all your style credits.</p>
+    <a href="/products/5-style-credits" class="style-swap__buy-btn">Buy 5 credits for $5 →</a>
+  </div>
+
+</div>
+
+<!-- Gate Modal -->
+<div id="style-swap-modal" class="style-swap__modal" style="display:none;" role="dialog" aria-modal="true">
+  <div class="style-swap__modal-inner">
+    <h4>Unlock More Styles</h4>
+    <p>Enter your info to get <strong>3 free style credits</strong> — no purchase needed.</p>
+    <input type="text" id="ss-modal-name" placeholder="Your name" class="style-swap__input" autocomplete="name" />
+    <input type="email" id="ss-modal-email" placeholder="Email address" class="style-swap__input" autocomplete="email" />
+    <input type="tel" id="ss-modal-phone" placeholder="Phone number" class="style-swap__input" autocomplete="tel" />
+    <p id="ss-modal-error" class="style-swap__modal-error" style="display:none;"></p>
+    <button id="ss-modal-submit" class="style-swap__modal-submit" type="button">Get My 3 Free Credits</button>
+    <button id="ss-modal-close" class="style-swap__modal-close" type="button" aria-label="Close">✕</button>
+  </div>
+</div>
+<div id="style-swap-overlay" class="style-swap__overlay" style="display:none;"></div>
+
+<!-- Email check prompt (returning user) -->
+<div id="style-swap-email-prompt" class="style-swap__email-prompt" style="display:none;">
+  <input type="email" id="ss-email-check" placeholder="Enter your email to check credits" class="style-swap__input" />
+  <button id="ss-email-check-btn" class="style-swap__check-btn" type="button">Check Credits →</button>
+</div>
+
+<style>
+.style-swap {
+  margin: 32px 0;
+  padding: 24px;
+  background: #1C1C1C;
+  border-radius: 12px;
+  border: 1px solid #333;
+  color: #e5e5e5;
+  font-family: 'Inter', sans-serif;
+}
+.style-swap__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 6px;
+}
+.style-swap__subtitle {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin: 0 0 16px;
+}
+.style-swap__credit-bar {
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: #B8860B;
+  font-weight: 600;
+}
+.style-swap__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.style-swap__preset-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #252525;
+  color: #d1d5db;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.style-swap__preset-btn:hover {
+  border-color: #B8860B;
+  color: #B8860B;
+}
+.style-swap__preset-btn.active {
+  background: #B8860B;
+  border-color: #B8860B;
+  color: #fff;
+}
+.style-swap__preset-btn--custom {
+  border-style: dashed;
+}
+.style-swap__custom-area {
+  margin-bottom: 16px;
+}
+.style-swap__custom-input {
+  width: 100%;
+  background: #252525;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #e5e5e5;
+  padding: 10px;
+  font-size: 0.9rem;
+  resize: vertical;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+.style-swap__enhance-btn, .style-swap__run-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-right: 8px;
+  border: 1px solid #B8860B;
+}
+.style-swap__enhance-btn { background: transparent; color: #B8860B; }
+.style-swap__run-btn { background: #B8860B; color: #fff; border-color: #B8860B; }
+.style-swap__shimmer {
+  height: 300px;
+  background: #252525;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+}
+.style-swap__shimmer-inner {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(184,134,11,0.1), transparent);
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+.style-swap__shimmer-label { color: #9ca3af; font-size: 0.9rem; position: relative; }
+.style-swap__result-img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.style-swap__result-actions { display: flex; align-items: center; gap: 12px; }
+.style-swap__save-btn {
+  padding: 8px 16px;
+  background: #252525;
+  border: 1px solid #B8860B;
+  color: #B8860B;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.style-swap__saved-label { color: #4ade80; font-size: 0.85rem; }
+.style-swap__upsell {
+  text-align: center;
+  padding: 16px;
+  background: #252525;
+  border-radius: 8px;
+  border: 1px dashed #555;
+}
+.style-swap__upsell p { color: #9ca3af; margin: 0 0 10px; font-size: 0.9rem; }
+.style-swap__buy-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #B8860B;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.style-swap__overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 999;
+}
+.style-swap__modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: #1C1C1C;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 28px;
+  width: 90%;
+  max-width: 400px;
+}
+.style-swap__modal h4 { color: #fff; margin: 0 0 8px; font-size: 1.2rem; }
+.style-swap__modal p { color: #9ca3af; font-size: 0.9rem; margin: 0 0 16px; }
+.style-swap__input {
+  width: 100%;
+  background: #252525;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #e5e5e5;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+.style-swap__modal-error { color: #f87171; font-size: 0.85rem; margin-top: -4px; }
+.style-swap__modal-submit {
+  width: 100%;
+  padding: 12px;
+  background: #B8860B;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.style-swap__modal-close {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none; color: #9ca3af;
+  font-size: 1.1rem; cursor: pointer;
+}
+.style-swap__email-prompt {
+  display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.style-swap__check-btn {
+  padding: 10px 16px;
+  background: #B8860B;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .style-swap { padding: 16px; }
+  .style-swap__preset-btn { font-size: 0.8rem; padding: 7px 11px; }
+}
+</style>
+
+<script>
+(function() {
+  const SWAP_API = 'https://n8n.empowerbuilding.ai/webhook/2K5uT9uqKxd1Mp3x/webhook/barnhaus-style-swap';
+  const CREDIT_API = 'https://n8n.empowerbuilding.ai/webhook/TGNr00LCQDTUFP9R/webhook/barnhaus-style-credits';
+  const ENHANCE_API = 'https://n8n.empowerbuilding.ai/webhook/rt-enhance-prompt';
+  const CREDIT_PACK_URL = '/products/5-style-credits';
+  const LS_EMAIL_KEY = 'bh_style_email';
+  const LS_SWAP_COUNT_KEY = 'bh_swap_count';
+
+  const section = document.getElementById('style-swap-section');
+  const productImage = section.dataset.productImage;
+
+  let userEmail = localStorage.getItem(LS_EMAIL_KEY) || null;
+  let swapCount = parseInt(localStorage.getItem(LS_SWAP_COUNT_KEY) || '0');
+  let creditsRemaining = null;
+  let pendingPreset = null;
+  let pendingCustomPrompt = null;
+
+  // DOM refs
+  const creditBar = document.getElementById('style-swap-credit-bar');
+  const creditCount = document.getElementById('style-swap-credit-count');
+  const resultArea = document.getElementById('style-swap-result-area');
+  const shimmer = document.getElementById('style-swap-shimmer');
+  const resultImgWrap = document.getElementById('style-swap-result-img-wrap');
+  const resultImg = document.getElementById('style-swap-result-img');
+  const upsell = document.getElementById('style-swap-upsell');
+  const modal = document.getElementById('style-swap-modal');
+  const overlay = document.getElementById('style-swap-overlay');
+  const emailPrompt = document.getElementById('style-swap-email-prompt');
+  const saveBtn = document.getElementById('style-swap-save-btn');
+  const savedLabel = document.getElementById('style-swap-saved-label');
+
+  function updateCreditUI() {
+    if (creditsRemaining !== null) {
+      creditBar.style.display = 'block';
+      creditCount.textContent = `✨ ${creditsRemaining} credit${creditsRemaining !== 1 ? 's' : ''} remaining`;
+    }
+  }
+
+  function showShimmer() {
+    resultArea.style.display = 'block';
+    shimmer.style.display = 'flex';
+    resultImgWrap.style.display = 'none';
+    upsell.style.display = 'none';
+  }
+
+  function showResult(url) {
+    shimmer.style.display = 'none';
+    resultImgWrap.style.display = 'block';
+    resultImg.src = url;
+    savedLabel.style.display = 'none';
+  }
+
+  function showUpsell() {
+    resultArea.style.display = 'none';
+    upsell.style.display = 'block';
+  }
+
+  function openModal() {
+    modal.style.display = 'block';
+    overlay.style.display = 'block';
+    document.getElementById('ss-modal-name').focus();
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+    overlay.style.display = 'none';
+    document.getElementById('ss-modal-error').style.display = 'none';
+  }
+
+  async function checkCredits(email) {
+    const res = await fetch(CREDIT_API, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, action: 'check'})
+    });
+    return res.json();
+  }
+
+  async function runSwap(imageUrl, preset, customPrompt, isFreeSwap) {
+    showShimmer();
+    try {
+      const body = {email: userEmail || '', imageUrl, is_free_swap: isFreeSwap};
+      if (customPrompt) body.customPrompt = customPrompt;
+      else body.preset = preset;
+
+      const res = await fetch(SWAP_API, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (data.success && data.resultUrl) {
+        showResult(data.resultUrl);
+        if (data.creditsRemaining !== null && data.creditsRemaining !== undefined) {
+          creditsRemaining = data.creditsRemaining;
+          updateCreditUI();
+        }
+        // Store chosen style as cart attribute
+        if (preset || customPrompt) {
+          setCartAttribute('chosen_style', preset || 'Custom: ' + (customPrompt || '').slice(0, 80));
+          setCartAttribute('style_image_url', data.resultUrl);
+        }
+      } else {
+        shimmer.style.display = 'none';
+        alert('Generation failed. Please try again.');
+      }
+    } catch(e) {
+      shimmer.style.display = 'none';
+      alert('Something went wrong. Please try again.');
+    }
+  }
+
+  async function setCartAttribute(key, value) {
+    try {
+      await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({attributes: {[key]: value}})
+      });
+    } catch(e) {}
+  }
+
+  async function handlePresetClick(preset) {
+    // Mark active
+    document.querySelectorAll('.style-swap__preset-btn').forEach(b => b.classList.remove('active'));
+    section.querySelector(`[data-preset="${preset}"]`)?.classList.add('active');
+
+    swapCount++;
+    localStorage.setItem(LS_SWAP_COUNT_KEY, swapCount);
+
+    if (swapCount === 1) {
+      // First swap — free, no gate
+      await runSwap(productImage, preset, null, true);
+    } else if (!userEmail) {
+      // Needs gate
+      pendingPreset = preset;
+      pendingCustomPrompt = null;
+      openModal();
+    } else {
+      // Has email — check credits
+      const credit = await checkCredits(userEmail);
+      if (!credit.allowed && !credit.is_new) {
+        showUpsell();
+        return;
+      }
+      await runSwap(productImage, preset, null, false);
+    }
+  }
+
+  // Preset buttons
+  document.querySelectorAll('.style-swap__preset-btn[data-preset]').forEach(btn => {
+    btn.addEventListener('click', () => handlePresetClick(btn.dataset.preset));
+  });
+
+  // Custom style toggle
+  document.getElementById('style-swap-custom-toggle').addEventListener('click', () => {
+    const area = document.getElementById('style-swap-custom-area');
+    area.style.display = area.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // Enhance prompt
+  document.getElementById('style-swap-custom-enhance').addEventListener('click', async () => {
+    const prompt = document.getElementById('style-swap-custom-prompt').value.trim();
+    if (!prompt) return;
+    const btn = document.getElementById('style-swap-custom-enhance');
+    btn.textContent = 'Enhancing…';
+    btn.disabled = true;
+    try {
+      const res = await fetch(ENHANCE_API, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({prompt, imageUrl: productImage})
+      });
+      const data = await res.json();
+      if (data.enhancedPrompt) {
+        document.getElementById('style-swap-custom-prompt').value = data.enhancedPrompt;
+      }
+    } catch(e) {}
+    btn.textContent = '✨ Enhance Prompt';
+    btn.disabled = false;
+  });
+
+  // Run custom style
+  document.getElementById('style-swap-custom-run').addEventListener('click', async () => {
+    const prompt = document.getElementById('style-swap-custom-prompt').value.trim();
+    if (!prompt) return;
+    swapCount++;
+    localStorage.setItem(LS_SWAP_COUNT_KEY, swapCount);
+
+    if (swapCount === 1) {
+      await runSwap(productImage, null, prompt, true);
+    } else if (!userEmail) {
+      pendingPreset = null;
+      pendingCustomPrompt = prompt;
+      openModal();
+    } else {
+      const credit = await checkCredits(userEmail);
+      if (!credit.allowed && !credit.is_new) { showUpsell(); return; }
+      await runSwap(productImage, null, prompt, false);
+    }
+  });
+
+  // Modal submit
+  document.getElementById('ss-modal-submit').addEventListener('click', async () => {
+    const name = document.getElementById('ss-modal-name').value.trim();
+    const email = document.getElementById('ss-modal-email').value.trim();
+    const phone = document.getElementById('ss-modal-phone').value.trim();
+    const errorEl = document.getElementById('ss-modal-error');
+
+    if (!name || !email || !phone) {
+      errorEl.textContent = 'All fields required.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      errorEl.textContent = 'Enter a valid email.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    const btn = document.getElementById('ss-modal-submit');
+    btn.textContent = 'Getting your credits…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(CREDIT_API, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email, name, phone, action: 'capture'})
+      });
+      const data = await res.json();
+      userEmail = email;
+      localStorage.setItem(LS_EMAIL_KEY, email);
+      creditsRemaining = data.credits_remaining;
+      updateCreditUI();
+      closeModal();
+      // Run the pending swap
+      if (pendingPreset || pendingCustomPrompt) {
+        await runSwap(productImage, pendingPreset, pendingCustomPrompt, false);
+        pendingPreset = null;
+        pendingCustomPrompt = null;
+      }
+    } catch(e) {
+      errorEl.textContent = 'Something went wrong. Try again.';
+      errorEl.style.display = 'block';
+    }
+    btn.textContent = 'Get My 3 Free Credits';
+    btn.disabled = false;
+  });
+
+  // Modal close
+  document.getElementById('ss-modal-close').addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+
+  // Email check (returning user)
+  document.getElementById('ss-email-check-btn').addEventListener('click', async () => {
+    const email = document.getElementById('ss-email-check').value.trim();
+    if (!email) return;
+    const data = await checkCredits(email);
+    userEmail = email;
+    localStorage.setItem(LS_EMAIL_KEY, email);
+    creditsRemaining = data.credits_remaining;
+    updateCreditUI();
+    emailPrompt.style.display = 'none';
+  });
+
+  // Save This Style
+  saveBtn.addEventListener('click', () => {
+    savedLabel.style.display = 'inline';
+    saveBtn.disabled = true;
+  });
+
+  // On load: if email in localStorage, show credit bar quietly
+  if (userEmail) {
+    checkCredits(userEmail).then(data => {
+      creditsRemaining = data.credits_remaining;
+      updateCreditUI();
+    });
+  } else if (swapCount > 0) {
+    // They've done a free swap but not entered email — show email prompt
+    emailPrompt.style.display = 'flex';
+  }
+})();
+</script>
