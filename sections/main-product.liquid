@@ -783,10 +783,10 @@
   <!-- Media Lightbox Modal (Images & 3D Models) -->
   <div id="image-lightbox" class="lightbox" onclick="closeLightbox(event)">
     <!-- Make It Yours button — centered above nav arrows -->
-    <button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()" style="display:none;position:absolute;bottom:100px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(184,134,11,0.95);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-size:0.88rem;font-weight:700;letter-spacing:0.03em;box-shadow:0 2px 16px rgba(0,0,0,0.5);cursor:pointer;white-space:nowrap;">✨ Make It Yours</button>
+    <button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()" style="display:none;position:fixed;bottom:110px;left:50%;transform:translateX(-50%);z-index:10000;background:rgba(184,134,11,0.95);color:#fff;border:none;border-radius:24px;padding:10px 22px;font-size:0.88rem;font-weight:700;letter-spacing:0.03em;box-shadow:0 2px 16px rgba(0,0,0,0.5);cursor:pointer;white-space:nowrap;">✨ Make It Yours</button>
 
     <!-- Before/After toggle -->
-    <div id="lb-compare-bar" style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:10;display:none;background:rgba(0,0,0,0.6);border-radius:20px;padding:4px;white-space:nowrap;">
+    <div id="lb-compare-bar" style="position:fixed;bottom:70px;left:50%;transform:translateX(-50%);z-index:10000;display:none;background:rgba(0,0,0,0.7);border-radius:20px;padding:4px;white-space:nowrap;">
       <button id="lb-show-generated" onclick="event.stopPropagation(); lbShowView('generated')" style="padding:6px 14px;border-radius:16px;border:none;font-size:0.8rem;font-weight:600;cursor:pointer;background:#B8860B;color:#fff;">Generated</button>
       <button id="lb-show-original" onclick="event.stopPropagation(); lbShowView('original')" style="padding:6px 14px;border-radius:16px;border:none;font-size:0.8rem;font-weight:600;cursor:pointer;background:transparent;color:#fff;">Original</button>
     </div>
@@ -1283,6 +1283,12 @@
         // Force update with no transition during active gestures
         element.style.transition = 'none';
         element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        // Hide UI when zoomed
+        const miy = document.getElementById('lb-make-it-yours');
+        const cbar = document.getElementById('lb-compare-bar');
+        const zoomed = scale > 1.1;
+        if (miy) miy.style.visibility = zoomed ? 'hidden' : 'visible';
+        if (cbar && cbar.style.display !== 'none') cbar.style.visibility = zoomed ? 'hidden' : 'visible';
       }
       
       function getDistance(touch1, touch2) {
@@ -1828,6 +1834,18 @@
   let currentOriginalUrl = null;
   let viewingGenerated = true;
 
+  function syncCurrentImage() {
+    const activeImg = document.querySelector('.lightbox-image.active img');
+    if (activeImg) {
+      currentOriginalUrl = activeImg.src;
+      // Restore original src if we were showing generated
+      if (aiResults[currentOriginalUrl]) {
+        // already have a result for this image — compare bar will show
+      }
+      updateCompareBar();
+    }
+  }
+
   // Show/hide Make It Yours button when lightbox opens
   const origOpenLightbox = window.openLightbox;
   window.openLightbox = function(index) {
@@ -1839,6 +1857,18 @@
       document.getElementById('lb-make-it-yours').style.display = 'block';
       updateCompareBar();
     }
+  };
+
+  // Sync image URL when navigating
+  const origLightboxNext = window.lightboxNext;
+  window.lightboxNext = function(e) {
+    origLightboxNext(e);
+    setTimeout(syncCurrentImage, 50);
+  };
+  const origLightboxPrev = window.lightboxPrevious;
+  window.lightboxPrevious = function(e) {
+    origLightboxPrev(e);
+    setTimeout(syncCurrentImage, 50);
   };
 
   function updateCompareBar() {
