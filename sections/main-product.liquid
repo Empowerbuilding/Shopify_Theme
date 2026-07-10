@@ -2002,10 +2002,10 @@
   window.closeStyleDrawer = function() {
     const drawer = document.getElementById('style-drawer');
     drawer.style.transition = 'transform 0.25s ease';
-    drawer.style.transform = 'translateY(100%)';
+    drawer.style.transform = 'translateX(-50%) translateY(100%)';
     setTimeout(() => {
       drawer.style.display = 'none';
-      drawer.style.transform = '';
+      drawer.style.transform = 'translateX(-50%)';
       drawer.style.transition = '';
     }, 250);
     document.getElementById('sd-drawer-overlay').style.display = 'none';
@@ -2036,7 +2036,7 @@
       if (delta > 0) {
         e.preventDefault();
         lastY = e.touches[0].clientY;
-        drawer.style.transform = 'translateY(' + delta + 'px)';
+        drawer.style.transform = 'translateX(-50%) translateY(' + delta + 'px)';
       }
     }, { passive: false });
 
@@ -2048,7 +2048,7 @@
         closeStyleDrawer();
       } else {
         drawer.style.transition = 'transform 0.2s ease';
-        drawer.style.transform = '';
+        drawer.style.transform = 'translateX(-50%)';
         setTimeout(function(){ drawer.style.transition = ''; }, 200);
       }
     }, { passive: false });
