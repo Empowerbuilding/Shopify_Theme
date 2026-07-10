@@ -2032,6 +2032,8 @@
       pendingPreset = preset; pendingCustom = null;
       closeStyleDrawer();
       openGateModal();
+    } else if (creditsRemaining !== null && creditsRemaining <= 0) {
+      setDrawerState('upsell');
     } else {
       doSwap(preset, null);
     }
@@ -2048,6 +2050,8 @@
       pendingPreset = null; pendingCustom = prompt;
       closeStyleDrawer();
       openGateModal();
+    } else if (creditsRemaining !== null && creditsRemaining <= 0) {
+      setDrawerState('upsell');
     } else {
       doSwap(null, prompt);
     }
