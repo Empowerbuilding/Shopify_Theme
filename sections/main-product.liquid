@@ -789,6 +789,7 @@
   <div id="image-lightbox" class="lightbox" onclick="closeLightbox(event)">
     <!-- Make It Yours button — centered above nav arrows -->
     <style>
+  /* Make It Yours — mobile: centered above nav, desktop: right of image */
   #lb-make-it-yours {
     display:none;
     position:fixed;
@@ -809,6 +810,23 @@
     cursor:pointer;
     white-space:nowrap;
     animation:miyGlow 2.4s ease-in-out infinite;
+  }
+  @media (min-width:768px) {
+    #lb-make-it-yours {
+      bottom:auto;
+      left:auto;
+      transform:none;
+      right:28px;
+      top:50%;
+      margin-top:-22px; /* half button height to vertically center */
+    }
+    #lb-compare-bar {
+      bottom:auto !important;
+      left:auto !important;
+      transform:none !important;
+      right:28px !important;
+      top:calc(50% + 34px) !important;
+    }
   }
   @keyframes miyGlow {
     0%,100% { box-shadow:0 0 18px rgba(218,165,32,0.5),0 2px 12px rgba(0,0,0,0.4); background-position:0% 50%; }
