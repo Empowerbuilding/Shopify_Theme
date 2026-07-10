@@ -4,7 +4,7 @@
   Add to product template via theme editor
 {% endcomment %}
 
-<div id="style-swap-section" class="style-swap" data-product-image="{{ product.featured_image | img_url: 'master' }}">
+<div id="style-swap-section" class="style-swap" data-product-image="{{ product.featured_image | img_url: 'master' | prepend: 'https:' }}">
 
   <div class="style-swap__header">
     <h3 class="style-swap__title">Visualize Your Style</h3>
