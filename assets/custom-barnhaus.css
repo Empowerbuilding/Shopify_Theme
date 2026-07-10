@@ -876,34 +876,7 @@ img {
     font-size: 0.9rem;
   }
   
-  /* Mobile zoom hint - shows briefly when opening lightbox */
-  .lightbox::after {
-    content: '👆 Double tap or pinch to zoom';
-    position: absolute;
-    top: 6.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 10002;
-  }
-  
-  .lightbox.active::after {
-    animation: zoomHintFade 4s ease-in-out;
-  }
-  
-  @keyframes zoomHintFade {
-    0% { opacity: 0; }
-    10% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
-  }
+
 }
 
 /* Back Button (Desktop & Mobile) */
