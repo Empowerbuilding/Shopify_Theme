@@ -1760,7 +1760,7 @@ body .product-page {
   
   /* Constrain all product page elements */
   .product-page {
-    padding: 70px 0 1.5rem 0;
+    padding: 8px 0 1.5rem 0;
     width: 100%;
     overflow-x: hidden;
   }
@@ -1820,8 +1820,8 @@ body .product-page {
     width: 100%;
     max-width: 100%;
     height: auto;
-    min-height: 350px;
-    max-height: 500px;
+    min-height: 420px;
+    max-height: 560px;
     touch-action: pan-x pinch-zoom; /* Better touch interaction */
   }
   
@@ -1986,7 +1986,7 @@ body .product-page {
   
   /* Product Page Extra Small Mobile */
   .product-page {
-    padding: 70px 0 1rem 0;
+    padding: 8px 0 1rem 0;
   }
   
   .product-title {
