@@ -832,6 +832,19 @@
     0%,100% { box-shadow:0 0 18px rgba(218,165,32,0.5),0 2px 12px rgba(0,0,0,0.4); background-position:0% 50%; }
     50%      { box-shadow:0 0 28px rgba(218,165,32,0.9),0 2px 16px rgba(0,0,0,0.4); background-position:100% 50%; }
   }
+  @media (min-width:768px) {
+    #sd-inner input, #sd-inner textarea {
+      max-width:460px;
+      display:block;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    #sd-inner .sd-btn-row {
+      max-width:460px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+  }
 </style>
 <button id="lb-make-it-yours" onclick="event.stopPropagation(); openStyleDrawer()">✨ Make It Yours</button>
 
@@ -895,7 +908,7 @@
   </div>
 
 <!-- Style Drawer -->
-<div id="style-drawer" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10001;background:#1C1C1C;border-radius:20px 20px 0 0;border-top:1px solid #333;max-height:55vh;overflow:hidden;" onclick="event.stopPropagation()">
+<div id="style-drawer" style="display:none;position:fixed;bottom:0;left:50%;transform:translateX(-50%);z-index:10001;background:#1C1C1C;border-radius:20px 20px 0 0;border-top:1px solid #333;max-height:55vh;overflow:hidden;width:100%;max-width:600px;" onclick="event.stopPropagation()">
   <!-- Drag handle: lives OUTSIDE the scroll area so it always gets touch events -->
   <div id="sd-drag-handle" style="width:100%;padding:20px 0 20px;text-align:center;cursor:grab;user-select:none;-webkit-tap-highlight-color:transparent;">
     <div style="width:40px;height:4px;background:#555;border-radius:2px;margin:0 auto;pointer-events:none;"></div>
@@ -915,7 +928,7 @@
     <div id="sd-custom-area" style="border-top:1px solid #333;padding-top:12px;">
       <p style="color:#9ca3af;font-size:0.8rem;margin:0 0 8px;text-align:center;">or describe your own style</p>
       <textarea id="sd-custom-prompt" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.85rem;resize:none;box-sizing:border-box;" rows="2" placeholder="e.g. dark cedar siding with black metal roof…"></textarea>
-      <div style="display:flex;gap:8px;margin-top:8px;">
+      <div class="sd-btn-row" style="display:flex;gap:8px;margin-top:8px;">
         <button onclick="enhanceDrawerPrompt()" title="Rewrites your description to get better AI results" style="flex:1;padding:9px;border-radius:8px;border:1px solid #B8860B;background:transparent;color:#B8860B;font-size:0.82rem;cursor:pointer;">✨ Improve Prompt</button>
         <button onclick="runDrawerCustom()" style="flex:1;padding:9px;border-radius:8px;border:none;background:#B8860B;color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;">Apply Style</button>
       </div>
