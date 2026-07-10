@@ -2009,7 +2009,7 @@
     setDrawerState('generating');
 
     try {
-      const body = { email: userEmail || '', imageUrl: currentOriginalUrl, is_free_swap: swapCount <= 1 };
+      const body = { email: userEmail || '', imageUrl: currentOriginalUrl, is_free_swap: swapCount <= 1, product_handle: '{{ product.handle }}', product_title: {{ product.title | json }} };
       if (customPrompt) body.customPrompt = customPrompt;
       else body.preset = preset;
 
