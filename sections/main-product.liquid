@@ -1909,6 +1909,8 @@
     return id;
   }
   const ANON_ID = getOrCreateAnonId();
+  const PRODUCT_HANDLE = '{{ product.handle }}';
+  const PRODUCT_TITLE = {{ product.title | json }};
 
   let userEmail = localStorage.getItem(LS_EMAIL) || null;
   let swapCount = parseInt(localStorage.getItem(LS_COUNT) || '0');
@@ -2225,7 +2227,7 @@
     btn.textContent = 'Getting credits…'; btn.disabled = true;
     try {
       const res = await fetch(CREDIT_API, { method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ email, name, phone, action: 'capture' }) });
+        body: JSON.stringify({ email, name, phone, action: 'capture', product_handle: PRODUCT_HANDLE, product_title: PRODUCT_TITLE }) });
       const data = await res.json();
       userEmail = email;
       localStorage.setItem(LS_EMAIL, email);
