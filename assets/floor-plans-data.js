@@ -101,6 +101,9 @@ const FLOOR_PLANS_DATA = {
   "the-ranch-view":
     { beds: 3, baths: 2,   area: 2306, patio: 1107, garage: 726,  garageType: "2-Car Garage" },
 
+  "the-bastion":
+    { beds: 4, baths: 4.5, area: 3020, patio: null, garage: 992,  garageType: "2-Car Garage" },
+
 };
 
 // ─── Helper Functions ──────────────────────────────────────────────────────────
