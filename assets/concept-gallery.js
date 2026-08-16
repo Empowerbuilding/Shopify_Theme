@@ -99,6 +99,8 @@ function getStoredEmail() {
 
 // Plans currently listed for sale in Shopify (exclude from concepts)
 const SHOPIFY_LISTED_PLANS = [
+  'bastion',
+  'modern farmhouse',
   'york creek',
   'timber trails',
   'whiskey',
