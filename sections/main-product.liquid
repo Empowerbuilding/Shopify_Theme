@@ -1224,6 +1224,11 @@
           const zoomed = scale > 1.05;
           if (miy) miy.style.visibility = zoomed ? 'hidden' : 'visible';
           if (cbar && cbar.style.display !== 'none') cbar.style.visibility = zoomed ? 'hidden' : 'visible';
+          // Hide nav arrows + counter while zoomed so thumb pans get the whole screen
+          document.querySelectorAll('.lightbox-nav, .lightbox-counter').forEach(function(el) {
+            el.style.visibility = zoomed ? 'hidden' : 'visible';
+            el.style.pointerEvents = zoomed ? 'none' : '';
+          });
         });
       }
 

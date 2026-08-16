@@ -719,12 +719,12 @@ img {
   touch-action: none; /* Enable all touch gestures */
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none; /* No iOS long-press image preview during slow thumb pans */
+  -webkit-user-drag: none;
   cursor: grab;
   transform-origin: center center;
   will-change: transform;
-  /* FORCE transforms to stick - override any other rules */
-  transition: none !important;
-  /* CRITICAL: Don't let image capture touch events on mobile */
+  /* Don't let image capture touch events on mobile — container handles gestures */
   pointer-events: none;
 }
 
@@ -739,11 +739,9 @@ img {
   }
 }
 
-/* Mobile specific - LOCK transforms and prevent image touch capture */
+/* Mobile specific - prevent image touch capture; container handles gestures */
 @media (max-width: 768px) {
   .lightbox-image img {
-    transition: none !important;
-    -webkit-transition: none !important;
     pointer-events: none !important; /* Image doesn't capture touches on mobile */
   }
   
