@@ -1185,245 +1185,208 @@
     }
   }
   
-  // Advanced Mobile Image Zoom & Pan
+  // Lightbox Image Zoom & Pan — pinch (focal-point anchored), double-tap, drag, wheel
   document.addEventListener('DOMContentLoaded', function() {
-    const lightboxImages = document.querySelectorAll('.lightbox-image img');
-    
-    lightboxImages.forEach(img => {
-      let scale = 1;
-      let translateX = 0;
-      let translateY = 0;
-      let lastTouchDistance = 0;
-      let lastTouchX = 0;
-      let lastTouchY = 0;
-      let isDragging = false;
-      let isPinching = false;
-      let lastTap = 0;
-      
-      // Double-tap to zoom
-      img.addEventListener('touchend', function(e) {
-        const currentTime = new Date().getTime();
-        const tapLength = currentTime - lastTap;
-        
-        if (tapLength < 300 && tapLength > 0) {
-          // Double tap detected
-          e.preventDefault();
-          
-          if (scale === 1) {
-            // Zoom in to 2.5x at tap location
-            const rect = img.getBoundingClientRect();
-            const touch = e.changedTouches[0];
-            const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
-            
-            scale = 2.5;
-            translateX = (rect.width / 2 - x) * (scale - 1);
-            translateY = (rect.height / 2 - y) * (scale - 1);
-          } else {
-            // Zoom out
-            scale = 1;
-            translateX = 0;
-            translateY = 0;
-          }
-          
-          updateTransform(img);
-        }
-        
-        lastTap = currentTime;
-      });
-      
-      // Improved pinch to zoom with better touch handling
-      const parentContainer = img.closest('.lightbox-image');
-      
-      parentContainer.addEventListener('touchstart', function(e) {
+    const zoomResetFns = [];
+    const MIN_SCALE = 1, MAX_SCALE = 5;
+
+    document.querySelectorAll('.lightbox-image img').forEach(img => {
+      const container = img.closest('.lightbox-image');
+      if (!container) return;
+
+      let scale = 1, tx = 0, ty = 0;
+      let pinching = false, dragging = false;
+      let startDist = 0, startScale = 1, startTx = 0, startTy = 0;
+      let lastX = 0, lastY = 0;
+      let tapStartX = 0, tapStartY = 0, moved = false;
+      let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
+      let rafId = null;
+
+      function containerCenter() {
+        const r = container.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+
+      function clampPan() {
+        const maxX = (img.offsetWidth * (scale - 1)) / 2;
+        const maxY = (img.offsetHeight * (scale - 1)) / 2;
+        tx = Math.max(-maxX, Math.min(tx, maxX));
+        ty = Math.max(-maxY, Math.min(ty, maxY));
+      }
+
+      function render(animate) {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          img.style.transition = animate ? 'transform 0.25s ease-out' : 'none';
+          img.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')';
+          const miy = document.getElementById('lb-make-it-yours');
+          const cbar = document.getElementById('lb-compare-bar');
+          const zoomed = scale > 1.05;
+          if (miy) miy.style.visibility = zoomed ? 'hidden' : 'visible';
+          if (cbar && cbar.style.display !== 'none') cbar.style.visibility = zoomed ? 'hidden' : 'visible';
+        });
+      }
+
+      function reset(animate) {
+        scale = 1; tx = 0; ty = 0;
+        pinching = false; dragging = false; startDist = 0;
+        render(animate);
+        img.style.cursor = '';
+      }
+      zoomResetFns.push(function() { reset(false); });
+
+      // Re-scale around a fixed screen point so the zoom follows your fingers
+      function setScaleAnchored(newScale, anchorX, anchorY, fromScale, fromTx, fromTy) {
+        const c = containerCenter();
+        const mx = anchorX - c.x;
+        const my = anchorY - c.y;
+        scale = Math.max(MIN_SCALE, Math.min(newScale, MAX_SCALE));
+        const ratio = scale / fromScale;
+        tx = mx - (mx - fromTx) * ratio;
+        ty = my - (my - fromTy) * ratio;
+        clampPan();
+      }
+
+      function getDistance(t1, t2) {
+        return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+      }
+
+      container.addEventListener('touchstart', function(e) {
         if (e.touches.length === 2) {
           e.preventDefault();
-          e.stopPropagation();
-          isPinching = true;
-          lastTouchDistance = getDistance(e.touches[0], e.touches[1]);
-          isDragging = false;
-          // Disable transitions while pinching
-          img.style.transition = 'none';
-        } else if (e.touches.length === 1 && scale > 1) {
-          isDragging = true;
-          lastTouchX = e.touches[0].clientX;
-          lastTouchY = e.touches[0].clientY;
-          img.style.transition = 'none';
-        }
-      }, { passive: false });
-      
-      parentContainer.addEventListener('touchmove', function(e) {
-        if (e.touches.length === 2 && isPinching) {
-          // Pinch zoom
-          e.preventDefault();
-          e.stopPropagation();
-          
-          const currentDistance = getDistance(e.touches[0], e.touches[1]);
-          
-          if (lastTouchDistance > 0) {
-            const scaleDelta = currentDistance / lastTouchDistance;
-            const newScale = scale * scaleDelta;
-            
-            // Smooth scale change
-            scale = Math.max(1, Math.min(newScale, 5)); // Limit between 1x and 5x
-            
-            // If zooming back to 1x, reset position
-            if (scale <= 1.05) {
-              scale = 1;
-              translateX = 0;
-              translateY = 0;
-            }
-          }
-          
-          lastTouchDistance = currentDistance;
-          // Apply transform immediately without transition
-          img.style.transition = 'none';
-          img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        } else if (e.touches.length === 1 && isDragging && scale > 1) {
-          // Pan image when zoomed
-          e.preventDefault();
-          e.stopPropagation();
-          
-          const deltaX = e.touches[0].clientX - lastTouchX;
-          const deltaY = e.touches[0].clientY - lastTouchY;
-          
-          translateX += deltaX;
-          translateY += deltaY;
-          
-          // Constrain panning to image bounds
-          const maxTranslate = (scale - 1) * img.offsetWidth / 2;
-          const maxTranslateY = (scale - 1) * img.offsetHeight / 2;
-          translateX = Math.max(-maxTranslate, Math.min(translateX, maxTranslate));
-          translateY = Math.max(-maxTranslateY, Math.min(translateY, maxTranslateY));
-          
-          lastTouchX = e.touches[0].clientX;
-          lastTouchY = e.touches[0].clientY;
-          
-          // Apply transform immediately without transition
-          img.style.transition = 'none';
-          img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        }
-      }, { passive: false });
-      
-      parentContainer.addEventListener('touchend', function(e) {
-        // When fingers are lifted, LOCK IN the current scale permanently
-        if (e.touches.length === 0) {
-          // All fingers lifted - ABSOLUTELY LOCK the zoom level
-          isDragging = false;
-          isPinching = false;
-          lastTouchDistance = 0;
-          
-          // Store the final transform values
-          const finalTransform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-          
-          // Apply with extreme prejudice
-          img.style.transition = 'none !important';
-          img.style.webkitTransition = 'none !important';
-          img.style.transform = finalTransform;
-          img.style.webkitTransform = finalTransform;
-          
-          // Force multiple reflows
-          img.offsetHeight;
-          void img.offsetWidth;
-          
-          console.log('🔒 ZOOM LOCKED at scale:', scale, 'Transform:', finalTransform);
-          
-          // Set attribute as backup
-          img.setAttribute('data-locked-transform', finalTransform);
-          img.setAttribute('data-locked-scale', scale);
-          
-          // Keep re-applying the transform for 500ms to fight any CSS
-          let lockCount = 0;
-          const lockInterval = setInterval(() => {
-            img.style.transition = 'none !important';
-            img.style.transform = finalTransform;
-            lockCount++;
-            if (lockCount >= 10) {
-              clearInterval(lockInterval);
-              console.log('✅ Zoom lock complete after', lockCount, 'applications');
-            }
-          }, 50);
-          
-          // After 1 second, allow smooth transitions only for double-tap
-          setTimeout(() => {
-            if (!isPinching && !isDragging) {
-              img.style.transition = 'transform 0.3s ease-out';
-            }
-          }, 1000);
+          pinching = true; dragging = false; moved = true;
+          startDist = getDistance(e.touches[0], e.touches[1]);
+          startScale = scale; startTx = tx; startTy = ty;
         } else if (e.touches.length === 1) {
-          // One finger left - stop pinching, prepare for dragging
-          isPinching = false;
-          lastTouchDistance = 0;
-          
-          if (scale > 1) {
-            isDragging = true;
-            lastTouchX = e.touches[0].clientX;
-            lastTouchY = e.touches[0].clientY;
+          lastX = tapStartX = e.touches[0].clientX;
+          lastY = tapStartY = e.touches[0].clientY;
+          moved = false;
+          if (scale > 1) dragging = true;
+        }
+      }, { passive: false });
+
+      container.addEventListener('touchmove', function(e) {
+        if (pinching && e.touches.length === 2) {
+          e.preventDefault();
+          if (startDist > 0) {
+            const dist = getDistance(e.touches[0], e.touches[1]);
+            const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+            const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            setScaleAnchored(startScale * (dist / startDist), midX, midY, startScale, startTx, startTy);
+            render(false);
+          }
+        } else if (e.touches.length === 1) {
+          const x = e.touches[0].clientX, y = e.touches[0].clientY;
+          if (!moved && Math.hypot(x - tapStartX, y - tapStartY) > 10) moved = true;
+          if (dragging && scale > 1) {
+            e.preventDefault();
+            tx += x - lastX;
+            ty += y - lastY;
+            lastX = x; lastY = y;
+            clampPan();
+            render(false);
           }
         }
-      }, { passive: true });
-      
-      // Reset zoom when lightbox closes
-      const lightboxElement = img.closest('.lightbox');
-      if (lightboxElement) {
-        const closeBtn = lightboxElement.querySelector('.lightbox-close');
-        const overlay = lightboxElement;
-        
-        [closeBtn, overlay].forEach(el => {
-          if (el) {
-            el.addEventListener('click', function() {
-              scale = 1;
-              translateX = 0;
-              translateY = 0;
-              updateTransform(img);
-            });
-          }
-        });
-      }
-      
-      function updateTransform(element) {
-        // Force update with no transition during active gestures
-        element.style.transition = 'none';
-        element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        // Hide UI when zoomed
-        const miy = document.getElementById('lb-make-it-yours');
-        const cbar = document.getElementById('lb-compare-bar');
-        const zoomed = scale > 1.1;
-        if (miy) miy.style.visibility = zoomed ? 'hidden' : 'visible';
-        if (cbar && cbar.style.display !== 'none') cbar.style.visibility = zoomed ? 'hidden' : 'visible';
-      }
-      
-      function getDistance(touch1, touch2) {
-        const dx = touch1.clientX - touch2.clientX;
-        const dy = touch1.clientY - touch2.clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-      }
-      
-      // FAILSAFE: Monitor for unwanted transform resets
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-            // If we have a locked transform and we're not actively pinching/dragging
-            const lockedTransform = img.getAttribute('data-locked-transform');
-            const lockedScale = parseFloat(img.getAttribute('data-locked-scale'));
-            
-            if (lockedTransform && lockedScale > 1 && !isPinching && !isDragging) {
-              const currentTransform = img.style.transform;
-              
-              // If transform got reset to something else, force it back
-              if (currentTransform !== lockedTransform && currentTransform.includes('scale(1)')) {
-                console.warn('⚠️ Transform was reset! Re-applying locked transform');
-                img.style.transition = 'none !important';
-                img.style.transform = lockedTransform;
-                scale = lockedScale;
-              }
+      }, { passive: false });
+
+      container.addEventListener('touchend', function(e) {
+        if (e.touches.length === 1) {
+          // Pinch ended with one finger still down — hand off to panning
+          pinching = false; startDist = 0; moved = true;
+          lastX = e.touches[0].clientX;
+          lastY = e.touches[0].clientY;
+          dragging = scale > 1;
+          return;
+        }
+        if (e.touches.length > 0) return;
+
+        const wasPinching = pinching;
+        pinching = false; dragging = false; startDist = 0;
+
+        // Snap back if barely zoomed
+        if (scale > 1 && scale < 1.08) { reset(true); return; }
+
+        // Double-tap to zoom (only clean taps — not pinch or drag releases)
+        if (!wasPinching && !moved && e.changedTouches.length === 1) {
+          const t = e.changedTouches[0];
+          const now = Date.now();
+          if (now - lastTapTime < 300 && Math.hypot(t.clientX - lastTapX, t.clientY - lastTapY) < 40) {
+            e.preventDefault();
+            if (scale > 1) {
+              reset(true);
+            } else {
+              setScaleAnchored(2.5, t.clientX, t.clientY, scale, tx, ty);
+              render(true);
             }
+            lastTapTime = 0;
+          } else {
+            lastTapTime = now; lastTapX = t.clientX; lastTapY = t.clientY;
           }
-        });
+        }
+      }, { passive: false });
+
+      container.addEventListener('touchcancel', function() {
+        pinching = false; dragging = false; startDist = 0;
+        if (scale <= 1.08) reset(false);
       });
-      
-      // Start observing
-      observer.observe(img, { attributes: true, attributeFilter: ['style'] });
+
+      // Desktop: scroll wheel zoom anchored at cursor
+      container.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        const factor = e.deltaY > 0 ? 0.85 : 1.18;
+        setScaleAnchored(scale * factor, e.clientX, e.clientY, scale, tx, ty);
+        if (scale < 1.05) { scale = 1; tx = 0; ty = 0; }
+        img.style.cursor = scale > 1 ? 'grab' : '';
+        render(false);
+      }, { passive: false });
+
+      // Desktop: drag to pan when zoomed
+      container.addEventListener('mousedown', function(e) {
+        if (scale > 1) {
+          e.preventDefault();
+          dragging = true;
+          lastX = e.clientX; lastY = e.clientY;
+          img.style.cursor = 'grabbing';
+        }
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (dragging && scale > 1) {
+          tx += e.clientX - lastX;
+          ty += e.clientY - lastY;
+          lastX = e.clientX; lastY = e.clientY;
+          clampPan();
+          render(false);
+        }
+      });
+      document.addEventListener('mouseup', function() {
+        if (dragging) {
+          dragging = false;
+          img.style.cursor = scale > 1 ? 'grab' : '';
+        }
+      });
+
+      // Desktop: double-click to zoom
+      container.addEventListener('dblclick', function(e) {
+        e.preventDefault();
+        if (scale > 1) {
+          reset(true);
+        } else {
+          setScaleAnchored(2.5, e.clientX, e.clientY, 1, 0, 0);
+          render(true);
+          img.style.cursor = 'grab';
+        }
+      });
+    });
+
+    // Reset zoom whenever the lightbox opens, closes, or navigates between images
+    ['openLightbox', 'closeLightbox', 'lightboxNext', 'lightboxPrevious'].forEach(function(name) {
+      const orig = window[name];
+      if (typeof orig === 'function') {
+        window[name] = function() {
+          zoomResetFns.forEach(function(fn) { fn(); });
+          return orig.apply(this, arguments);
+        };
+      }
     });
   });
   
