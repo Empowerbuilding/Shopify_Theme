@@ -1,0 +1,97 @@
+{% comment %}
+  Mod Concierge drawer — slide-up drawer that iframes the customization app
+  (customize.barnhaussteelbuilders.com) with this product's plan preloaded.
+
+  TEST MODE: the trigger button only appears when the URL contains ?modtest=1
+  Remove the gate (see MOD_TEST_GATE below) to go live for all shoppers.
+{% endcomment %}
+
+<div id="mod-concierge-trigger-wrap" style="display:none; margin-top:12px;">
+  <button
+    id="mod-concierge-open"
+    style="
+      display: block;
+      width: 100%;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #B8860B, #DAA520);
+      color: #1a1a1a;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+    "
+    onmouseover="this.style.opacity='0.9'"
+    onmouseout="this.style.opacity='1'"
+  >
+    ✏️ Customize This Plan
+  </button>
+</div>
+
+<div id="mod-concierge-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:99998;"></div>
+
+<div id="mod-concierge-drawer" style="
+  display:none;
+  position:fixed;
+  left:0; right:0; bottom:0;
+  height:94dvh;
+  max-height:94dvh;
+  z-index:99999;
+  background:#1a1a1a;
+  border-radius:16px 16px 0 0;
+  box-shadow:0 -8px 40px rgba(0,0,0,0.6);
+  overflow:hidden;
+  transform:translateY(100%);
+  transition:transform 0.28s ease;
+">
+  <iframe
+    id="mod-concierge-frame"
+    title="Customize This Plan"
+    style="width:100%; height:100%; border:none; display:block;"
+    allow="clipboard-write"
+  ></iframe>
+</div>
+
+<script>
+(function () {
+  var APP_URL = 'https://customize.barnhaussteelbuilders.com/?plan={{ product.handle | escape }}&embed=1';
+
+  // MOD_TEST_GATE — button hidden unless ?modtest=1 (remove this block to go live)
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('modtest') === '1') {
+    var wrap = document.getElementById('mod-concierge-trigger-wrap');
+    if (wrap) wrap.style.display = 'block';
+  }
+
+  var overlay = document.getElementById('mod-concierge-overlay');
+  var drawer = document.getElementById('mod-concierge-drawer');
+  var frame = document.getElementById('mod-concierge-frame');
+  var openBtn = document.getElementById('mod-concierge-open');
+  var loaded = false;
+
+  function openDrawer() {
+    if (!loaded) { frame.src = APP_URL; loaded = true; }
+    overlay.style.display = 'block';
+    drawer.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { drawer.style.transform = 'translateY(0)'; });
+    });
+  }
+
+  function closeDrawer() {
+    drawer.style.transform = 'translateY(100%)';
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+    setTimeout(function () { drawer.style.display = 'none'; }, 300);
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  window.addEventListener('message', function (e) {
+    if (e && e.data && e.data.type === 'modConciergeClose') closeDrawer();
+  });
+})();
+</script>
