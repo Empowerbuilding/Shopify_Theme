@@ -137,10 +137,9 @@
     var loaded = false;
     var bar = document.getElementById('barnhaus-bar');
 
-    // MOD CONCIERGE TEST — with ?modtest=1 the bar opens the new step-by-step
-    // Mod Concierge instead of the old popup chat. Flip MODTEST to true to go
-    // live for everyone, then remove the old branch.
-    var MODTEST = new URLSearchParams(window.location.search).get('modtest') === '1';
+    // MOD CONCIERGE LIVE — the bar opens the new step-by-step Mod Concierge.
+    // Set MODTEST = false to roll back to the old popup chat instantly.
+    var MODTEST = true;
     if (MODTEST) {
       var cta = document.getElementById('barnhaus-bar-cta');
       if (cta) cta.textContent = 'Customize It Now →';
