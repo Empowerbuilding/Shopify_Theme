@@ -143,6 +143,10 @@
     if (MODTEST) {
       var cta = document.getElementById('barnhaus-bar-cta');
       if (cta) cta.textContent = 'Customize It Now →';
+      // The new app has its own ✕ in its header — the panel's floating close
+      // button overlaps the app UI (users hit it trying to close zoomed images)
+      var pc = document.getElementById('barnhaus-close-btn');
+      if (pc) pc.style.display = 'none';
     }
 
     // Show after 10 seconds
