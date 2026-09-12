@@ -2340,23 +2340,6 @@ textarea:focus {
    Conversion fixes — 2026-09-11 (Clarity funnel teardown)
    ═══════════════════════════════════════════════════════ */
 
-/* TL;DR value bullets under price */
-.price-tldr {
-  list-style: none;
-  margin: 0 0 1.25rem;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-.price-tldr li {
-  color: #ccc;
-  font-size: 13.5px;
-  line-height: 1.45;
-}
-.price-tldr li strong {
-  color: #fff;
-}
 
 /* Sticky mobile buy bar */
 #sticky-buy-bar {

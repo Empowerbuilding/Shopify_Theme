@@ -129,19 +129,6 @@
           <span id="product-price">{{ product.selected_or_first_available_variant.price | money }}</span>
         </div>
 
-        {% comment %} TL;DR value bullets — quick-scan value props right under the price {% endcomment %}
-        {% assign has_study_variant = false %}
-        {% for v in product.variants %}
-          {% if v.title contains 'Study' or v.title contains 'study' %}{% assign has_study_variant = true %}{% endif %}
-        {% endfor %}
-        {% if has_study_variant %}
-        <ul class="price-tldr">
-          <li>📥 <strong>Instant download</strong> &mdash; plans hit your inbox in minutes</li>
-          <li>🎨 <strong>FREE 1-hour design session</strong> with our design team included</li>
-          <li>💡 <strong>$99 applies as a credit</strong> toward your full Construction Set</li>
-        </ul>
-        {% endif %}
-        
         <!-- Product Form -->
         <form method="post" action="/cart/add" id="product-form" class="product-form">
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="product-variant-id">
