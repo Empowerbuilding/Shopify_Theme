@@ -128,6 +128,19 @@
           </span>
           <span id="product-price">{{ product.selected_or_first_available_variant.price | money }}</span>
         </div>
+
+        {% comment %} TL;DR value bullets — quick-scan value props right under the price {% endcomment %}
+        {% assign has_study_variant = false %}
+        {% for v in product.variants %}
+          {% if v.title contains 'Study' or v.title contains 'study' %}{% assign has_study_variant = true %}{% endif %}
+        {% endfor %}
+        {% if has_study_variant %}
+        <ul class="price-tldr">
+          <li>📥 <strong>Instant download</strong> &mdash; plans hit your inbox in minutes</li>
+          <li>🎨 <strong>FREE 1-hour design session</strong> with our design team included</li>
+          <li>💡 <strong>$99 applies as a credit</strong> toward your full Construction Set</li>
+        </ul>
+        {% endif %}
         
         <!-- Product Form -->
         <form method="post" action="/cart/add" id="product-form" class="product-form">
@@ -204,6 +217,34 @@
         </form>
         
         {% unless product.tags contains 'style_credits_pack' %}
+
+        {% comment %} Cost Calculator CTA — lead net directly under ATC {% endcomment %}
+        <div style="padding: 10px 0 4px;">
+          <button
+            id="open-calc-btn"
+            onclick="openCalcModal()"
+            style="
+              display: block;
+              width: 100%;
+              padding: 13px 20px;
+              background: transparent;
+              border: 1px solid #B8860B;
+              color: #DAA520;
+              font-size: 15px;
+              font-weight: 700;
+              text-align: center;
+              border-radius: 4px;
+              box-sizing: border-box;
+              cursor: pointer;
+              letter-spacing: 0.3px;
+            "
+            onmouseover="this.style.background='rgba(184,134,11,0.12)'"
+            onmouseout="this.style.background='transparent'"
+          >
+            💰 Estimate My Build Cost
+          </button>
+        </div>
+
         {% render 'legal-disclaimer' %}
 
         {% comment %} ── What Happens After You Buy — study set journey strip ── {% endcomment %}
@@ -234,33 +275,6 @@
           </div>
         </div>
         {% endif %}
-
-        {% comment %} Cost Calculator CTA — hidden for non-floor-plan products {% endcomment %}
-        <div style="padding: 10px 0 15px;">
-          <button
-            id="open-calc-btn"
-            onclick="openCalcModal()"
-            style="
-              display: block;
-              width: 100%;
-              padding: 14px 20px;
-              background: linear-gradient(135deg, #B8860B, #DAA520);
-              border: none;
-              color: #fff;
-              font-size: 15px;
-              font-weight: 700;
-              text-align: center;
-              border-radius: 4px;
-              box-sizing: border-box;
-              cursor: pointer;
-              letter-spacing: 0.3px;
-            "
-            onmouseover="this.style.opacity='0.9'"
-            onmouseout="this.style.opacity='1'"
-          >
-            💰 Estimate My Build Cost
-          </button>
-        </div>
 
         {% comment %} Design Concierge Widget (floating) {% endcomment %}
         {% render 'concierge-widget' %}
@@ -2253,6 +2267,62 @@
   }
 })();
 </script>
+
+{% comment %} ── Sticky Mobile Buy Bar — ATC always visible once inline button scrolls away ── {% endcomment %}
+{% unless product.tags contains 'style_credits_pack' %}
+<div id="sticky-buy-bar" aria-hidden="true">
+  <div class="sbb-price">
+    <span id="sbb-compare" style="display:none;"></span>
+    <span id="sbb-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+  </div>
+  <button type="button" class="sbb-atc" onclick="document.getElementById('product-form').requestSubmit()">
+    Add to Cart
+  </button>
+</div>
+
+<script>
+(function() {
+  var bar = document.getElementById('sticky-buy-bar');
+  var atcBtn = document.getElementById('add-to-cart-button');
+  if (!bar || !atcBtn || !('IntersectionObserver' in window)) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    var entry = entries[0];
+    // Show only after the inline ATC has scrolled ABOVE the viewport (user went past it)
+    var pastIt = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+    bar.classList.toggle('visible', pastIt);
+    bar.setAttribute('aria-hidden', pastIt ? 'false' : 'true');
+    document.body.classList.toggle('sbb-on', pastIt);
+  }, { threshold: 0 });
+  observer.observe(atcBtn);
+
+  // Mirror price + compare price from the main display (updates on variant selection)
+  var srcPrice = document.getElementById('product-price');
+  var srcCompare = document.getElementById('product-compare-price');
+  var dstPrice = document.getElementById('sbb-price');
+  var dstCompare = document.getElementById('sbb-compare');
+  function sync() {
+    if (srcPrice && dstPrice) dstPrice.textContent = srcPrice.textContent;
+    if (srcCompare && dstCompare) {
+      dstCompare.textContent = srcCompare.textContent.trim();
+      dstCompare.style.display = (srcCompare.style.display === 'none') ? 'none' : 'inline';
+    }
+  }
+  sync();
+  var mo = new MutationObserver(sync);
+  if (srcPrice) mo.observe(srcPrice, { childList: true, characterData: true, subtree: true });
+  if (srcCompare) mo.observe(srcCompare, { childList: true, attributes: true, characterData: true, subtree: true });
+
+  // Mirror ATC button state ("Adding...", "Added!", disabled) onto sticky button
+  var sbbBtn = bar.querySelector('.sbb-atc');
+  var btnMo = new MutationObserver(function() {
+    sbbBtn.textContent = atcBtn.textContent;
+    sbbBtn.disabled = atcBtn.disabled;
+  });
+  btnMo.observe(atcBtn, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['disabled'] });
+})();
+</script>
+{% endunless %}
 
 {% schema %}
 {
