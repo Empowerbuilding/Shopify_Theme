@@ -2271,12 +2271,11 @@
 {% comment %} ── Sticky Mobile Buy Bar — ATC always visible once inline button scrolls away ── {% endcomment %}
 {% unless product.tags contains 'style_credits_pack' %}
 <div id="sticky-buy-bar" aria-hidden="true">
-  <div class="sbb-price">
-    <span id="sbb-compare" style="display:none;"></span>
-    <span id="sbb-price">{{ product.selected_or_first_available_variant.price | money }}</span>
-  </div>
+  <button type="button" class="sbb-customize" onclick="if (window.barnhausOpen) barnhausOpen()">
+    ✏️ Customize
+  </button>
   <button type="button" class="sbb-atc" onclick="document.getElementById('product-form').requestSubmit()">
-    Add to Cart
+    Add to Cart &bull; <span id="sbb-price">{{ product.selected_or_first_available_variant.price | money }}</span>
   </button>
 </div>
 
@@ -2285,6 +2284,7 @@
   var bar = document.getElementById('sticky-buy-bar');
   var atcBtn = document.getElementById('add-to-cart-button');
   if (!bar || !atcBtn || !('IntersectionObserver' in window)) return;
+  document.body.classList.add('has-sbb'); // retire the separate concierge bottom bar on mobile — one bar only
 
   var observer = new IntersectionObserver(function(entries) {
     var entry = entries[0];
@@ -2296,27 +2296,22 @@
   }, { threshold: 0 });
   observer.observe(atcBtn);
 
-  // Mirror price + compare price from the main display (updates on variant selection)
+  // Mirror price from the main display (updates on variant selection)
   var srcPrice = document.getElementById('product-price');
-  var srcCompare = document.getElementById('product-compare-price');
   var dstPrice = document.getElementById('sbb-price');
-  var dstCompare = document.getElementById('sbb-compare');
   function sync() {
     if (srcPrice && dstPrice) dstPrice.textContent = srcPrice.textContent;
-    if (srcCompare && dstCompare) {
-      dstCompare.textContent = srcCompare.textContent.trim();
-      dstCompare.style.display = (srcCompare.style.display === 'none') ? 'none' : 'inline';
-    }
   }
   sync();
   var mo = new MutationObserver(sync);
   if (srcPrice) mo.observe(srcPrice, { childList: true, characterData: true, subtree: true });
-  if (srcCompare) mo.observe(srcCompare, { childList: true, attributes: true, characterData: true, subtree: true });
 
   // Mirror ATC button state ("Adding...", "Added!", disabled) onto sticky button
   var sbbBtn = bar.querySelector('.sbb-atc');
   var btnMo = new MutationObserver(function() {
-    sbbBtn.textContent = atcBtn.textContent;
+    var t = atcBtn.textContent.trim();
+    if (t === 'Add to Cart') { sync(); sbbBtn.innerHTML = 'Add to Cart &bull; <span id="sbb-price">' + (srcPrice ? srcPrice.textContent : '') + '</span>'; dstPrice = document.getElementById('sbb-price'); }
+    else { sbbBtn.textContent = t; }
     sbbBtn.disabled = atcBtn.disabled;
   });
   btnMo.observe(atcBtn, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ['disabled'] });

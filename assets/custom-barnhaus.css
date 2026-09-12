@@ -2376,25 +2376,22 @@ textarea:focus {
 #sticky-buy-bar.visible {
   display: flex;
 }
-.sbb-price {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
+.sbb-customize {
   flex-shrink: 0;
-}
-#sbb-compare {
-  color: #888;
-  text-decoration: line-through;
-  font-size: 12px;
-}
-#sbb-price {
-  color: #fff;
-  font-size: 1.15rem;
-  font-weight: 700;
+  padding: 13px 14px;
+  background: transparent;
+  border: 1px solid #B8860B;
+  border-radius: 4px;
+  color: #DAA520;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  white-space: nowrap;
 }
 .sbb-atc {
   flex: 1;
-  padding: 13px 20px;
+  padding: 13px 16px;
   background: linear-gradient(135deg, #B8860B, #DAA520);
   border: none;
   border-radius: 4px;
@@ -2403,21 +2400,24 @@ textarea:focus {
   font-weight: 700;
   letter-spacing: 0.3px;
   cursor: pointer;
+  white-space: nowrap;
 }
 .sbb-atc:disabled {
   opacity: 0.7;
 }
-/* Sticky bar owns the bottom edge — hide concierge bar while visible, pad page bottom */
-body.sbb-on #barnhaus-bar {
-  display: none !important;
+#sbb-price {
+  font-weight: 700;
 }
 body.sbb-on .product-page {
   padding-bottom: 90px;
 }
-/* Desktop keeps inline flow only */
+/* One bottom bar on mobile: sticky bar replaces the separate concierge bar entirely */
+@media (max-width: 768px) {
+  body.has-sbb #barnhaus-bar { display: none !important; }
+}
+/* Desktop keeps inline flow + concierge bar only */
 @media (min-width: 769px) {
   #sticky-buy-bar { display: none !important; }
-  body.sbb-on #barnhaus-bar { display: flex !important; }
   body.sbb-on .product-page { padding-bottom: 3rem; }
 }
 
