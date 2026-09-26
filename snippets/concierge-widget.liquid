@@ -12,13 +12,10 @@
   </div>
 </div>
 
-<div id="barnhaus-bar" onclick="barnhausOpen()">
-  <span id="barnhaus-bar-icon">✏️</span>
-  <span id="barnhaus-bar-text">Want to customize this plan?</span>
-  <a id="barnhaus-bar-call" href="tel:+18309718825" onclick="event.stopPropagation()">📞 Call us now</a>
-  <span id="barnhaus-bar-cta">Chat with a Concierge →</span>
-  <span id="barnhaus-bar-phone">· or call (830) 971-8825</span>
-</div>
+<a id="barnhaus-bar" href="tel:+18309718825">
+  <span id="barnhaus-bar-call">📞 Call us now</span>
+  <span id="barnhaus-bar-phone">(830) 971-8825</span>
+</a>
 
 <style>
   #barnhaus-bar {
@@ -50,39 +47,23 @@
   #barnhaus-bar:hover {
     background: linear-gradient(90deg, #222 0%, #2a2a2a 100%);
   }
-  #barnhaus-bar-icon {
-    font-size: 16px;
-  }
-  #barnhaus-bar-text {
-    color: #ccc;
-    font-size: 13px;
-  }
-  #barnhaus-bar-cta {
-    color: #DAA520;
-    font-size: 13px;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  /* Mobile-first: Call is the primary CTA */
+  #barnhaus-bar { text-decoration: none; }
   #barnhaus-bar-call {
     background: #DAA520;
     color: #111;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
-    padding: 9px 16px;
+    padding: 10px 22px;
     border-radius: 999px;
-    text-decoration: none;
     white-space: nowrap;
   }
-  #barnhaus-bar-call:active { background: #B8860B; }
+  #barnhaus-bar:active #barnhaus-bar-call { background: #B8860B; }
   #barnhaus-bar-phone {
     display: none;
-    color: #999;
-    font-size: 13px;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 600;
     white-space: nowrap;
-  }
-  @media (max-width: 767px) {
-    #barnhaus-bar { flex-wrap: wrap; gap: 8px 12px; padding: 10px 14px; }
   }
 
   /* Subtle pulse on the gold border */
@@ -146,10 +127,7 @@
   @media (min-width: 768px) {
     #barnhaus-overlay { align-items: center; padding: 24px; }
     #barnhaus-panel { height: 88vh; border-radius: 20px; }
-    #barnhaus-bar-text { font-size: 14px; }
-    #barnhaus-bar-cta { font-size: 14px; }
-    /* Desktop: chat stays primary, phone shown as text */
-    #barnhaus-bar-call { display: none; }
+    /* Desktop: show the number next to the button */
     #barnhaus-bar-phone { display: inline; }
   }
 
@@ -167,10 +145,6 @@
     // Set MODTEST = false to roll back to the old popup chat instantly.
     var MODTEST = new URLSearchParams(window.location.search).get('modtest') === '1';
     if (MODTEST) {
-      var cta = document.getElementById('barnhaus-bar-cta');
-      if (cta) cta.textContent = 'Customize It Now →';
-      // The new app has its own ✕ in its header — the panel's floating close
-      // button overlaps the app UI (users hit it trying to close zoomed images)
       var pc = document.getElementById('barnhaus-close-btn');
       if (pc) pc.style.display = 'none';
     }
