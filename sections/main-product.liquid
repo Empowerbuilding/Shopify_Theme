@@ -1087,9 +1087,14 @@
     <p style="color:#9ca3af;font-size:0.85rem;margin:0 0 16px;">Enter your info to get <strong style="color:#fff;">3 free style credits</strong>.</p>
     <input id="sd-modal-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:10px;box-sizing:border-box;" />
     <input id="sd-modal-email" type="email" placeholder="Email address" autocomplete="email" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:10px;box-sizing:border-box;" />
-    <input id="sd-modal-phone" type="tel" placeholder="Phone number" autocomplete="tel" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:12px;box-sizing:border-box;" />
+    <input id="sd-modal-phone" type="tel" placeholder="Phone number" autocomplete="tel" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:10px;box-sizing:border-box;" />
+    <label style="display:flex;align-items:flex-start;gap:8px;margin:0 0 12px;cursor:pointer;">
+      <input type="checkbox" id="sd-modal-sms-consent" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;" />
+      <span style="color:#888;font-size:11px;line-height:1.4;">I agree to receive texts and calls from Barnhaus Steel Builders about my project, using automated technology. Msg frequency varies. Reply STOP to opt out, HELP for help.</span>
+    </label>
     <p id="sd-modal-error" style="color:#f87171;font-size:0.82rem;display:none;margin-bottom:8px;"></p>
     <button id="sd-modal-submit" onclick="submitGateModal()" style="width:100%;padding:12px;background:#B8860B;color:#fff;border:none;border-radius:8px;font-size:0.95rem;font-weight:700;cursor:pointer;">Get My 3 Free Credits</button>
+    <p style="color:#666;font-size:10px;text-align:center;margin:10px 0 0;line-height:1.4;">By submitting, you agree to our <a href="https://barnhaussteelbuilders.com/terms" style="color:#B8860B;">Terms</a> and <a href="https://barnhaussteelbuilders.com/privacy" style="color:#B8860B;">Privacy Policy</a>. If we connect you with a provider, we may be compensated.</p>
     <button onclick="closeGateModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:#9ca3af;font-size:1.1rem;cursor:pointer;">✕</button>
   </div>
 </div>
@@ -2324,7 +2329,11 @@
     btn.textContent = 'Getting credits…'; btn.disabled = true;
     try {
       const res = await fetch(CREDIT_API, { method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ email, name, phone, action: 'capture', product_handle: PRODUCT_HANDLE, product_title: PRODUCT_TITLE }) });
+        body: JSON.stringify({ email, name, phone, action: 'capture', product_handle: PRODUCT_HANDLE, product_title: PRODUCT_TITLE,
+          consent_sms: !!document.getElementById('sd-modal-sms-consent').checked,
+          consent_captured_at: document.getElementById('sd-modal-sms-consent').checked ? new Date().toISOString() : undefined,
+          consent_source_url: window.location.href,
+          consent_text_version: 'v1' }) });
       const data = await res.json();
       userEmail = email;
       localStorage.setItem(LS_EMAIL, email);
