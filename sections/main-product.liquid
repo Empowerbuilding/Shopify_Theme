@@ -269,7 +269,7 @@
 
         {% comment %} ── Cost Calculator Modal ─────────────────────────────── {% endcomment %}
         {% unless product.tags contains 'style_credits_pack' %}
-        <div id="calc-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:20px 10px;">
+        <div id="calc-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; overflow-y:auto; padding:20px 10px 48px;">
           <div style="max-width:780px; margin:0 auto; background:#1C1C1C; border-radius:12px; border:1px solid #333; padding:28px 24px; position:relative;">
             
             {%- comment -%} Close button {%- endcomment -%}
@@ -710,11 +710,13 @@
         function openCalcModal(){
           document.getElementById('calc-modal').style.display = 'block';
           document.body.style.overflow = 'hidden';
+          document.body.classList.add('bh-overlay-open');
           calcUpdate();
         }
         function closeCalcModal(){
           document.getElementById('calc-modal').style.display = 'none';
           document.body.style.overflow = '';
+          document.body.classList.remove('bh-overlay-open');
         }
 
         var calcRouting = { project_type: 'custom_home', financing_status: '', land_status: '', budget_range: '150_300k', timeline: '3_12mo', kit: false };
@@ -2134,6 +2136,7 @@
   window.openStyleDrawer = function() {
     document.getElementById('style-drawer').style.display = 'block';
     document.getElementById('sd-drawer-overlay').style.display = 'block';
+    document.body.classList.add('bh-overlay-open');
     setDrawerState('presets');
     updateCreditBar();
   };
@@ -2146,6 +2149,7 @@
       drawer.style.display = 'none';
       drawer.style.transform = 'translateX(-50%)';
       drawer.style.transition = '';
+      document.body.classList.remove('bh-overlay-open');
     }, 250);
     document.getElementById('sd-drawer-overlay').style.display = 'none';
   };
@@ -2311,11 +2315,13 @@
   function openGateModal() {
     document.getElementById('sd-modal').style.display = 'block';
     document.getElementById('sd-modal-error').style.display = 'none';
+    document.body.classList.add('bh-overlay-open');
     document.getElementById('sd-modal-name').focus();
   }
 
   window.closeGateModal = function() {
     document.getElementById('sd-modal').style.display = 'none';
+    document.body.classList.remove('bh-overlay-open');
   };
 
   window.submitGateModal = async function() {

@@ -58,6 +58,8 @@
     white-space: nowrap;
   }
   #barnhaus-bar:active #barnhaus-bar-call { background: #B8860B; }
+  /* Hide the call bar whenever a full-screen overlay is open (calc modal, style drawer, gate modal) */
+  body.bh-overlay-open #barnhaus-bar { display: none !important; }
   #barnhaus-bar-phone {
     display: none;
     color: #ccc;
