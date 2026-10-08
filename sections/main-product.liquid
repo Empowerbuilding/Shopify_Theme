@@ -401,6 +401,57 @@
                 </div>
               </div>
 
+              {%- comment -%} Lead routing questions (lead monetization) {%- endcomment -%}
+              <div style="margin-bottom:24px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">What are you planning to build?</label>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                  <button type="button" onclick="calcRouteSet('project_type','custom_home',this)" style="padding:8px 14px;background:#B8860B;border:1px solid #B8860B;border-radius:6px;color:#fff;font-size:13px;cursor:pointer;">Custom home</button>
+                  <button type="button" onclick="calcRouteSet('project_type','barndominium',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Barndominium</button>
+                  <button type="button" onclick="calcRouteSet('project_type','shop_garage',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Shop / garage</button>
+                  <button type="button" onclick="calcRouteSet('project_type','unsure',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Not sure</button>
+                </div>
+              </div>
+              <div style="margin-bottom:24px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">How will you finance your build?</label>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                  <button type="button" onclick="calcRouteSet('financing_status','cash',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Cash</button>
+                  <button type="button" onclick="calcRouteSet('financing_status','approved',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Already approved</button>
+                  <button type="button" onclick="calcRouteSet('financing_status','needs_help',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Help me find financing</button>
+                </div>
+              </div>
+              <div style="margin-bottom:24px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Do you have your land?</label>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                  <button type="button" onclick="calcRouteSet('land_status','owned',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Own it</button>
+                  <button type="button" onclick="calcRouteSet('land_status','under_contract',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Under contract</button>
+                  <button type="button" onclick="calcRouteSet('land_status','looking',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Still looking</button>
+                </div>
+              </div>
+              <div style="margin-bottom:24px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">What's your budget range (roughly)?</label>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                  <button type="button" onclick="calcRouteSet('budget_range','under_150k',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Under $150k</button>
+                  <button type="button" onclick="calcRouteSet('budget_range','150_300k',this)" style="padding:8px 14px;background:#B8860B;border:1px solid #B8860B;border-radius:6px;color:#fff;font-size:13px;cursor:pointer;">$150–300k</button>
+                  <button type="button" onclick="calcRouteSet('budget_range','300k_plus',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">$300k+</button>
+                  <button type="button" onclick="calcRouteSet('budget_range','unsure',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Not sure</button>
+                </div>
+              </div>
+              <div id="calc-kit-offer" style="display:none;background:#B8860B18;border:1px solid #B8860B55;border-radius:8px;padding:14px;margin-bottom:24px;">
+                <p style="color:#ccc;font-size:13px;margin:0 0 6px;">💡 <strong style="color:#fff;">On a tighter budget?</strong> Steel building kits can stretch it a lot further — many of our customers go this route.</p>
+                <p style="color:#888;font-size:12px;margin:0 0 10px;">Want us to connect you with kit suppliers?</p>
+                <div style="display:flex;gap:8px;">
+                  <button type="button" onclick="calcRouteKit(true)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Yes, connect me</button>
+                  <button type="button" onclick="calcRouteKit(false)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">No thanks</button>
+                </div>
+              </div>
+              <div style="margin-bottom:24px;">
+                <label style="color:#ccc;font-size:13px;font-weight:600;display:block;margin-bottom:8px;">When are you hoping to build?</label>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                  <button type="button" onclick="calcRouteSet('timeline','0_3mo',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">0–3 months</button>
+                  <button type="button" onclick="calcRouteSet('timeline','3_12mo',this)" style="padding:8px 14px;background:#B8860B;border:1px solid #B8860B;border-radius:6px;color:#fff;font-size:13px;cursor:pointer;">3–12 months</button>
+                  <button type="button" onclick="calcRouteSet('timeline','exploring',this)" style="padding:8px 14px;background:#252525;border:1px solid #444;border-radius:6px;color:#ccc;font-size:13px;cursor:pointer;">Just exploring</button>
+                </div>
+              </div>
               <button onclick="calcNextStep()"
                 style="width:100%;padding:14px;background:linear-gradient(135deg,#B8860B,#DAA520);border:none;border-radius:6px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;">
                 Get My Full Estimate →
@@ -429,8 +480,8 @@
                   <input id="calc-phone" type="tel" placeholder="(555) 123-4567"
                     style="width:100%;background:#252525;border:1px solid #444;border-radius:6px;padding:10px 12px;color:#fff;font-size:14px;box-sizing:border-box;">
                   <label style="display:flex;align-items:flex-start;gap:8px;margin-top:8px;cursor:pointer;">
-                    <input type="checkbox" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;">
-                    <span style="color:#666;font-size:11px;line-height:1.4;">You are opting into marketing texts from Barnhaus Steel Builders. Msg frequency may vary. Standard msg & data rates may apply. Reply STOP to opt out.</span>
+                    <input type="checkbox" id="calc-sms-consent" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;">
+                    <span style="color:#666;font-size:11px;line-height:1.4;">I agree to receive texts and calls from Barnhaus Steel Builders about my project, using automated technology. Msg frequency varies. Reply STOP to opt out, HELP for help.</span>
                   </label>
                 </div>
                 <div>
@@ -471,6 +522,7 @@
                   Get Instant Estimate
                 </button>
               </div>
+              <p style="color:#666;font-size:11px;text-align:center;margin:10px 0 0;">By submitting, you agree to our Terms of Service and Privacy Policy. If we connect you with a provider, we may be compensated.</p>
             </div>
 
             {%- comment -%} ── STEP 3: RESULTS ──────────────────────────── {%- endcomment -%}
@@ -665,6 +717,39 @@
           document.body.style.overflow = '';
         }
 
+        var calcRouting = { project_type: 'custom_home', financing_status: '', land_status: '', budget_range: '150_300k', timeline: '3_12mo', kit: false };
+        function calcRouteSet(key, val, btn){
+          calcRouting[key] = val;
+          var wrap = btn.parentElement;
+          for (var i = 0; i < wrap.children.length; i++) {
+            wrap.children[i].style.background = '#252525';
+            wrap.children[i].style.borderColor = '#444';
+            wrap.children[i].style.color = '#ccc';
+          }
+          btn.style.background = '#B8860B';
+          btn.style.borderColor = '#B8860B';
+          btn.style.color = '#fff';
+          calcKitOfferUpdate();
+        }
+        function calcRouteKit(yes){
+          calcRouting.kit = yes;
+          var yb = document.getElementById('calc-kit-offer').querySelector('button');
+          var btns = document.getElementById('calc-kit-offer').querySelectorAll('button');
+          for (var i = 0; i < btns.length; i++) {
+            btns[i].style.background = '#252525'; btns[i].style.borderColor = '#444'; btns[i].style.color = '#ccc';
+          }
+          var chosen = yes ? btns[0] : btns[1];
+          chosen.style.background = '#B8860B'; chosen.style.borderColor = '#B8860B'; chosen.style.color = '#fff';
+        }
+        function calcKitEligible(){
+          return calcRouting.budget_range === 'under_150k' || calcRouting.project_type === 'shop_garage' || calcRouting.project_type === 'barndominium';
+        }
+        function calcKitOfferUpdate(){
+          var el = document.getElementById('calc-kit-offer');
+          if (!el) return;
+          if (calcKitEligible()) { el.style.display = 'block'; }
+          else { el.style.display = 'none'; calcRouting.kit = false; }
+        }
         function calcNextStep(){
           document.getElementById('calc-step-inputs').style.display = 'none';
           document.getElementById('calc-step-form').style.display   = 'block';
@@ -717,6 +802,20 @@
             // Identity
             name: name, email: email, phone: phone,
             message: msg, project_stage: stage,
+            // Lead routing + consent (lead monetization)
+            project_type: calcRouting.project_type,
+            financing_status: calcRouting.financing_status || undefined,
+            land_status: calcRouting.land_status || undefined,
+            budget_range: calcRouting.budget_range,
+            timeline: calcRouting.timeline,
+            consent_sms: !!document.getElementById('calc-sms-consent').checked,
+            consent_lender: calcRouting.financing_status === 'needs_help',
+            consent_kit: calcKitEligible() && calcRouting.kit,
+            consent_realtor: calcRouting.land_status === 'looking',
+            consent_builder: false,
+            consent_captured_at: (document.getElementById('calc-sms-consent').checked || calcRouting.financing_status === 'needs_help' || (calcKitEligible() && calcRouting.kit) || calcRouting.land_status === 'looking') ? new Date().toISOString() : undefined,
+            consent_source_url: window.location.href,
+            consent_text_version: 'v1',
             // Dimensions
             bedrooms: r.beds, bathrooms: r.baths,
             living_space: r.living, patio_space: r.patio, garage_space: r.garage,
