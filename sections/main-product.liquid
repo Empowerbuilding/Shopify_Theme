@@ -1092,7 +1092,42 @@
     <p style="color:#9ca3af;font-size:0.85rem;margin:0 0 16px;">Enter your info to get <strong style="color:#fff;">3 free style credits</strong>.</p>
     <input id="sd-modal-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:10px;box-sizing:border-box;" />
     <input id="sd-modal-email" type="email" placeholder="Email address" autocomplete="email" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:10px;box-sizing:border-box;" />
-    <input id="sd-modal-phone" type="tel" placeholder="Phone number" autocomplete="tel" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:10px;box-sizing:border-box;" />
+    <input id="sd-modal-phone" type="tel" placeholder="Phone number" autocomplete="tel" style="width:100%;background:#252525;border:1px solid #333;border-radius:8px;color:#e5e5e5;padding:10px;font-size:0.9rem;margin-bottom:12px;box-sizing:border-box;" />
+
+    <!-- Lead routing pills (lead monetization — 2 taps, optional) -->
+    <div style="margin-bottom:12px;">
+      <p style="color:#9ca3af;font-size:0.78rem;font-weight:600;margin:0 0 6px;">What are you planning to build?</p>
+      <div id="sd-pill-project" style="display:flex;flex-wrap:wrap;gap:6px;">
+        <button type="button" data-value="custom_home" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">Custom home</button>
+        <button type="button" data-value="barndominium" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">Barndominium</button>
+        <button type="button" data-value="shop_garage" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">Shop / garage</button>
+        <button type="button" data-value="unsure" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">Not sure</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <p style="color:#9ca3af;font-size:0.78rem;font-weight:600;margin:0 0 6px;">What's your budget range (roughly)?</p>
+      <div id="sd-pill-budget" style="display:flex;flex-wrap:wrap;gap:6px;">
+        <button type="button" data-value="under_150k" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">Under $150k</button>
+        <button type="button" data-value="150_300k" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">$150–300k</button>
+        <button type="button" data-value="300_600k" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">$300–600k</button>
+        <button type="button" data-value="600k_1m" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">$600k–$1M</button>
+        <button type="button" data-value="1m_3m" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">$1M–$3M</button>
+        <button type="button" data-value="3m_plus" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">$3M+</button>
+        <button type="button" data-value="unsure" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">Not sure</button>
+      </div>
+    </div>
+
+    <div id="sd-kit-offer" style="display:none;background:rgba(184,134,11,0.1);border:1px solid rgba(184,134,11,0.35);border-radius:8px;padding:12px;margin-bottom:12px;">
+      <p style="color:#d1d5db;font-size:0.78rem;margin:0;">💡 <strong style="color:#fff;">On a tighter budget?</strong> Steel building kits can stretch it a lot further — many of our customers go this route.</p>
+      <p style="color:#9ca3af;font-size:0.78rem;margin:6px 0 8px;">Want us to connect you with kit suppliers?</p>
+      <div style="display:flex;gap:6px;">
+        <button type="button" id="sd-kit-yes" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">Yes, connect me</button>
+        <button type="button" id="sd-kit-no" style="padding:6px 11px;border-radius:8px;border:1px solid #333;background:#252525;color:#d1d5db;font-size:0.78rem;cursor:pointer;">No thanks</button>
+      </div>
+    </div>
+
+    <label style="display:flex;align-items:flex-start;gap:8px;margin:0 0 12px;cursor:pointer;">
     <label style="display:flex;align-items:flex-start;gap:8px;margin:0 0 12px;cursor:pointer;">
       <input type="checkbox" id="sd-modal-sms-consent" style="margin-top:2px;accent-color:#B8860B;flex-shrink:0;" />
       <span style="color:#888;font-size:11px;line-height:1.4;">I agree to receive texts and calls from Barnhaus Steel Builders about my project, using automated technology. Msg frequency varies. Reply STOP to opt out, HELP for help.</span>
@@ -2315,6 +2350,48 @@
     } catch(e) { el.value = prompt; }
   };
 
+  // ── Lead routing pills (lead monetization — optional, 2 taps) ──
+  window.__sdRouting = { projectType: '', budgetRange: '', kitConsent: false, showKitOffer: false };
+
+  function sdStylePill(btn, selected) {
+    btn.style.background = selected ? '#B8860B' : '#252525';
+    btn.style.borderColor = selected ? '#B8860B' : '#333';
+    btn.style.color = selected ? '#fff' : '#d1d5db';
+  }
+
+  function sdUpdateKitOffer() {
+    const r = window.__sdRouting;
+    r.showKitOffer = r.budgetRange === 'under_150k' || r.projectType === 'shop_garage' || r.projectType === 'barndominium';
+    const offer = document.getElementById('sd-kit-offer');
+    if (offer) offer.style.display = r.showKitOffer ? 'block' : 'none';
+    if (!r.showKitOffer) r.kitConsent = false;
+    const yes = document.getElementById('sd-kit-yes');
+    const no = document.getElementById('sd-kit-no');
+    if (yes && no) { sdStylePill(yes, r.kitConsent); sdStylePill(no, !r.kitConsent); }
+  }
+
+  function sdWirePillGroup(groupId, key) {
+    const group = document.getElementById(groupId);
+    if (!group) return;
+    group.querySelectorAll('button[data-value]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const r = window.__sdRouting;
+        r[key] = (r[key] === btn.dataset.value) ? '' : btn.dataset.value; // tap again to clear
+        group.querySelectorAll('button[data-value]').forEach(function(b) { sdStylePill(b, b.dataset.value === r[key]); });
+        sdUpdateKitOffer();
+      });
+      sdStylePill(btn, false);
+    });
+  }
+  sdWirePillGroup('sd-pill-project', 'projectType');
+  sdWirePillGroup('sd-pill-budget', 'budgetRange');
+
+  const sdKitYes = document.getElementById('sd-kit-yes');
+  const sdKitNo = document.getElementById('sd-kit-no');
+  if (sdKitYes) sdKitYes.addEventListener('click', function() { window.__sdRouting.kitConsent = true; sdUpdateKitOffer(); });
+  if (sdKitNo) sdKitNo.addEventListener('click', function() { window.__sdRouting.kitConsent = false; sdUpdateKitOffer(); });
+  sdUpdateKitOffer();
+
   function openGateModal() {
     document.getElementById('sd-modal').style.display = 'block';
     document.getElementById('sd-modal-error').style.display = 'none';
@@ -2334,15 +2411,23 @@
     const errEl = document.getElementById('sd-modal-error');
     if (!name || !email || !phone) { errEl.textContent = 'All fields required.'; errEl.style.display = 'block'; return; }
     if (!/\S+@\S+\.\S+/.test(email)) { errEl.textContent = 'Enter a valid email.'; errEl.style.display = 'block'; return; }
+    // Lead routing pill state (lead monetization)
+    const gateProjectType = window.__sdRouting && window.__sdRouting.projectType || '';
+    const gateBudgetRange = window.__sdRouting && window.__sdRouting.budgetRange || '';
+    const gateKitConsent = !!(window.__sdRouting && window.__sdRouting.kitConsent);
+    const gateShowKitOffer = !!(window.__sdRouting && window.__sdRouting.showKitOffer);
     const btn = document.getElementById('sd-modal-submit');
     btn.textContent = 'Getting credits…'; btn.disabled = true;
     try {
       const res = await fetch(CREDIT_API, { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ email, name, phone, action: 'capture', product_handle: PRODUCT_HANDLE, product_title: PRODUCT_TITLE,
           consent_sms: !!document.getElementById('sd-modal-sms-consent').checked,
-          consent_captured_at: document.getElementById('sd-modal-sms-consent').checked ? new Date().toISOString() : undefined,
+          consent_captured_at: (document.getElementById('sd-modal-sms-consent').checked || (gateShowKitOffer && gateKitConsent)) ? new Date().toISOString() : undefined,
           consent_source_url: window.location.href,
-          consent_text_version: 'v1' }) });
+          consent_text_version: 'v1',
+          project_type: gateProjectType || undefined,
+          budget_range: gateBudgetRange || undefined,
+          consent_kit: gateShowKitOffer ? gateKitConsent : false }) });
       const data = await res.json();
       userEmail = email;
       localStorage.setItem(LS_EMAIL, email);
