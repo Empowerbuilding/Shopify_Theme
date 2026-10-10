@@ -753,7 +753,7 @@
           chosen.textContent = '\u2713 ' + chosen.dataset.label;
         }
         function calcKitEligible(){
-          return calcRouting.budget_range === 'under_150k' || calcRouting.project_type === 'shop_garage' || calcRouting.project_type === 'barndominium';
+          return calcRouting.budget_range === 'under_150k' || calcRouting.budget_range === '150_300k' || calcRouting.project_type === 'shop_garage' || calcRouting.project_type === 'barndominium';
         }
         function calcKitOfferUpdate(){
           var el = document.getElementById('calc-kit-offer');
@@ -2378,7 +2378,7 @@
 
   function sdUpdateKitOffer() {
     const r = window.__sdRouting;
-    r.showKitOffer = r.budgetRange === 'under_150k' || r.projectType === 'shop_garage' || r.projectType === 'barndominium';
+    r.showKitOffer = r.budgetRange === 'under_150k' || r.budgetRange === '150_300k' || r.projectType === 'shop_garage' || r.projectType === 'barndominium';
     const offer = document.getElementById('sd-kit-offer');
     if (offer) offer.style.display = r.showKitOffer ? 'block' : 'none';
     if (!r.showKitOffer) { r.kitConsent = false; r.kitAnswered = false; }
